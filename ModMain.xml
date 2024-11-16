@@ -1,0 +1,1145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TranscendenceExtension
+[
+	<!ENTITY UNIDExtensionHornet	"0xD008002f">
+	<!ENTITY rsArmorHUDShip_Hornet	"0xD008002e">
+	<!ENTITY rsHornetArmorSingle		"0xD008002d">
+	<!ENTITY rsHornetLarge			"0xD008002c">
+	<!ENTITY scPlayerHornetBase 	"0xD008002b">
+	<!ENTITY scHornetPlayer 		"0xD008002a">
+	<!ENTITY itCymekMicroDeflector		        "0xD5390000">
+	<!--<!ENTITY itCymekNaniteProjector "0xD5390001">-->
+	<!ENTITY itNanoInfusedUltraSteel "0xD5390002">
+	<!ENTITY itEmergencySupplies "0xD5390003">
+	<!ENTITY itNanoFabricator "0xD5390004">
+	<!ENTITY dsNanoFabricator "0xD5390005">
+	<!ENTITY stPlayerCargoContainer "0xD5390006">
+	<!ENTITY itPlayerCargoContainer "0xD5390007">
+	<!ENTITY itAmmoBoxKM100 "0xD5390008">
+	<!ENTITY itAmmoBoxSapiens "0xD5390009">
+	<!ENTITY rsBarrelBomb	 	"0xD539000A">
+	<!ENTITY vtBarrelBombFire	 "0xD539000B">
+	<!ENTITY itBarrelBomb	 	"0xD539000C">
+	<!ENTITY itMinersSmugglingCargoHold "0xD539000D">
+	<!ENTITY itBioTechMod "0xD539000E">
+	<!ENTITY itBrainInAVat "0xD539000F">
+	<!ENTITY itCymekOmniMiningLaser "0xD5390010">
+	<!ENTITY itMetalBlitz "0xD5390011">
+	<!ENTITY itPersonalCDMShard "0xD5390012">
+]>
+
+<!--
+
+References/Mods
+
+* FAD's Hornet Battle Pod Player Ship: http://xelerus.de/index.php?s=mod&id=18&d=0
+* Shivian Hunter's Hornet Battle Pod Player Ship: http://xelerus.de/index.php?s=mod&id=1223&d=1
+* Soggydoggy's One Piece Armor Mod: http://xelerus.de/index.php?s=mod&id=358&d=1
+* darksider's Barrel Launcher: http://xelerus.de/index.php?s=mod&id=244
+
+To Do:
+- Add references to other mods used
+- Fix bugs, for the moment buggy code is commented out.
+- Upload to GitHub, fork Transcendence source also
+- Recall auton option
+- Add new hornet battle pod to Eternity Port mod if possible
+- Balance Recipes; specifically armor
+- New Items
+  - Micro-missiles
+  - Container of small arms
+  - Missile enhancement ROM
+  - Weapon crates
+  - (illegal) Better than life head set!
+- Number of device slots for the HornetBattle?
+- BUGS: Fix renaming habitats
+
+-->
+
+
+<TranscendenceExtension 
+	UNID="&UNIDExtensionHornet;" 
+	apiVersion="22" 
+	name="Cymek Industries" 
+	credits="howerj/HornetBattlePodsRule <https://github.com/howerj/cymek>, darksider (barrel bomb), FAD's hornet battle pod mod, Shivian Hunter's hornet battle pod mod, Soggydoggy's one piece armor mod, and more!"
+	>
+	
+	<Image UNID="&rsArmorHUDShip_Hornet;" bitmap="Resources/ArmorHUDShip_Hornet.jpg"/>
+	<Image UNID="&rsHornetArmorSingle;" bitmap="Resources/OneArmorHUD.bmp"/>
+	<Image UNID="&rsHornetLarge;" bitmap="Resources/LargeHornet.jpg" bitmask="Resources/LargeHornetMask.bmp"/>
+	<Image UNID="&rsBarrelBomb;"	bitmap="Resources/barrelbomb.jpg"	bitmask="Resources/barrelbombmask.bmp" backColor="0x00000000"/>
+
+	<ShipClass UNID="&scPlayerHornetBase;"
+			class=				"(player Hornet base class)"
+			attributes=			"commonwealth, playerClass, startingClass, 00200000_PlayerShip"
+			characterClass=		"&unidPilgrimClass;"
+			>
+
+		<PlayerSettings
+			desc=				"This modified Hornet Battle pod was commissioned by the Late and Legendary Anarchist pilot Zephron Janus Babblebrox which they were unable to collect. Zephron's next of kin sold the rights to their life story, which have made somewhat unpopular with those sympathetic with the Anarchists."
+			startingCredits=	"1d100+37"
+
+			largeImage=			"&rsHornetLarge;"
+			initialClass=		"true"
+			>
+
+			<ArmorDisplay>
+				<ShipImage imageID="&rsArmorHUDShip_Hornet;" imageWidth="136" imageHeight="136"/>
+				<ArmorSection name="main"
+						imageID="&rsHornetArmorSingle;" 
+						imageX="0" imageY="0" imageWidth="110" imageHeight="110"
+						destX="13" destY="13" hpX="55" hpY="14"
+						nameY="8" nameBreakWidth="200" nameDestX="0" nameDestY="10" />
+			</ArmorDisplay>
+
+			<ShieldDisplay shieldLevelEffect="&efShieldHUDDefault;"> </ShieldDisplay>
+
+			<ReactorDisplay>
+				<Image imageID="&rsZubrinReactor;" 
+						imageX="0" imageY="0" imageWidth="256" imageHeight="60"/>
+
+				<PowerLevelImage imageID="&rsZubrinReactor;"
+						imageX="0" imageY="60" imageWidth="202" imageHeight="14"
+						destX="54" destY="9"/>
+
+				<FuelLevelImage imageID="&rsZubrinReactor;"
+						imageX="0" imageY="74" imageWidth="194" imageHeight="14"
+						destX="54" destY="37"/>
+
+				<FuelLowLevelImage imageID="&rsZubrinReactor;"
+						imageX="0" imageY="88" imageWidth="194" imageHeight="14"/>
+
+				<ReactorText x="62" y="22" width="154" height="14"/>
+				<PowerLevelText x="62" y="0" width="154" height="9"/>
+				<FuelLevelText x="62" y="51" width="154" height="9"/>
+			</ReactorDisplay>
+		</PlayerSettings>
+	</ShipClass>
+
+	<ShipClass UNID="&scHornetPlayer;"
+			manufacturer=		"Cymek Industries"
+			class=				"Cymek Hornet"
+			type=				"battlepod"
+			score=				"1"
+
+			mass=				"5"
+			reactorPower=		"100"
+			fuelCapacity=		"10000"
+			cargoSpace=			"30"
+			thrust=				"150"
+			maxSpeed=			"45"
+
+			maxArmor=			"5000"
+			maxCargoSpace=		"60"
+			maxDevices=			"6"
+			maxWeapons=			"2"
+
+			leavesWreck=		"0"
+			
+			attributes=			"00200000_PlayerShip"
+			
+			inherit=			"&scPlayerHornetBase;"
+			>
+
+		<Armor>
+			<ArmorSection name="main" start="0" span="360" armorID="&itUltraLightTitaniumCasing;"/>
+			<!--<ArmorSection name="main" start="0" span="360" armorID="&itNanoInfusedUltraSteel;"/>-->
+		</Armor>
+
+		<Items>
+			<Item count="3d3" item="&itHelium3FuelRod;"/>
+			<Item count="1" item="&itTradingComputerROM;"/>
+			<Item count="1" item="&itTargetingComputerROM;"/>
+
+			<!-- Test Items
+			<Item count="2d3" item="&itTitaniumOre;"/>
+			<Item count="1d3" item="&itBarrelBomb;"/>
+			<Item count="1" item="&itPlayerCargoContainer;"/>
+			<Item count="1" item="&itEmergencySupplies;"/>
+			<Item count="3" item="&itRegeneratingNanos;"/>
+			<Item count="2" item="&itFusionTrigger;"/>
+			<Item count="2" item="&itBioTechMod;"/>
+			<Item count="2" item="&itBrainInAVat;"/>
+			<Item count="1" item="&itMetalBlitz;"/>
+
+			<Item count="1" item="&itWeaponSpeedROM;"/>
+			<Item count="1" item="&itEnhanceSRSROM;"/>
+			-->
+		</Items>
+
+		<Devices>
+			<DeviceSlot criteria="w" posAngle="0" posRadius="14"/>
+			<Device deviceID="&itCymekOmniMiningLaser;"/>
+			<Device deviceID="&itNanoFabricator;"/>
+			<!--<Device deviceID="&itCymekMicroDeflector;"/>
+			<Device deviceID="&itMinersSmugglingCargoHold;"/>
+			<Device deviceID="&itPersonalCDMShard;"/>-->
+		</Devices>
+
+		<AISettings
+			fireRateAdj=		"30"
+			fireAccuracy=		"90"
+			perception=			"4"
+			/>
+
+		<Maneuver
+			maxRotationRate=	"18.0"
+			rotationAccel=		"6.0"
+			/>
+
+		<Image imageID="&rsHornetHD;" imageWidth="32" imageHeight="32" rotationCount="120" rotationColumns="12" viewportRatio="0.0029375"/>
+		<HeroImage imageID="&rsHornetHero;" imageWidth="320" imageHeight="320"/>
+
+		<Effects>
+			<Effect type="thrustMain"		posAngle="180"	posRadius="8"	posZ="0"	rotation="180"/>
+		</Effects>
+
+	</ShipClass>
+
+	<ItemType UNID="&itCymekMicroDeflector;"
+			name=				"Cymek Micro Deflector"
+			level=				"2"
+			value=				"300"
+			mass=				"50"
+			frequency=			"uncommon"
+			modifiers=			"MajorItem"
+			showReference=		"true"
+
+			description=		"This ultra lightweight micro deflector can be installed by hand if needed. It requires no device slots, a Cymek speciality."
+
+			>
+
+		<Image imageID="&rsItems1;" imageX="192" imageY="0" imageWidth="96" imageHeight="96"/>
+
+		<Shields
+				hitPoints=		"12"
+				hpBonus=		"0"
+				regen=		        "12"
+				depletionDelay=	        "288"
+				powerUse=		"5"
+                                deviceSlots="0"
+				/>
+                
+        <Invoke>
+			(intAutoInstall gSource gItem)
+		</Invoke>
+
+		</ItemType>
+
+	<ItemType UNID="&itCymekOmniMiningLaser;"
+			name=				"Cymek Omni Mining Laser"
+			level=				"6"
+			value=				"2500"
+			mass=				"1000"
+			frequency=			"rare"
+			modifiers=			"EnergyWeapon; MajorItem; Specialty;"
+			showReference=		"true"
+
+			description=		"Cymek Industries have spent considerable effort in optimizing obsolete laser weaponry for motives unknown. This omni mining laser is one such artifact of this shadowy organization."
+			>
+
+		<Image imageID="&rsItems1;" imageX="96" imageY="0" imageWidth="96" imageHeight="96"/>
+
+		<Weapon
+				type=				"beam"
+				damage=				"laser:1d4+1; mining:5;"
+				fireRate=			"30"
+				lifetime=			"50"
+				powerUse=			"20"
+			        omnidirectional=		"true" 
+                                deviceSlots=			"0"
+				fireEffect=			"&efGreenLaserFireEffect;"
+				hitEffect=			"&efGreenLaserHitEffect;"
+				sound=				"&snLaserCannon;"
+				>
+			<Effect>
+				<Beam
+						beamType=			"laser"
+						primaryColor=		"0x5f, 0xf1, 0x2a"
+						secondaryColor=		"0x00, 0xff, 0x00"
+						/>
+			</Effect>			
+		</Weapon>
+
+        	<Invoke>
+			(intAutoInstall gSource gItem)
+		</Invoke>
+		</ItemType>
+
+	<!--
+	<ItemType UNID="&itCymekNaniteProjector;"
+			name=				"Cymek Nanite Projector Matrix"
+			level=				"6"
+			value=				"1650"
+			mass=				"120"
+			frequency=			"rare"
+			modifiers=			"EnergyWeapon; MajorItem; Specialty;"
+			showReference=		"true"
+
+			description=		"This Cymek Industries device projects charged offensive nanites from a regenerating feedstock to perform mining functions. The nanite reservoir can be refilled by feeding these tiny robots any old junk."
+			>
+
+		<Image imageID="&rsItems1;" imageX="96" imageY="0" imageWidth="96" imageHeight="96"/>
+
+		<Weapon
+				type=				"beam"
+				minFireArc=			"345"
+				maxFireArc=			"15"
+				damage=				"nano:1d3+1; mining:6;"
+				fireRate=			"20"
+				lifetime=			"70"
+			        powerUse=			"20"
+			        omnidirectional = "true" 
+                                deviceSlots="0"
+
+				beamType=			"lightning"
+				primaryColor=		"0xc4, 0x2a, 0xf1"
+				secondaryColor=		"0xc0, 0x00, 0xff"
+                                intensity=			"1"
+				directional=		"true"
+                                sound=				"&snLaserCannon;"
+				>
+		</Weapon>
+        
+        	<Invoke>
+			(intAutoInstall gSource gItem)
+		</Invoke>
+	</ItemType>-->
+
+	<ItemType UNID="&itNanoInfusedUltraSteel;"
+			name=				"segment of Cymek Nanite Infused Steel"
+			level=				"7"
+			value=				"3500"
+			mass=				"1000"
+			frequency=			"rare"
+			numberAppearing=	"4"
+			modifiers=			"MinorItem; Specialty;"
+
+			description=		"Made for next generation Cymek scout ships this nano-forged and nanite infused composite allows ships self-sufficiency on long missions. Despite its name, it contains only trace amounts of Iron."
+
+			>
+
+		<Image imageID="&rsItems1;" imageX="0" imageY="0" imageWidth="96" imageHeight="96"/>
+
+		<Armor
+				hitPoints=	"100"
+				hpBonus=	"+0"
+				repairTech=	"8"
+				composition=            "nanoscale"
+				regen="1"
+				radiationImmune=        "true"
+                                photoRecharge=          "30"
+
+				blindingImmune=			"false"
+				deviceDamageImmune=		"false"
+				disintegrationImmune=	"false"
+				radiationImmune=		"true"
+				shatterImmune=			"false"
+
+
+				/>
+                
+    	</ItemType>
+        
+	<ItemType UNID="&itEmergencySupplies;"
+			name=				"[crate(s) of ]emergency supplies"
+			level=				"2"
+			value=				"250"
+			mass=				"500"
+			frequency=			"uncommon"
+			numberAppearing=	"1d8"
+			attributes=			"Consumable; consumerGood, humanTech, Meds, Food"
+
+			description=		"Water, rations, medicine, radio flares, tools, even a disposable space suit, This container  has everything a budding cosmonaut needs to survive in the vacuum of space for up to 72 hours. "
+
+			sortName=			"medical supplies, crate of"
+			>
+
+		<Image imageID="&rsItems1;" imageX="192" imageY="480" imageWidth="96" imageHeight="96"/>
+	</ItemType>
+
+
+	<ItemType UNID="&itNanoFabricator;"
+			name=				"Cymek Nano Fabricator"
+			attributes=			"humanTech, majorItem"
+			  
+			level=				"7"
+			frequency=			"rare"
+			unknownType=		"&itUnknownAlienDevice;"
+
+			value=				"3500"
+			mass=				"1000"
+                        deviceSlots="0"
+			  
+			description=		"For such an advanced device it looks more like a barrel full of gray goop. This is a nano-fabricator, bordering on illegality it is capable of producing many goods from raw materials."
+			>
+
+		<Image imageID="&rsItems1;" imageX="0" imageY="192" imageWidth="96" imageHeight="96"/>
+
+		<MiscellaneousDevice powerUse=			"1" />
+
+		<Invoke key="F" installedOnly="false">
+			(block Nil
+				(scrShowScreen gScreen &dsNanoFabricator;)
+
+				; Item identified
+				(itmSetKnown gItem)
+				)
+		</Invoke>
+
+	</ItemType>
+
+	<DockScreen UNID="&dsNanoFabricator;"
+			type=           "customItemPicker"
+			inherit=		"&dsDockScreenBase;"
+			nestedScreen=   "true"
+			>
+		<Display type="customItemPicker"
+				displayActual="true"
+				>
+			(block (
+				(criteria (or (@ gData 'criteria) "* +hasComponents:true;"))
+				)
+				(append
+					;	Items with component definitions
+					(map (itmGetTypes criteria) 'excludeNil theType
+						(itmCreate theType 1)
+						)
+
+					;	Global Nano Fab recipes
+					(map (typGetData &dsNanoFabricator; 'NanoRecipes) 'excludeNil theRecipe
+						(itmSetData (tinkerCreateItem theRecipe 1) 'recipe theRecipe)
+						)
+					)
+				)
+		</Display>
+		
+		<Panes>
+			<Default>
+				<OnPaneInit>
+					(block (
+						(theItem (scrGetItem gScreen))
+						(theRecipe (itmGetData theItem 'recipe))
+						(fabInfo (if theRecipe
+							(tinkerCalcFabrication theRecipe)
+							(rpgCalcCreateFromComponents theItem gPlayerShip gSource)
+							))
+						;(workCost (@ fabInfo 'workCost))
+						(workCost 0)
+						(currencyUsed (@ fabInfo 'currencyUsed))
+						(maxCount (@ fabInfo 'maxCount))
+
+						;	Data for error conditions
+						(itemNeeded (or (@ (@ fabInfo 'componentsMissing) 0) (@ (@ fabInfo 'componentsLacking) 0)))
+						(errorDesc {
+							item: itemNeeded
+							itemCount: (itmGetCount itemNeeded)
+							itemName: (itmGetName itemNeeded 'actual)
+							itemNames: (itmGetName itemNeeded '(actual plural))
+							itemNamesShort: (itmGetName itemNeeded '(actual plural short))
+							})
+						desc
+						)
+
+						;	Set the description of the selected item
+						
+						(switch
+							(not theItem)
+								(scrSetDescTranslate gScreen 'descFabricateNoItems)
+							
+							(not (@ fabInfo 'componentsNeededDesc))
+								(scrSetDescTranslate gScreen 'descFabricateItemNoComponents {
+									itemName: (itmGetName theItem '(actual count))
+									cost: (fmtCurrency currencyUsed workCost)
+									})
+
+							(scrSetDescTranslate gScreen 'descFabricateItem {
+								itemName: (itmGetName theItem '(actual count))
+								cost: (fmtCurrency currencyUsed workCost)
+								})
+							)
+
+						;	Set the list of components
+
+						(scrSetControlValue gScreen 'componentsNeeded (@ fabInfo 'itemListDisplay))
+
+						;	Generate an error descriptor, if we can't fabricate even a single item
+
+						(switch
+							(not theItem)
+								Nil
+
+							(@ fabInfo 'componentsMissing)
+								(scrSetControlValue gScreen 'descError
+									(scrTranslate gScreen 'errorComponentMissing errorDesc)
+									)
+
+							(and (@ fabInfo 'componentsLacking) (= (@ errorDesc 'itemCount) 1))
+								(scrSetControlValue gScreen 'descError
+									(scrTranslate gScreen 'errorComponentLacking errorDesc)
+									)
+
+							(@ fabInfo 'componentsLacking)
+								(scrSetControlValue gScreen 'descError
+									(scrTranslate gScreen 'errorComponentsLacking errorDesc)
+									)
+
+							(leq (plyGetCredits gPlayer) (@ fabInfo 'workCost))
+								(scrSetControlValue gScreen 'descError
+									(scrTranslate gScreen 'errorMoneyLacking)
+									)
+
+							(@ fabInfo 'noCargoSpace)
+								(scrSetControlValue gScreen 'descError
+									(scrTranslate gScreen 'errorCargoSpace)
+									)
+							)
+
+						;	Remember the recipe, the components, and the cost for later
+						(scrSetData gScreen 'fabInfo fabInfo)
+
+						;	Disable Fabricate action if we can't do it
+						
+						(scrEnableAction gScreen 'actionFabricate (gr maxCount 0))
+						; (scrEnableAction gScreen 'actionReminder theItem)
+						)
+				</OnPaneInit>
+
+				<Controls>
+					<Text id="desc"/>
+					<ItemListDisplay id="componentsNeeded"	showActualItem="true"/>
+					<Text id="descError"/>
+				</Controls>
+
+				<Actions>
+					<Action id="actionFabricate" default="1">
+						(block (
+							(fabInfo (scrGetData gScreen 'fabInfo))
+							)
+
+							(if (gr (@ fabInfo 'maxCount) 1)
+								(scrShowPane gScreen "FabricateCount")
+
+								(block Nil
+									(scrSetData gScreen 'result
+										(rpgCreateFromComponents fabInfo gPlayerShip gSource 1 {
+											reminderCriteria: "aS +unid:&msTinkerReminder;;"
+											})
+										)
+									(scrShowPane gScreen "FabricateResult")
+									)
+								)
+							)
+					</Action>
+					<Action id="actionDone" cancel="1">
+						(scrExitScreen gScreen)
+					</Action>
+				</Actions>
+			</Default>
+			
+			<FabricateCount
+					showCounter=	"true"
+					>
+				<OnPaneInit>
+					(block (
+						(fabInfo (scrGetData gScreen 'fabInfo))
+						)
+						(scrSetDescTranslate gScreen 'descFabricateCount)
+						(scrSetCounter gScreen (@ fabInfo 'maxCount))
+						)
+				</OnPaneInit>
+			
+				<Actions>
+					<Action id="actionFabricate" default="1">
+						(block (
+							(fabInfo (scrGetData gScreen 'fabInfo))
+							(count (scrGetCounter gScreen))
+							)
+							(switch
+								(gr count (@ fabInfo 'maxCount))
+									(scrSetCounter gScreen (@ fabInfo 'maxCount))
+
+								(leq count 0)
+									(scrShowPane gScreen "Default")
+
+								(block Nil
+									(scrSetData gScreen 'result
+										(rpgCreateFromComponents fabInfo gPlayerShip gSource count {
+											reminderCriteria: "aS +unid:&msTinkerReminder;;"
+											})
+										)
+									(scrShowPane gScreen "FabricateResult")
+									)
+								)
+							)
+					</Action>
+					
+					<Action id="actionCancel" cancel="1">
+						(scrShowPane gScreen "Default")
+					</Action>
+				</Actions>
+			</FabricateCount>
+				
+			<FabricateResult
+					noListNavigation="true"
+					>
+				<OnPaneInit>
+					(block (
+						(theResult (scrGetData gScreen 'result))
+						)
+						(scrSetDescTranslate gScreen 'descFabricateResult {
+							itemCreated: (itmGetName (@ theResult 'itemsCreated) 0x08)
+							itemsConsumed: (or (strItemList (@ theResult 'itemsConsumed) 0x08) "None")
+							totalCost: (fmtCurrency (@ theResult 'currencyUsed) (@ theResult 'totalCost))
+							})
+						)
+				</OnPaneInit>
+			
+				<Actions>
+					<Action id="actionDone" default="1" cancel="1">
+						(scrExitScreen gScreen)
+					</Action>
+				</Actions>
+			</FabricateResult>
+		</Panes>
+
+		<!-- We could add fuel rods as a `cost` -->
+		<GlobalData>
+			<NanoRecipes>
+				(
+					{ item:&itCymekMicroDeflector;	enhancement:Nil		components:( { item:&itTitaniumOre; count:4 }  { item:&itHydrocarbons; count:1 } { item:&itHelium3FuelRod; count:3 } )	totalCost:0 }
+					{ item:&itAutoSentinel;	enhancement:Nil		components:( { item:&itTitaniumOre; count:5 } { item:&itHelium3FuelRod; count:6 } )	totalCost:0 }
+					{ item:&itPlayerCargoContainer;	enhancement:Nil		components:( { item:&itTitaniumOre; count:5 } { item:&itHydrocarbons; count:1 } { item:&itHelium3FuelRod; count:3 } )	totalCost:0 }
+					{ item:&itFrozenSupplies;	enhancement:Nil		components:( { item:&itHydrocarbons; count:1 } { item:&itWaterIce; count:2 } { item:&itHelium3FuelRod; count:3 } )	totalCost:0 }
+					{ item:&itMedicalSupplies;	enhancement:Nil		components:( { item:&itHydrocarbons; count:2 } { item:&itWaterIce; count:1 } { item:&itHelium3FuelRod; count:3 } )	totalCost:0 }
+					{ item:&itEmergencySupplies;	enhancement:Nil		components:( { item:&itHydrocarbons; count:2 } { item:&itWaterIce; count:2 } { item:&itHelium3FuelRod; count:3 } )	totalCost:0 }
+					{ item:&itHeliumAssembly;	enhancement:Nil		components:( { item:&itHelium3FuelRod; count:6 } )	totalCost:0 }
+					{ item:&itUraniumRods;	enhancement:Nil		components:( { item:&itUraniumOre; count:1 } )	totalCost:0 }
+					{ item:&itCymekOmniMiningLaser;	enhancement:Nil components:( { item:&itNiobiumOre; count:2 } { item:&itTitaniumOre; count: 3 } )	totalCost:0 }
+					{ item:&itDisposableLauncher;	enhancement:Nil    		components:( { item:&itKM100Missile; count:32 } { item:&itTitaniumOre; count: 1 } )	totalCost:0 }
+					{ item:&itDM1500MissileRack;	enhancement:Nil    		components:( { item:&itKM500Missile; count:32 } { item:&itTitaniumOre; count: 1 } )	totalCost:0 }
+					{ item:&itNanoInfusedUltraSteel;	enhancement:Nil    		components:( { item:&itCeralloyOre; count:1 } { item:&itDuralloyOre; count: 4 } )	totalCost:0 }
+					{ item:&itRegeneratingNanos;	enhancement:Nil    		components:( { item:&itRepairingNanos; count: 2 } )	totalCost:0 }
+					{ item:&itUltraLightTitaniumCasing;	enhancement:Nil    		components:( { item:&itTitaniumOre; count: 1 } )	totalCost:0 }
+					{ item:&itPersonalCDMShard;	enhancement:Nil    		components:( { item:&itOpticalKnowledgeArray; count: 3 } { item:&itNeuralProcessor; count: 2 } )	totalCost:0 }
+					{ item:&itNanoFabricator;	enhancement:Nil    		components:( { item:&itRegeneratingNanos; count: 3 } { item:&itNeuralProcessor; count: 1 } { item:&itOrthosteelOre; count: 1 } )	totalCost:0 }
+
+					{ item:&itSuperconductingShields;	enhancement:Nil		components:( { item:&itSuperconductingCoil; count:4 } { item:&itHeavySungArmor; count:2 } )	totalCost:0 }
+					{ item:&itSuperconductingCoil;	enhancement:Nil		components:(  { item:&itNiobiumOre; count:1 } )	totalCost:0 }
+					
+					{ item:&itWasteCannon;				enhancement:Nil						components:( { item:&itRadioactiveWaste; count:8 })	totalCost:0 }
+					{ item:&itAmmoBoxKM100;				enhancement:Nil						components:( { item:&itHydrocarbons; count:1 })	totalCost:0 }
+					{ item:&itAmmoBoxSapiens;				enhancement:Nil						components:( { item:&itHydrocarbons; count:1 } { item:&itRadioactiveWaste; count:1 } )	totalCost:0 }
+					
+					)
+			</NanoRecipes>
+		</GlobalData>
+		
+		<Language>
+			<Text id="actionFabricate">[F]abricate</Text>
+			<!--<Text id="actionReminder">[R]emember for Later</Text>-->
+
+			<Text id="descFabricateNoItems">
+				Unfortunately, you do not have any required components.
+			</Text>
+			<Text id="descFabricateItem">
+				To fabricate %itemName% the following components are needed:
+			</Text>
+			<Text id="descFabricateItemNoComponents">
+				To fabricate %itemName% we charge %cost%.
+			</Text>
+			<Text id="descFabricateReminderAdded">
+				A reminder has been added to your mission computer. Once you obtain
+				the necessary items you may return here to fabricate %itemName%.
+			</Text>
+			<Text id="descFabricateCount">
+				How many items do you wish to fabricate?
+			</Text>
+			<Text id="descFabricateResult">
+				After aggressive squelching and burbling the nano-soup retreats back
+				into the barrel from whence it came:
+
+				Fabricated: %itemCreated%.\n
+				Consumed: %itemsConsumed%.\n
+			</Text>
+
+			<Text id="errorComponentLacking">
+				Unfortunately, you need one more %itemName%.
+			</Text>
+			<Text id="errorComponentsLacking">
+				Unfortunately, you need %itemCount% more %itemNames%.
+			</Text>
+			<Text id="errorComponentMissing">
+				Unfortunately, you do not have any %itemNamesShort%.
+			</Text>
+			<Text id="errorMoneyLacking">
+				Unfortunately, you do not have enough credits.
+			</Text>
+			<Text id="errorCargoSpace">
+				Unfortunately, you do not have enough cargo space.
+			</Text>
+		</Language>
+	</DockScreen>
+
+	<ItemType UNID="&itPersonalCDMShard;"
+			name=				"Personal CDM Shard"
+			level=				"7"
+			value=				"1500"
+			mass=				"1000"
+			frequency=			"rare"
+			attributes=			"MajorItem, communion, humanTech, info, soul, notForSale, QuantumCPU"
+
+			description=		"This Quantum CDM shard contains a homomorphically encrypted copy of your mind running in a virtual paradise. Given the CDM copy will only talk to you, it is much less useful to anyone else... "
+		>
+
+		<CyberDeckDevice
+				range=			"40"
+				attackChance=	"80"
+				aiLevel=		"5"
+				program=		"Disarm"
+				programName=	"DisarmAll v5.3.2"
+                                deviceSlots=	 "1"
+                                powerUse=		"10"
+			/>
+
+		<Properties>
+			<Definition id="sisters.donateRel">270</Definition>
+		</Properties>
+
+		<Image imageID="&rsItems1;" imageX="192" imageY="288" imageWidth="96" imageHeight="96"/>
+
+        	<Invoke>
+			(intAutoInstall gSource gItem)
+		</Invoke>
+		
+		<Language>
+			<Text id="sisters.donateDesc">
+				
+				You hear a voice in your head but can't understand the words. 
+				You feel joy and sadness, triumph and failure, surprise and
+				regret.
+
+				Eventually, all those feelings fade and you're left with the
+				presence of Domina and a sense of loss.
+				
+			</Text>
+		</Language>
+	</ItemType>
+
+
+
+	<ItemType UNID="&itPlayerCargoContainer;"
+			name=				"Deployable Container Habitat"
+			level=				"2"
+			value=				"300"
+			mass=				"2000"
+			frequency=			"common"
+			modifiers=			"commonwealth, humanTech"
+			description=                    "A deployable container habitat and storage solution."
+			>
+                        
+			<!--<CyberDeckDevice
+						range=			"40"
+						attackChance=	"40"
+						aiLevel=		"10"
+						program=		"Disarm"
+						programName=	"DisarmAll v5.3.2"
+						powerUse=		"1"
+						deviceSlots=	 "0"
+			/>-->
+		<Image imageID="&rsItems1;" imageX="288" imageY="0" imageWidth="96" imageHeight="96"/>
+
+		<Invoke key="H">
+			(block (newStation)
+			      (setq gDest (sysCreateStation &stPlayerCargoContainer; (sysVectorPolarOffset gPlayerShip 0 0)))
+			      ; Welcome message
+			      (objSendMessage gSource Nil "Habitat Deployed.")
+
+			      ; Remove the item from the player's list
+			      (objRemoveItem gSource gItem 1)
+			)
+		</Invoke>
+	</ItemType>
+
+	<!-- Player Cargo Container -->
+
+	<!-- TODO: Fix cargo space, fix name when renaming container, add option to collapse habitat container back if it is empty. -->
+	<!-- It would be nice if we could take the container with if it is empty -->
+	<StationType UNID="&stPlayerCargoContainer;"
+			name=				"player habitat"
+			sovereign=			"&svPlayer;"
+			inherit=			"&unidCommonText;"
+		
+			attributes=			"envAir, generic, friendly, majorStation"
+
+			abandonedScreen=	"Main"
+
+			scale=				"ship"
+			size=				"20"
+			mass=				"50"
+			structuralHitPoints=		"40"
+			cargoSpace=			"100" 
+			mobile=				"true"
+			noMapIcon=			"false"
+			ejectaType=			"&vtWreckEjecta;"
+		>
+
+		<Properties>
+			<Definition id="autonItemType">&itPlayerCargoContainer;</Definition>
+			<Definition id="cargoSpace">100</Definition>
+		</Properties>
+
+
+		<ImageVariants> <!-- Image and Effects Sealed containers are mostly orange, with a small chance of other colors.  -->
+			<Image	imageID="&rsCargoContainer;"	imageX="0"   imageY="0"   imageWidth="56" imageHeight="56" viewportRatio="0.00406"/>
+			<Image	imageID="&rsCargoContainer;"	imageX="56"  imageY="0"   imageWidth="56" imageHeight="56" viewportRatio="0.00406"/>
+			<Image	imageID="&rsCargoContainer;"	imageX="112" imageY="0"   imageWidth="56" imageHeight="56" viewportRatio="0.00406"/>
+			<Image	imageID="&rsCargoContainer;"	imageX="168" imageY="0"   imageWidth="56" imageHeight="56" viewportRatio="0.00406"/>
+			<Image	imageID="&rsCargoContainer;"	imageX="224" imageY="0"   imageWidth="56" imageHeight="56" viewportRatio="0.00406"/>
+			<Image	imageID="&rsCargoContainer;"	imageX="280" imageY="0"   imageWidth="56" imageHeight="56" viewportRatio="0.00406"/>
+			<Image	imageID="&rsCargoContainer;"	imageX="336" imageY="0"   imageWidth="56" imageHeight="56" viewportRatio="0.00406"/>
+			<Image	imageID="&rsCargoContainer;"	imageX="392" imageY="0"   imageWidth="56" imageHeight="56" viewportRatio="0.00406"/>
+
+			<Image	imageID="&rsCargoContainer;"	imageX="112" imageY="56"  imageWidth="56" imageHeight="56" viewportRatio="0.00406"/>
+			<Image	imageID="&rsCargoContainer;"	imageX="336" imageY="112" imageWidth="56" imageHeight="56" viewportRatio="0.00406"/>
+		</ImageVariants>
+
+		<DockingPorts
+				portCount=		"2"
+				portRadius=		"50"
+				maxDist=		"3"
+			/>
+
+		<Language>
+			<Text id="actionUndock">[U]ndock</Text>
+			<Text id="actionUndeploy">[X] Retrieve this container</Text>
+			<Text id="actionJettison">[S]tore Items</Text>
+			<Text id="actionLoot">[R]etrieve Items</Text>
+			<Text id="actionNameContainer">[N]ame Habitat</Text>
+			<Text id="actionRetrieveThisItem">[R]etrieve this Item</Text>
+			<Text id="actionRetrieve">[R]etrieve</Text>
+			<Text id="actionStoreThisItem">[S]tore this Item</Text>
+			<Text id="actionStore">[S]tore</Text>
+			<Text id="core.noItemsHereDesc">There are no items here.</Text>
+
+			<!-- The `%capacity%` variable is not being calculated correctly, presumably because
+				the right object is not getting the `cargoSpace` property set.
+
+				When it is fixed, add in the string:
+				
+				"Capacity Left: %capacity%"
+
+				Otherwise the container has unlimited storage capacity.
+			-->
+			<Text id="descDefault">
+
+				These cheap and popular 20 Ft modular shipping containers can be deployed 
+				into a personal habitat or a storage solution depending on the users needs.  
+
+				Along with a shower, toilet, bed, oxygen recycler, radio, and solar panels. 
+				The major feature according to the digi-brochure is a Soylent combined waste and 
+				food processor which comes with the tag line 'Tasty and Hygienic!'.
+
+				This one is yours, you need to tidy up and you forgot to turn the Holo TV off
+				when you last left.
+			</Text>
+
+			<Text id="rpg.jettisonQuantity">How many items do you wish to store?</Text>
+			<Text id="rpg.lootQuantity">How many items do you wish to retrieve?</Text>
+			<Text id="rpg.noSpaceToJettison">There is not enough space here to store %itemName%.</Text>
+			<Text id="rpg.onlySomeSpaceToJettison">There is only enough space here to store %itemName%.</Text>
+		</Language>
+		
+		<!-- Docking -->
+		
+		<DockScreens>
+			<Main>
+				<Panes>
+					<Default descID="descDefault">
+						<OnPaneInit>
+							(block ()
+								(scrSetDescTranslate gScreen 'descDefault {
+									name: (objGetName gSource 0)
+									capacity: (fmtNumber 'massKg (objGetCargoSpaceLeft gSource))
+									})
+
+								(rpgSetLootAction gSource)
+								)
+						</OnPaneInit>
+
+						<Actions>
+							<Action id="actionLoot" default="1">
+								(scrShowScreen gScreen &dsRPGLoot; {
+									lootLabel: (objTranslate gSource 'actionRetrieveThisItem)
+									lootConfirmLabel: (objTranslate gSource 'actionRetrieve)
+									})
+							</Action>
+
+							<Action id="actionJettison">
+								(scrShowScreen gScreen &dsRPGJettison; {
+									jettisonLabel: (objTranslate gSource 'actionStoreThisItem)
+									jettisonConfirmLabel: (objTranslate gSource 'actionStore)
+									})
+							</Action>
+
+							<!-- Bug with Auton Name, so comment this out for now.
+							<Action id="actionNameContainer">
+								(scrShowScreen gScreen &dsNameAuton; { autonObject:gSource } )
+								</Action>
+							-->
+
+							<Action id="actionUndock" cancel="1" default="1">
+								<Exit/>
+							</Action>
+
+							<!--<Action id="actionUndeploy"> </Action>-->
+						</Actions>
+					</Default>
+				</Panes>
+
+			</Main>
+		</DockScreens>
+	</StationType>
+
+	<ItemType UNID="&itAmmoBoxKM100;"
+			name=				"KM100 ammunition box(es)"
+			level=				"2"
+			value=				"200"
+			mass=				"1000"
+			frequency=			"notrandom"
+			unknownType=		"&vtUnknownAmmoBox;"
+			attributes=			"ammoBox, commonwealth, consumable"
+
+			description=		"This box contains KM100 missiles."
+			>
+
+		<Image imageID="&rsItems1;" imageX="0" imageY="384" imageWidth="96" imageHeight="96"/>
+
+		<Invoke>
+			(intAmmoBoxOpen (itmCreate &itKM100Missile; 50))
+		</Invoke>
+
+	</ItemType>
+
+	<ItemType UNID="&itAmmoBoxSapiens;"
+			name=				"Sapiens Radiation Mine ammunition box(es)"
+			level=				"2"
+			value=				"150"
+			mass=				"500"
+			frequency=			"notrandom"
+			unknownType=		"&vtUnknownAmmoBox;"
+			attributes=			"ammoBox, commonwealth, consumable, illegal"
+
+			description=		"This box contains Sapiens Radiation Mines."
+			>
+
+		<Image imageID="&rsItems1;" imageX="0" imageY="384" imageWidth="96" imageHeight="96"/>
+
+		<Invoke>
+			(intAmmoBoxOpen (itmCreate &itSapiensRadiationMine; 20))
+		</Invoke>
+
+	</ItemType>
+
+<!-- barrel bomb  -->
+
+	<ItemType UNID="&vtBarrelBombFire;"
+			name=				"thrown barrel bomb"
+			virtual=			"true"
+			level=				"2"
+			>
+
+		<Weapon
+				type=			"missile"
+				lifetime=		"250"
+				damage=			"blast:8d6; momentum1; WMD4"
+				missileSpeed=	"3"
+				hitPoints=		"20"
+				canhitsource=	"false"
+				powerUse=			"10"
+				hitEffect=		"&efFragmentationExplosion;"
+
+				failsafe=		"10"
+			>
+
+
+			<Effect>
+				<Image imageID="&rsBarrelBomb;" imageX="0" imageY="0" imageWidth="24" imageHeight="24" imageFrameCount="12" imageTicksPerFrame="10"/>
+			</Effect>
+
+			<Fragment 
+				count=			"1"
+				type=			"radius"
+				canhitsource=	"true"
+
+				damage=			"blast:8d6; momentum:3; WMD:4"
+				minRadius=		"1"
+				maxRadius=		"4"
+				missileSpeed=	"0"
+				lifetime=	"6"
+				>
+
+				<Effect>
+					<Flare
+						style=				"fadingBlast"
+						radius=				"160"
+						primaryColor=		"0xe0, 0x90, 0x80"
+						/>
+				</Effect>
+			</Fragment>
+		</Weapon>
+
+	</ItemType>
+
+	<ItemType UNID="&itBarrelBomb;"
+			name=				"barrel bomb"
+
+			level=				"2"
+			value=				"25"
+			mass=				"1000"
+			frequency=			"common"
+			numberAppearing=	"2d20"
+			modifiers=			"Consumable; Missile; "
+
+			description=		"An awfully primitive weapon, which is just a barrel filled with explosives and a simple control device. These explosives can be used without any dedicated launcher."
+			>
+
+		<Image imageID="&rsItems1;" imageX="96" imageY="96" imageWidth="96" imageHeight="96"/>
+
+	<Invoke key="B">
+		(block (barrelbombthrow)
+			; Create the thrown barrel bomb
+			(setq barrelbombthrow
+				(sysCreateWeaponfire &vtBarrelBombFire; gPlayership (objGetPos gSource) (add (random -8 8) (shpGetDirection gPlayership)) (rolldice 1 6) Nil) )
+
+			; Identify the item (if not known)
+			(itmSetKnown gItem)
+
+			; Remove the item from the player's list
+			(objRemoveItem gSource gItem 1)
+		)
+	</Invoke>
+
+	</ItemType>
+
+    <ItemType UNID="&itMinersSmugglingCargoHold;"
+            name=               "ore smugglers cargo hold"
+            level=              "5"
+            value=              "8000"
+            mass=               "650"
+            frequency=          "rare"
+            numberAppearing=    "1"
+            attributes=         "majorItem, MinersHold, illegal, smugglersHold"
+            description=        "This hold has a mining scoop to being ore aboard along with several scan shielded hidden compartments to hide illicit goods."
+            >
+
+        <Image  imageID="&rsItems1;"
+                imageX="96" imageY="192"
+                imageWidth="96" imageHeight="96"
+                />
+
+	<CargoHoldDevice cargoSpace=		"30" >
+		<Equipment>
+			<!-- We could turn this into a ROM -->
+			<Install equipment="miningComputer"/>
+		</Equipment>
+	</CargoHoldDevice>
+
+</ItemType>
+
+	<ItemType UNID="&itBioTechMod;"
+			name=				"biotech mod"
+			level=				"6"
+			value=				"2500"
+			mass=				"15"
+			frequency=			"rare"
+			numberAppearing=	"1d2"
+			attributes=			"Consumable; humanTech, Meds, illegal"
+
+			description=		"This container of nanite and gene biomods have been outlawed throughout human space."
+			>
+
+		<Image imageID="&rsItems1;" imageX="192" imageY="480" imageWidth="96" imageHeight="96"/>
+
+		<!-- Installing these could have consequences, perhaps adding special minor powers, such
+		as hacking/disabling weapons on enemy ships to slowing down time (increased reaction speed) temporarily. 
+
+		You could also get caught... -->
+	</ItemType>
+
+	<ItemType UNID="&itBrainInAVat;"
+			name=				"Cymek Brain in a vat"
+			level=				"6"
+			value=				"3500"
+			mass=				"150"
+			frequency=			"rare"
+			attributes=			"communion, consumable, humanTech, info, soul, notForSale, illegal"
+
+			description=		"Cymek industries pioneered the disincorporated individual, a human brain in a self sustaining vat. Whilst not illegal in and of themselves these living and thinking brains are illegal to trade."
+			>
+
+		<Properties>
+			<Definition id="sisters.donateRel">180</Definition>
+		</Properties>
+
+		<Image imageID="&rsItems1;" imageX="192" imageY="480" imageWidth="96" imageHeight="96"/>
+		
+		<Language>
+			<Text id="sisters.donateDesc">
+				You see a medical facility and a laser scalpel followed by a screaming black 
+				void, and finally a virtual world that feels empty and alone, a VR
+				display shows a CCTV camera pointing at a loved one, your avatar waves,
+				they wave back.
+				
+				You snap out of it. You feel the presence of Domina.
+			</Text>
+		</Language>
+
+	</ItemType>
+
+	<ItemType UNID="&itMetalBlitz;"
+			name=				"Flenser Metal Biltz"
+			level=				"6"
+			value=				"2500"
+			mass=				"220"
+			frequency=			"common"
+                        numberAppearing=               	"4d4"
+			modifiers=			"MajorItem; Illegal"
+
+			charges=			"60"
+			valueCharges=		"true"
+
+			description=		"This is a disposable weapon system that uses uranium-235 pellets both as fuel and ammunition. It was made illegal shortly after going into production as it contaminates its targets."
+			>
+
+		<Image imageID="&rsItems1;" imageX="0" imageY="480" imageWidth="96" imageHeight="96"/>
+
+		<Weapon
+				type=				"missile"
+				launcher=			"true"
+
+				damage=				"kinetic:4d8; momentum:2; WMD:3; radiation1"
+				fireRate=			"7"
+				missileSpeed=		        "90"
+				lifetime=			"80"
+				powerUse=			"2"
+				charges=			"true"
+                                deviceSlots=                    "1"
+
+				directional=		        "true"
+                                sound=				"&snRecoillessCannon;"
+				
+				>
+
+			<Effect>
+				<Image imageID="&rsMissiles3;" imageX="16" imageY="0" imageWidth="16" imageHeight="16" imageFrameCount="0" imageTicksPerFrame="0"/>
+			</Effect>
+		</Weapon>
+
+		<Invoke>
+			(intAutoInstall gSource gItem)
+		</Invoke>
+	</ItemType>
+
+
+</TranscendenceExtension>
+

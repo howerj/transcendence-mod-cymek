@@ -1,0 +1,53 @@
+Soggy Doggy's 	One Piece Armor mod - - - The Needed Code:
+
+In this zip is simply the, 1 graphic you'll need to create a ship
+with one simgle piece of armor. But the following code you'll need 
+for the XML code of the ship.
+
+
+The following are a couple of examples using the new images:
+
+RESOURCE:
+<Image UNID="&nwg"ShipName"Armour;" bitmap="OneArmourHUD.bmp" backColor="0x00000000"/>
+
+This is for the image reasource, the graphic name can be changed only if you change the
+"OneArmourHUD" bit.
+
+1 Segment Display:
+			
+	<ArmorDisplay>
+		<ArmorSection name="forward"
+				imageID="&nwg"ShipName"Armor;" 
+				imageX="0" imageY="0" imageWidth="110" imageHeight="110"
+				destX="13" destY="13" hpX="55" hpY="14"
+				nameY="8" nameBreakWidth="200" nameDestX="0" nameDestY="10" />
+
+	</ArmorDisplay>
+
+This goes in the "Player settings" section, this shows, which entity it uses, the verious
+settings needed to see the graphic and where the name of the armor and its hp goes.
+
+
+Finally,
+
+<Armor>
+	<ArmorSection start="0" span="360" armorID="&itDesiredArmorPiece;" areaSet="0,2" />
+</Armor>
+
+This just states the In Game coverage of the armor piece, just add in whatever armor piece
+you want and you're good! (No one seems to know what the area set is, so just leave it be).
+
+
+
+NOTE:
+for all the pro modders out there, sorry for the noob talk, just trying to be unnversaly 
+understood.			<!-- SOGGY DOGGY HAS SPOKEN -->
+
+
+
+
+
+
+
+
+
