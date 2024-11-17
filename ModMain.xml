@@ -155,11 +155,6 @@ To Do:
 
 		<Items>
 			<Item count="3d3" item="&itHelium3FuelRod;"/>
-			<Item count="1" item="&itTradingComputerROM;"/>
-			<Item count="1" item="&itTargetingComputerROM;"/>
-			<Item count="1" item="&itMiningComputerROM;"/>
-			<Item count="2" item="&itPlayerCargoContainer;"/>
-			<Item count="4d3" item="&itBarrelBomb;"/>
 			<!-- Test Items
 			<Item count="2d3" item="&itTitaniumOre;"/>
 			<Item count="1d3" item="&itBarrelBomb;"/>
@@ -171,6 +166,8 @@ To Do:
 			<Item count="2" item="&itBrainInAVat;"/>
 			<Item count="1" item="&itMetalBlitz;"/>
 
+			<Item count="1" item="&itTargetingComputerROM;"/>
+			<Item count="1" item="&itTradingComputerROM;"/>
 			<Item count="1" item="&itWeaponSpeedROM;"/>
 			<Item count="1" item="&itEnhanceSRSROM;"/>
 			-->
