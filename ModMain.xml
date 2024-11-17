@@ -3,7 +3,7 @@
 [
 	<!ENTITY UNIDExtensionHornet	"0xD008002f">
 	<!ENTITY rsArmorHUDShip_Hornet	"0xD008002e">
-	<!ENTITY rsHornetArmorSingle		"0xD008002d">
+	<!ENTITY rsHornetArmorSingle		"0xD008002d"> 
 	<!ENTITY rsHornetLarge			"0xD008002c">
 	<!ENTITY scPlayerHornetBase 	"0xD008002b">
 	<!ENTITY scHornetPlayer 		"0xD008002a">
@@ -26,9 +26,15 @@
 	<!ENTITY itCymekOmniMiningLaser "0xD5390010">
 	<!ENTITY itMetalBlitz "0xD5390011">
 	<!ENTITY itPersonalCDMShard "0xD5390012">
+	<!ENTITY itMiningComputerROM "0xD5390013">
+	<!ENTITY dsNameHabitat "0xD5390014">
 ]>
 
 <!--
+
+Mod Site: <https://github.com/howerj/transcendence-mod-cymek>
+
+* Author: Richard James Howe
 
 References/Mods
 
@@ -38,20 +44,22 @@ References/Mods
 * darksider's Barrel Launcher: http://xelerus.de/index.php?s=mod&id=244
 
 To Do:
-- Add references to other mods used
-- Fix bugs, for the moment buggy code is commented out.
-- Upload to GitHub, fork Transcendence source also
-- Recall auton option
-- Add new hornet battle pod to Eternity Port mod if possible
-- Balance Recipes; specifically armor
-- New Items
-  - Micro-missiles
-  - Container of small arms
-  - Missile enhancement ROM
-  - Weapon crates
-  - (illegal) Better than life head set!
-- Number of device slots for the HornetBattle?
-- BUGS: Fix renaming habitats
+
+* Build instructions / Add a release
+* Improve `readme.md`.
+* Recall auton option
+* Add new hornet battle pod to Eternity Port mod if possible
+* Balance Recipes; specifically armor
+* New Items
+  * Micro-missiles
+  * Container of small arms
+  * Missile enhancement ROM
+  * Weapon crates
+  * (illegal) Better than life head set!
+* Number of device slots for the HornetBattle?
+* Upgrade recipes via ROM? Also fabricate armor patches from ore, get a tech/craft tree going
+* Better Armor tile? The resource image needs cleaning up.
+
 
 -->
 
@@ -130,7 +138,7 @@ To Do:
 
 			maxArmor=			"5000"
 			maxCargoSpace=		"60"
-			maxDevices=			"6"
+			maxDevices=			"7"
 			maxWeapons=			"2"
 
 			leavesWreck=		"0"
@@ -149,7 +157,9 @@ To Do:
 			<Item count="3d3" item="&itHelium3FuelRod;"/>
 			<Item count="1" item="&itTradingComputerROM;"/>
 			<Item count="1" item="&itTargetingComputerROM;"/>
-
+			<Item count="1" item="&itMiningComputerROM;"/>
+			<Item count="2" item="&itPlayerCargoContainer;"/>
+			<Item count="4d3" item="&itBarrelBomb;"/>
 			<!-- Test Items
 			<Item count="2d3" item="&itTitaniumOre;"/>
 			<Item count="1d3" item="&itBarrelBomb;"/>
@@ -170,6 +180,7 @@ To Do:
 			<DeviceSlot criteria="w" posAngle="0" posRadius="14"/>
 			<Device deviceID="&itCymekOmniMiningLaser;"/>
 			<Device deviceID="&itNanoFabricator;"/>
+			<Device deviceID="&itDM1500MissileRack;"/>
 			<!--<Device deviceID="&itCymekMicroDeflector;"/>
 			<Device deviceID="&itMinersSmugglingCargoHold;"/>
 			<Device deviceID="&itPersonalCDMShard;"/>-->
@@ -683,9 +694,9 @@ To Do:
 	<ItemType UNID="&itPersonalCDMShard;"
 			name=				"Personal CDM Shard"
 			level=				"7"
-			value=				"1500"
+			value=				"500"
 			mass=				"1000"
-			frequency=			"rare"
+			frequency=			"notrandom"
 			attributes=			"MajorItem, communion, humanTech, info, soul, notForSale, QuantumCPU"
 
 			description=		"This Quantum CDM shard contains a homomorphically encrypted copy of your mind running in a virtual paradise. Given the CDM copy will only talk to you, it is much less useful to anyone else... "
@@ -693,11 +704,12 @@ To Do:
 
 		<CyberDeckDevice
 				range=			"40"
-				attackChance=	"80"
+				attackChance=	"90"
 				aiLevel=		"5"
 				program=		"Disarm"
 				programName=	"DisarmAll v5.3.2"
-                                deviceSlots=	 "1"
+				deviceSlots=	 "0"
+				omnidirectional = "true"
                                 powerUse=		"10"
 			/>
 
@@ -762,32 +774,39 @@ To Do:
 
 	<!-- Player Cargo Container -->
 
-	<!-- TODO: Fix cargo space, fix name when renaming container, add option to collapse habitat container back if it is empty. -->
+	<!-- TODO: Fix cargo space, add option to collapse habitat container back if it is empty. -->
 	<!-- It would be nice if we could take the container with if it is empty -->
 	<StationType UNID="&stPlayerCargoContainer;"
 			name=				"player habitat"
 			sovereign=			"&svPlayer;"
 			inherit=			"&unidCommonText;"
 		
-			attributes=			"envAir, generic, friendly, majorStation"
+			attributes=			"envAir, generic, friendly, majorStation, noSalvage"
 
 			abandonedScreen=	"Main"
 
 			scale=				"ship"
 			size=				"20"
 			mass=				"50"
-			structuralHitPoints=		"40"
 			cargoSpace=			"100" 
 			mobile=				"true"
 			noMapIcon=			"false"
 			ejectaType=			"&vtWreckEjecta;"
+			regen=				"1"
+			noSalvage=			"true"
 		>
 
 		<Properties>
 			<Definition id="autonItemType">&itPlayerCargoContainer;</Definition>
-			<Definition id="cargoSpace">100</Definition>
 		</Properties>
 
+		<InitialData>
+			<!-- We don't want salvagers to take this loot. Hopefully these magical
+			incantation wards them against doing so. -->
+			<Data id="core.noSalvage">True</Data>
+			<Data id="autonItemType">&itPlayerCargoContainer;</Data>
+			<Data id="cargoSpace">100</Data>
+		</InitialData>
 
 		<ImageVariants> <!-- Image and Effects Sealed containers are mostly orange, with a small chance of other colors.  -->
 			<Image	imageID="&rsCargoContainer;"	imageX="0"   imageY="0"   imageWidth="56" imageHeight="56" viewportRatio="0.00406"/>
@@ -881,11 +900,9 @@ To Do:
 									})
 							</Action>
 
-							<!-- Bug with Auton Name, so comment this out for now.
 							<Action id="actionNameContainer">
-								(scrShowScreen gScreen &dsNameAuton; { autonObject:gSource } )
-								</Action>
-							-->
+								(scrShowScreen gScreen &dsNameHabitat; { autonObject:gSource } )
+							</Action>
 
 							<Action id="actionUndock" cancel="1" default="1">
 								<Exit/>
@@ -1140,6 +1157,197 @@ To Do:
 		</Invoke>
 	</ItemType>
 
+	<ItemType UNID="&itMiningComputerROM;"
+			name=				"mining program ROM"
+			attributes=			"humanTech, info, minorItem, shipEquipment"
+			inherit=			"&baStdEquipmentItem;"
+
+			level=				"3"
+			frequency=			"uncommon"
+
+			value=				"300"
+			mass=				"1"
+			unknownType=		"&itUnknownROM;, &itUnknownROMB;, &itUnknownROMC;"
+
+			description=		"This mining ROM helps keep track of mined asteroids and candidate asteroids. To bring ore on board without loss install a mining cargo hold."
+			>
+
+		<Properties>
+			<Constant id="rpg.equipment">'miningComputer</Constant>
+		</Properties>
+
+		<Image imageID="&rsItems1;" imageX="192" imageY="96" imageWidth="96" imageHeight="96"/>
+
+		<Language>
+			<Text id="rpg.equipmentInstalled">Mining program installed</Text>
+			<Text id="rpg.equipmentNoEffect">Ship already has a mining program</Text>
+			<Text id="rpg.equipmentRedundant">Installed redundant mining system</Text>
+			<Text id="rpg.equipmentRepaired">Mining system repaired</Text>
+		</Language>
+	</ItemType>
+
+	<!-- N.B This screen is needed because I could not get the name %autonName% variable
+	to be set correctly in the dsNameAuton Dock Screen -->
+	<DockScreen UNID="&dsNameHabitat;" nestedScreen= 	"true" >
+		<Panes>
+			<Default showTextInput=	"true" >
+				<Actions>
+					<Action id="actionName" default="1">
+						(block ((theName (rpgSanitizeAutonName (scrGetInputText gScreen)))
+								(theAuton (@ gData 'autonObject))
+								)
+							(objSetName theAuton (or theName (obj@ theAuton 'name)))
+							(scrExitScreen gScreen)
+							)
+					</Action>
+					
+					<Action id="actionCancel" cancel="1">
+						(scrExitScreen gScreen)
+					</Action>
+				</Actions>
+			</Default>
+		</Panes>
+		
+		<Language>
+			<Text id="actionName">[Enter] Name</Text>
+			<Text id="actionCancel">[Esc] Cancel</Text>
+		</Language>
+	</DockScreen>
+
+	<!--
+	<ItemType UNID="&itMicroLauncher;"
+			name=				"Neocymek Missile Launcher"
+			level=				"2"
+			value=				"2515"
+			mass=				"500"
+			frequency=			"common"
+			modifiers=			"MajorItem;"
+
+			description=		"This is the smallest launcher available, made by Neocymek industries. The launcher itself uses low technology, the rounds it fires are a different matter."
+			>
+
+		<Image imageID="&rsItems1;" imageX="0" imageY="480" imageWidth="96" imageHeight="96"/>
+		<Weapon
+				fireRate=			"15"
+				powerUse=			"2"
+				launcher=			"true"
+                                deviceSlots=                    "0"
+				>
+
+			<Missiles>
+
+
+				<Missile ammoID="&itMicroMissile;"
+						type=			"missile"
+						lifetime=		"180"
+						damage=			"blast:3d6; momentum3; WMD4"
+						missileSpeed=	"40"
+						hitPoints=		"15"
+						directional=	"true"
+						sound=			"&snMissileLauncher;"
+						vaporTrailLength="16"
+						vaporTrailWidth="110"
+						vaporTrailWidthInc="5"
+						vaporTrailColor="0xd0, 0xd0, 0xd0"
+						>
+					<Image imageID="&rsMissiles2;" imageX="0" imageY="0" imageWidth="32" imageHeight="32" imageFrameCount="0" imageTicksPerFrame="0"/>
+				</Missile>
+
+				<Missile ammoID="&itEMPMissile;"
+
+						type=			"missile"
+						lifetime=		"240"
+						damage=			"ion:4d6; EMP4;"
+						missileSpeed=	"40"
+						hitPoints=		"15"
+						maneuverability="2"
+						directional=	"true"
+						sound=			"&snMissileLauncher;"
+						vaporTrailLength="16"
+						vaporTrailWidth="110"
+						vaporTrailWidthInc="5"
+						vaporTrailColor="0xd0, 0xd0, 0xd0"
+						>
+					<Image imageID="&rsMissiles2;" imageX="0" imageY="0" imageWidth="32" imageHeight="32" imageFrameCount="0" imageTicksPerFrame="0"/>
+				</Missile>
+                                
+                                <Missile ammoID="&itParticleMissile;"
+
+						type=			"beam"
+						lifetime=		"120"
+						damage=			"Particle:4d6+4;"
+						missileSpeed=	"90"
+						hitPoints=		"15"
+						directional=	"true"
+                                                beamType=			"heavyblaster"
+                                                primaryColor=		"0x33, 0xff, 0x33"
+                                                secondaryColor=		"0x00, 0x99, 0x00"
+                                                intensity=			"5"
+						sound=			"&snLaserCannon;"
+
+						>
+					
+				</Missile>
+
+			</Missiles>
+
+		</Weapon>
+
+	</ItemType>
+
+	<ItemType UNID="&itMicroMissile;"
+			name=				"Neocymek Destructor"
+			level=				"2"
+			value=				"10"
+			mass=				"4"
+			frequency=			"common"
+			numberAppearing=	"12d12"
+			modifiers=			"Consumable; Missile"
+			showReference=		"true"
+
+			description=		"This uses a special shaped charge to amplify armor penetration from such a small amount of explosives."
+
+			sortName=			"NAMI.40"
+			>
+
+		<Image imageID="&rsItems1;" imageX="0" imageY="96" imageWidth="96" imageHeight="96"/>
+	</ItemType>
+
+	<ItemType UNID="&itEMPMissile;"
+			name=				"Neocymek Tesla Missile"
+			level=				"4"
+			value=				"20"
+			mass=				"6"
+			frequency=			"common"
+			numberAppearing=	"12d12"
+			modifiers=			"Consumable; Missile;"
+
+			description=		"This is a lightweight tracking EMP missile used to disable oppenents. It doesn't do any physical damage however."
+
+			sortName=			"NAMI.35"
+			>
+
+		<Image imageID="&rsItems1;" imageX="0" imageY="96" imageWidth="96" imageHeight="96"/>
+	</ItemType>
+
+	<ItemType UNID="&itParticleMissile;"
+			name=				"Neocymek Desolator"
+			level=				"4"
+			value=				"20"
+			mass=				"1"
+			frequency=			"common"
+			numberAppearing=	"12d12"
+			modifiers=			"Consumable; Missile;"
+
+			description=		"A lot of ships reactors have trouble powering particle weapons, this solves the problem by packing the particle and power source in the same package."
+
+			sortName=			"NAMI.35"
+			>
+
+		<Image imageID="&rsItems1;" imageX="288" imageY="192" imageWidth="96" imageHeight="96"/>
+	</ItemType>
+
+	-->
 
 </TranscendenceExtension>
 
