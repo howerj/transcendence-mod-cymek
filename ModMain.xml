@@ -61,7 +61,7 @@ To Do:
 * Better Armor tile? The resource image needs cleaning up.
 	* Add timer / charge to nano-factory
 * Nuclear fuel reprocessing
-
+* More cargo hold, black market needs to ask about installation of Ore Smugglers hold
 
 -->
 
@@ -153,11 +153,11 @@ To Do:
 		<Armor>
 			<ArmorSection name="main" start="0" span="360" armorID="&itUltraLightTitaniumCasing;"/>
 			<!--<ArmorSection name="main" start="0" span="360" armorID="&itNanoInfusedUltraSteel;"/>-->
+			<!--<ArmorSection name="main" start="0" span="360" armorID="&itDiamondLatticeArmor;"/>-->
 		</Armor>
 
 		<Items>
 			<Item count="3d3" item="&itHelium3FuelRod;"/>
-
 
 			<!-- Test Items
 			<Item count="2d3" item="&itTitaniumOre;"/>
@@ -170,6 +170,9 @@ To Do:
 			<Item count="2" item="&itBrainInAVat;"/>
 			<Item count="1" item="&itMetalBlitz;"/>
 
+			<Item count="200" item="&itSlaveCoffin;"/>
+			<Item count="5" item="&itGemOfDespair;"/>
+			<Item count="5" item="&itTranspaceJumpdrive;"/>
 			<Item count="1" item="&itTargetingComputerROM;"/>
 			<Item count="1" item="&itTradingComputerROM;"/>
 			<Item count="1" item="&itWeaponSpeedROM;"/>
