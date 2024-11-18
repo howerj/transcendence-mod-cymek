@@ -57,8 +57,10 @@ To Do:
   * Weapon crates
   * (illegal) Better than life head set!
 * Number of device slots for the HornetBattle?
-* Upgrade recipes via ROM? Also fabricate armor patches from ore, get a tech/craft tree going
+* Upgrade recipes via ROM? Also fabricate armor patches from ore, nanos from ore, get a tech/craft tree going
 * Better Armor tile? The resource image needs cleaning up.
+	* Add timer / charge to nano-factory
+* Nuclear fuel reprocessing
 
 
 -->
@@ -130,8 +132,8 @@ To Do:
 			score=				"1"
 
 			mass=				"5"
-			reactorPower=		"100"
-			fuelCapacity=		"10000"
+			reactorPower=		"50"
+			fuelCapacity=		"25000"
 			cargoSpace=			"30"
 			thrust=				"150"
 			maxSpeed=			"45"
@@ -155,6 +157,8 @@ To Do:
 
 		<Items>
 			<Item count="3d3" item="&itHelium3FuelRod;"/>
+
+
 			<!-- Test Items
 			<Item count="2d3" item="&itTitaniumOre;"/>
 			<Item count="1d3" item="&itBarrelBomb;"/>
@@ -169,6 +173,7 @@ To Do:
 			<Item count="1" item="&itTargetingComputerROM;"/>
 			<Item count="1" item="&itTradingComputerROM;"/>
 			<Item count="1" item="&itWeaponSpeedROM;"/>
+			<Item count="1" item="&itMiningComputerROM;"/>
 			<Item count="1" item="&itEnhanceSRSROM;"/>
 			-->
 		</Items>
@@ -630,6 +635,7 @@ To Do:
 					{ item:&itUltraLightTitaniumCasing;	enhancement:Nil    		components:( { item:&itTitaniumOre; count: 1 } )	totalCost:0 }
 					{ item:&itPersonalCDMShard;	enhancement:Nil    		components:( { item:&itOpticalKnowledgeArray; count: 3 } { item:&itNeuralProcessor; count: 2 } )	totalCost:0 }
 					{ item:&itNanoFabricator;	enhancement:Nil    		components:( { item:&itRegeneratingNanos; count: 3 } { item:&itNeuralProcessor; count: 1 } { item:&itOrthosteelOre; count: 1 } )	totalCost:0 }
+					{ item:&itSmallArmorPatch;	enhancement:Nil    		components:( { item:&itTitaniumOre; count: 1 }  { item:&itHelium3FuelRod; count: 1 } )	totalCost:0 }
 
 					{ item:&itSuperconductingShields;	enhancement:Nil		components:( { item:&itSuperconductingCoil; count:4 } { item:&itHeavySungArmor; count:2 } )	totalCost:0 }
 					{ item:&itSuperconductingCoil;	enhancement:Nil		components:(  { item:&itNiobiumOre; count:1 } )	totalCost:0 }
