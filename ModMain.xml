@@ -56,12 +56,20 @@ To Do:
   * Missile enhancement ROM
   * Weapon crates
   * (illegal) Better than life head set!
+  * Luminous AI system 
 * Number of device slots for the HornetBattle?
+* BUG: Cannot install smugglers cargo hold from black market station, related to mining computer? Or to Hornet Battlepod display?
 * Upgrade recipes via ROM? Also fabricate armor patches from ore, nanos from ore, get a tech/craft tree going
 * Better Armor tile? The resource image needs cleaning up.
 	* Add timer / charge to nano-factory
 * Nuclear fuel reprocessing
 * More cargo hold, black market needs to ask about installation of Ore Smugglers hold
+* BUG: Buy ship does not work, might be related to smugglers cargo hold problem
+* Make your own habitable station and faction, whatever the system, including Elysium,
+	generates credits with redoable missions.
+* Lower level linked fired devices
+* Energy consuming launcher, without ammo?
+* Make a release
 
 -->
 
@@ -169,10 +177,10 @@ To Do:
 			<Item count="2" item="&itBioTechMod;"/>
 			<Item count="2" item="&itBrainInAVat;"/>
 			<Item count="1" item="&itMetalBlitz;"/>
-
 			<Item count="200" item="&itSlaveCoffin;"/>
 			<Item count="5" item="&itGemOfDespair;"/>
 			<Item count="5" item="&itTranspaceJumpdrive;"/>
+
 			<Item count="1" item="&itTargetingComputerROM;"/>
 			<Item count="1" item="&itTradingComputerROM;"/>
 			<Item count="1" item="&itWeaponSpeedROM;"/>
