@@ -8,7 +8,7 @@
 	<!ENTITY scPlayerHornetBase 	"0xD008002b">
 	<!ENTITY scHornetPlayer 		"0xD008002a">
 	<!ENTITY itCymekMicroDeflector		        "0xD5390000">
-	<!--<!ENTITY itCymekNaniteProjector "0xD5390001">-->
+	<!ENTITY itCymekNaniteProjector "0xD5390001">
 	<!ENTITY itNanoInfusedUltraSteel "0xD5390002">
 	<!ENTITY itEmergencySupplies "0xD5390003">
 	<!ENTITY itNanoFabricator "0xD5390004">
@@ -23,11 +23,25 @@
 	<!ENTITY itMinersSmugglingCargoHold "0xD539000D">
 	<!ENTITY itBioTechMod "0xD539000E">
 	<!ENTITY itBrainInAVat "0xD539000F">
-	<!ENTITY itCymekOmniMiningLaser "0xD5390010">
+	<!--<!ENTITY itCymekOmniMiningLaser "0xD5390010">-->
 	<!ENTITY itMetalBlitz "0xD5390011">
 	<!ENTITY itPersonalCDMShard "0xD5390012">
 	<!ENTITY itMiningComputerROM "0xD5390013">
 	<!ENTITY dsNameHabitat "0xD5390014">
+
+	<!ENTITY itAmmoBoxCymekTitanium "0xD5390015">
+	<!ENTITY itAmmoBoxCymekUranium "0xD5390016"> 
+	<!ENTITY itCymekTitaniumSlug "0xD5390017">
+	<!ENTITY itCymekUraniumSlug "0xD5390018"> 
+	<!ENTITY itCymekLauncher "0xD5390019"> 
+	<!ENTITY itAmmoBoxCymekBlast "0xD539001A"> 
+	<!ENTITY itCymekBlastSlug "0xD539001B"> 
+	<!ENTITY itAmmoBoxCymekIon "0xD539001C">
+	<!ENTITY itCymekIonSlug "0xD539001D"> 
+	<!ENTITY itAmmoBoxCymekAntiMatter "0xD539001E">
+	<!ENTITY itCymekAntiMatterSlug "0xD539001F"> 
+
+
 ]>
 
 <!--
@@ -43,38 +57,35 @@ References/Mods
 * Soggydoggy's One Piece Armor Mod: http://xelerus.de/index.php?s=mod&id=358&d=1
 * darksider's Barrel Launcher: http://xelerus.de/index.php?s=mod&id=244
 
-To Do:
+To Do / Ideas:
 
 * Build instructions / Add a release
 * Improve `readme.md`.
+* Make a new Auton; Nano-fabricated, regen/no-armor, cymek
 * Recall auton option
 * Add new hornet battle pod to Eternity Port mod if possible
 * Balance Recipes; specifically armor
 * New Items
-  * Micro-missiles
   * Container of small arms
-  * Missile enhancement ROM
   * Weapon crates
   * (illegal) Better than life head set!
   * Luminous AI system 
-* Number of device slots for the HornetBattle?
 * BUG: Cannot install smugglers cargo hold from black market station, related to mining computer? Or to Hornet Battlepod display?
 * Upgrade recipes via ROM? Also fabricate armor patches from ore, nanos from ore, get a tech/craft tree going
 * Better Armor tile? The resource image needs cleaning up.
-	* Add timer / charge to nano-factory
-* Nuclear fuel reprocessing
-* More cargo hold, black market needs to ask about installation of Ore Smugglers hold
+* Add timer / charge to nano-factory
 * BUG: Buy ship does not work, might be related to smugglers cargo hold problem
 * Make your own habitable station and faction, whatever the system, including Elysium,
 	generates credits with redoable missions.
-* Fuel harvesting station - place near sun, makes fuel
 * Lower level linked fired devices
-* Energy consuming launcher, without ammo?
 * Make a release
-* Nuclear fuel reprocessing
-* light solar armor
-* Solar refuels like it used to?
 * Advanced scanner
+* make more missiles out of raw materials
+* Make post on mod site
+* Solar fuel collector; Fuel harvesting station - place near sun, makes fuel
+* Solar refuels like it used to?
+* Split fuel assemblies
+* Different version of jump drive that can be created in nano-factory
 
 -->
 
@@ -95,11 +106,13 @@ To Do:
 			class=				"(player Hornet base class)"
 			attributes=			"commonwealth, playerClass, startingClass, 00200000_PlayerShip"
 			characterClass=		"&unidPilgrimClass;"
+			inherit=			"&baHumanTechShip;"
+
 			>
 
 		<PlayerSettings
 			desc=				"This modified Hornet Battle pod was commissioned by the Late and Legendary Anarchist pilot Zephron Janus Babblebrox which they were unable to collect. Zephron's next of kin sold the rights to their life story, which have made somewhat unpopular with those sympathetic with the Anarchists."
-			startingCredits=	"1d100+37"
+			startingCredits=	"2d100+50"
 
 			largeImage=			"&rsHornetLarge;"
 			initialClass=		"true"
@@ -136,6 +149,10 @@ To Do:
 				<FuelLevelText x="62" y="51" width="154" height="9"/>
 			</ReactorDisplay>
 		</PlayerSettings>
+
+		<Image imageID="&rsHornetHD;" imageWidth="32" imageHeight="32" rotationCount="120" rotationColumns="12" viewportRatio="0.0029375"/>
+		<HeroImage imageID="&rsHornetHero;" imageWidth="320" imageHeight="320"/>
+
 	</ShipClass>
 
 	<ShipClass UNID="&scHornetPlayer;"
@@ -158,23 +175,22 @@ To Do:
 
 			leavesWreck=		"0"
 			
-			attributes=			"00200000_PlayerShip"
+			attributes=			"commonwealth, playerClass, startingClass, 00200000_PlayerShip"
 			
 			inherit=			"&scPlayerHornetBase;"
 			>
 
 		<Armor>
-			<ArmorSection name="main" start="0" span="360" armorID="&itUltraLightTitaniumCasing;"/>
-			<!--<ArmorSection name="main" start="0" span="360" armorID="&itNanoInfusedUltraSteel;"/>-->
-			<!--<ArmorSection name="main" start="0" span="360" armorID="&itDiamondLatticeArmor;"/>-->
+			<ArmorSection name="main" start="0" span="360" armorID="&itLightSolarArmor;"/>
 		</Armor>
 
 		<Items>
 			<Item count="3d3" item="&itHelium3FuelRod;"/>
+			<Item count="1d3" item="&itBarrelBomb;"/>
+
 
 			<!-- Test Items
 			<Item count="2d3" item="&itTitaniumOre;"/>
-			<Item count="1d3" item="&itBarrelBomb;"/>
 			<Item count="1" item="&itPlayerCargoContainer;"/>
 			<Item count="1" item="&itEmergencySupplies;"/>
 			<Item count="3" item="&itRegeneratingNanos;"/>
@@ -191,17 +207,27 @@ To Do:
 			<Item count="1" item="&itWeaponSpeedROM;"/>
 			<Item count="1" item="&itMiningComputerROM;"/>
 			<Item count="1" item="&itEnhanceSRSROM;"/>
+
+			<Item count="1" item="&itAmmoBoxCymekTitanium;"/>
+			<Item count="1" item="&itAmmoBoxCymekUranium;"/>
+			<Item count="1" item="&itAmmoBoxCymekBlast;"/>
+			<Item count="1" item="&itAmmoBoxCymekIon;"/>
+			<Item count="1" item="&itAmmoBoxCymekAntiMatter;"/>
+
 			-->
 		</Items>
 
 		<Devices>
 			<DeviceSlot criteria="w" posAngle="0" posRadius="14"/>
-			<Device deviceID="&itCymekOmniMiningLaser;"/>
+			<Device deviceID="&itCymekNaniteProjector;"/>
 			<Device deviceID="&itNanoFabricator;"/>
-			<Device deviceID="&itDM1500MissileRack;"/>
-			<!--<Device deviceID="&itCymekMicroDeflector;"/>
+			<Device deviceID="&itCymekMicroDeflector;"/>
+			<!-- Test Items
 			<Device deviceID="&itMinersSmugglingCargoHold;"/>
-			<Device deviceID="&itPersonalCDMShard;"/>-->
+			<Device deviceID="&itDM1500MissileRack;"/>
+			<Device deviceID="&itCymekLauncher;"/>
+			<Device deviceID="&itPersonalCDMShard;"/>
+			-->
 		</Devices>
 
 		<AISettings
@@ -215,8 +241,6 @@ To Do:
 			rotationAccel=		"6.0"
 			/>
 
-		<Image imageID="&rsHornetHD;" imageWidth="32" imageHeight="32" rotationCount="120" rotationColumns="12" viewportRatio="0.0029375"/>
-		<HeroImage imageID="&rsHornetHero;" imageWidth="320" imageHeight="320"/>
 
 		<Effects>
 			<Effect type="thrustMain"		posAngle="180"	posRadius="8"	posZ="0"	rotation="180"/>
@@ -244,7 +268,7 @@ To Do:
 				hpBonus=		"0"
 				regen=		        "12"
 				depletionDelay=	        "288"
-				powerUse=		"5"
+				powerUse=		"3"
                                 deviceSlots="0"
 				/>
                 
@@ -254,6 +278,7 @@ To Do:
 
 		</ItemType>
 
+	<!--
 	<ItemType UNID="&itCymekOmniMiningLaser;"
 			name=				"Cymek Omni Mining Laser"
 			level=				"6"
@@ -293,12 +318,12 @@ To Do:
 			(intAutoInstall gSource gItem)
 		</Invoke>
 		</ItemType>
+	-->
 
-	<!--
 	<ItemType UNID="&itCymekNaniteProjector;"
 			name=				"Cymek Nanite Projector Matrix"
 			level=				"6"
-			value=				"1650"
+			value=				"2650"
 			mass=				"120"
 			frequency=			"rare"
 			modifiers=			"EnergyWeapon; MajorItem; Specialty;"
@@ -313,7 +338,7 @@ To Do:
 				type=				"beam"
 				minFireArc=			"345"
 				maxFireArc=			"15"
-				damage=				"nano:1d3+1; mining:6;"
+				damage=				"nano:1d4+1; mining:6;"
 				fireRate=			"20"
 				lifetime=			"70"
 			        powerUse=			"20"
@@ -332,7 +357,7 @@ To Do:
         	<Invoke>
 			(intAutoInstall gSource gItem)
 		</Invoke>
-	</ItemType>-->
+	</ItemType>
 
 	<ItemType UNID="&itNanoInfusedUltraSteel;"
 			name=				"segment of Cymek Nanite Infused Steel"
@@ -347,10 +372,10 @@ To Do:
 
 			>
 
-		<Image imageID="&rsItems1;" imageX="0" imageY="0" imageWidth="96" imageHeight="96"/>
+		<Image imageID="&rsItems4;" imageX="192" imageY="0" imageWidth="96" imageHeight="96"/>
 
 		<Armor
-				hitPoints=	"100"
+				hitPoints=	"150"
 				hpBonus=	"+0"
 				repairTech=	"8"
 				composition=            "nanoscale"
@@ -399,7 +424,7 @@ To Do:
 			mass=				"1000"
                         deviceSlots="0"
 			  
-			description=		"For such an advanced device it looks more like a barrel full of gray goop. This is a nano-fabricator, bordering on illegality it is capable of producing many goods from raw materials."
+			description=		"For such an advanced device it looks more like a barrel full of gray goop. This is a nano-fabricator, bordering on illegality, it is capable of producing many goods from raw materials."
 			>
 
 		<Image imageID="&rsItems1;" imageX="0" imageY="192" imageWidth="96" imageHeight="96"/>
@@ -636,30 +661,39 @@ To Do:
 			<NanoRecipes>
 				(
 					{ item:&itCymekMicroDeflector;	enhancement:Nil		components:( { item:&itTitaniumOre; count:4 }  { item:&itHydrocarbons; count:1 } { item:&itHelium3FuelRod; count:3 } )	totalCost:0 }
-					{ item:&itAutoSentinel;	enhancement:Nil		components:( { item:&itTitaniumOre; count:5 } { item:&itHelium3FuelRod; count:6 } )	totalCost:0 }
+					{ item:&itAutoSentinel;	enhancement:Nil		components:( { item:&itTitaniumOre; count:5 } { item:&itHelium3FuelRod; count:5 } )	totalCost:0 }
 					{ item:&itPlayerCargoContainer;	enhancement:Nil		components:( { item:&itTitaniumOre; count:5 } { item:&itHydrocarbons; count:1 } { item:&itHelium3FuelRod; count:3 } )	totalCost:0 }
 					{ item:&itFrozenSupplies;	enhancement:Nil		components:( { item:&itHydrocarbons; count:1 } { item:&itWaterIce; count:2 } { item:&itHelium3FuelRod; count:3 } )	totalCost:0 }
 					{ item:&itMedicalSupplies;	enhancement:Nil		components:( { item:&itHydrocarbons; count:2 } { item:&itWaterIce; count:1 } { item:&itHelium3FuelRod; count:3 } )	totalCost:0 }
 					{ item:&itEmergencySupplies;	enhancement:Nil		components:( { item:&itHydrocarbons; count:2 } { item:&itWaterIce; count:2 } { item:&itHelium3FuelRod; count:3 } )	totalCost:0 }
 					{ item:&itHeliumAssembly;	enhancement:Nil		components:( { item:&itHelium3FuelRod; count:6 } )	totalCost:0 }
 					{ item:&itUraniumRods;	enhancement:Nil		components:( { item:&itUraniumOre; count:1 } )	totalCost:0 }
-					{ item:&itCymekOmniMiningLaser;	enhancement:Nil components:( { item:&itNiobiumOre; count:2 } { item:&itTitaniumOre; count: 3 } )	totalCost:0 }
+					{ item:&itUraniumRods;				enhancement:Nil						components:( { item:&itRadioactiveWaste; count:3 })	totalCost:0 }
+					{ item:&itCymekNaniteProjector;	enhancement:Nil components:( { item:&itNiobiumOre; count:2 } { item:&itTitaniumOre; count: 3 } )	totalCost:0 }
 					{ item:&itDisposableLauncher;	enhancement:Nil    		components:( { item:&itKM100Missile; count:32 } { item:&itTitaniumOre; count: 1 } )	totalCost:0 }
 					{ item:&itDM1500MissileRack;	enhancement:Nil    		components:( { item:&itKM500Missile; count:32 } { item:&itTitaniumOre; count: 1 } )	totalCost:0 }
 					{ item:&itNanoInfusedUltraSteel;	enhancement:Nil    		components:( { item:&itCeralloyOre; count:1 } { item:&itDuralloyOre; count: 4 } )	totalCost:0 }
 					{ item:&itRegeneratingNanos;	enhancement:Nil    		components:( { item:&itRepairingNanos; count: 2 } )	totalCost:0 }
+					{ item:&itRepairingNanos;	enhancement:Nil    		components:( { item:&itTitaniumOre; count: 4 } { item:&itHelium3FuelRod; count: 6 } )	totalCost:0 }
 					{ item:&itUltraLightTitaniumCasing;	enhancement:Nil    		components:( { item:&itTitaniumOre; count: 1 } )	totalCost:0 }
 					{ item:&itPersonalCDMShard;	enhancement:Nil    		components:( { item:&itOpticalKnowledgeArray; count: 3 } { item:&itNeuralProcessor; count: 2 } )	totalCost:0 }
 					{ item:&itNanoFabricator;	enhancement:Nil    		components:( { item:&itRegeneratingNanos; count: 3 } { item:&itNeuralProcessor; count: 1 } { item:&itOrthosteelOre; count: 1 } )	totalCost:0 }
 					{ item:&itSmallArmorPatch;	enhancement:Nil    		components:( { item:&itTitaniumOre; count: 1 }  { item:&itHelium3FuelRod; count: 1 } )	totalCost:0 }
 
-					{ item:&itSuperconductingShields;	enhancement:Nil		components:( { item:&itSuperconductingCoil; count:4 } { item:&itHeavySungArmor; count:2 } )	totalCost:0 }
+					{ item:&itSuperconductingShields;	enhancement:Nil		components:( { item:&itSuperconductingCoil; count:4 } { item:&itDuralloyOre; count:4 } )	totalCost:0 }
 					{ item:&itSuperconductingCoil;	enhancement:Nil		components:(  { item:&itNiobiumOre; count:1 } )	totalCost:0 }
 					
-					{ item:&itWasteCannon;				enhancement:Nil						components:( { item:&itRadioactiveWaste; count:8 })	totalCost:0 }
 					{ item:&itAmmoBoxKM100;				enhancement:Nil						components:( { item:&itHydrocarbons; count:1 })	totalCost:0 }
 					{ item:&itAmmoBoxSapiens;				enhancement:Nil						components:( { item:&itHydrocarbons; count:1 } { item:&itRadioactiveWaste; count:1 } )	totalCost:0 }
-					
+					{ item:&itBarrelBomb;				enhancement:Nil						components:( { item:&itHydrocarbons; count:1 } { item:&itTitaniumOre; count:1 } )	totalCost:0 }
+
+
+					{ item:&itCymekLauncher;				enhancement:Nil						components:( { item:&itDuralloyOre; count:3 } { item:&itCeralloyOre; count:1 } { item:&itHelium3FuelRod; count:5 } )	totalCost:0 }
+					{ item:&itAmmoBoxCymekTitanium;				enhancement:Nil						components:( { item:&itTitaniumOre; count:2 } { item:&itHelium3FuelRod; count:5 } )	totalCost:0 }
+					{ item:&itAmmoBoxCymekUranium;				enhancement:Nil						components:( { item:&itUraniumOre; count:2 } { item:&itHelium3FuelRod; count:5 } )	totalCost:0 }
+					{ item:&itAmmoBoxCymekBlast;				enhancement:Nil						components:( { item:&itHydrocarbons; count:2 } { item:&itHelium3FuelRod; count:10 } )	totalCost:0 }
+					{ item:&itAmmoBoxCymekIon;				enhancement:Nil						components:( { item:&itXenotiteOre; count:2 } )	totalCost:0 }
+					{ item:&itAmmoBoxCymekAntiMatter;			enhancement:Nil						components:( { item:&itPteracniumOre; count:4 } { item:&itXenotiteOre; count:3 } )	totalCost:0 }
 					)
 			</NanoRecipes>
 		</GlobalData>
@@ -713,24 +747,35 @@ To Do:
 	<ItemType UNID="&itPersonalCDMShard;"
 			name=				"Personal CDM Shard"
 			level=				"7"
-			value=				"500"
+			value=				"2000"
 			mass=				"1000"
 			frequency=			"notrandom"
 			attributes=			"MajorItem, communion, humanTech, info, soul, notForSale, QuantumCPU"
 
-			description=		"This Quantum CDM shard contains a homomorphically encrypted copy of your mind running in a virtual paradise. Given the CDM copy will only talk to you, it is much less useful to anyone else... "
+			description=		"This Quantum CDM shard contains a homomorphically encrypted copy of your mind running in a virtual paradise. It may be willing to help you."
 		>
+		<MiscellaneousDevice
+				powerUse=		"1"
+				capacitorPowerUse=	"4"
+				powerToActivate=	"20000"
+				/>
 
-		<CyberDeckDevice
-				range=			"40"
-				attackChance=	"90"
-				aiLevel=		"5"
-				program=		"Disarm"
-				programName=	"DisarmAll v5.3.2"
-				deviceSlots=	 "0"
-				omnidirectional = "true"
-                                powerUse=		"10"
-			/>
+		<Invoke key="S" installedOnly="true">
+			; Paralyze enemy ships in the area
+			(block (targets)
+				(setq targets (sysFindObject gSource "sEN:16;"))
+				(enum targets target
+					(objProgramDamage target gSource "CDM Scramble" 6
+						(objMakeParalyzed target (random 600 1200))
+						)
+					)
+				(if targets
+					(objSendMessage gSource Nil "CDM Scramble: Targets disabled")
+					(objSendMessage gSource Nil "CDM Scramble: No targets in range")
+					)
+
+				(itmSetKnown gItem))
+		</Invoke>
 
 		<Properties>
 			<Definition id="sisters.donateRel">270</Definition>
@@ -738,9 +783,9 @@ To Do:
 
 		<Image imageID="&rsItems1;" imageX="192" imageY="288" imageWidth="96" imageHeight="96"/>
 
-        	<Invoke>
+		<!--<Invoke>
 			(intAutoInstall gSource gItem)
-		</Invoke>
+		</Invoke>-->
 		
 		<Language>
 			<Text id="sisters.donateDesc">
@@ -750,13 +795,11 @@ To Do:
 				regret.
 
 				Eventually, all those feelings fade and you're left with the
-				presence of Domina and a sense of loss.
+				presence of Domina and a profound sense of loss.
 				
 			</Text>
 		</Language>
 	</ItemType>
-
-
 
 	<ItemType UNID="&itPlayerCargoContainer;"
 			name=				"Deployable Container Habitat"
@@ -768,15 +811,6 @@ To Do:
 			description=                    "A deployable container habitat and storage solution."
 			>
                         
-			<!--<CyberDeckDevice
-						range=			"40"
-						attackChance=	"40"
-						aiLevel=		"10"
-						program=		"Disarm"
-						programName=	"DisarmAll v5.3.2"
-						powerUse=		"1"
-						deviceSlots=	 "0"
-			/>-->
 		<Image imageID="&rsItems1;" imageX="288" imageY="0" imageWidth="96" imageHeight="96"/>
 
 		<Invoke key="H">
@@ -867,6 +901,9 @@ To Do:
 				"Capacity Left: %capacity%"
 
 				Otherwise the container has unlimited storage capacity.
+
+				Changing the text of the description for each habitat would be good;
+				Beware of the leopard, roommates, etcetera.
 			-->
 			<Text id="descDefault">
 
@@ -976,6 +1013,98 @@ To Do:
 
 	</ItemType>
 
+	<ItemType UNID="&itAmmoBoxCymekTitanium;"
+			name=				"Cymek Titanium Slug ammunition box(es)"
+			level=				"2"
+			value=				"200"
+			mass=				"1000"
+			frequency=			"notrandom"
+			unknownType=		"&vtUnknownAmmoBox;"
+			attributes=			"ammoBox, commonwealth, consumable"
+
+			description=		"This box contains titanium slugs."
+			>
+
+		<Image imageID="&rsItems1;" imageX="0" imageY="384" imageWidth="96" imageHeight="96"/>
+
+		<Invoke>
+			(intAmmoBoxOpen (itmCreate &itCymekTitaniumSlug; 200))
+		</Invoke>
+	</ItemType>
+
+	<ItemType UNID="&itAmmoBoxCymekUranium;"
+			name=				"Cymek Uranium Slug ammunition box(es)"
+			level=				"2"
+			value=				"200"
+			mass=				"1000"
+			frequency=			"notrandom"
+			unknownType=		"&vtUnknownAmmoBox;"
+			attributes=			"ammoBox, commonwealth, consumable, illegal"
+
+			description=		"This box contains depleted uranium slugs. Do not bounce."
+			>
+
+		<Image imageID="&rsItems1;" imageX="0" imageY="384" imageWidth="96" imageHeight="96"/>
+
+		<Invoke>
+			(intAmmoBoxOpen (itmCreate &itCymekUraniumSlug; 200))
+		</Invoke>
+	</ItemType>
+
+	<ItemType UNID="&itAmmoBoxCymekBlast;"
+			name=				"Cymek Blast Slug ammunition box(es)"
+			level=				"2"
+			value=				"400"
+			mass=				"1000"
+			frequency=			"notrandom"
+			unknownType=		"&vtUnknownAmmoBox;"
+			attributes=			"ammoBox, commonwealth, consumable"
+
+			description=		"This box contains blast slugs."
+			>
+
+		<Image imageID="&rsItems1;" imageX="0" imageY="384" imageWidth="96" imageHeight="96"/>
+
+		<Invoke>
+			(intAmmoBoxOpen (itmCreate &itCymekBlastSlug; 200))
+		</Invoke>
+	</ItemType>
+	<ItemType UNID="&itAmmoBoxCymekIon;"
+			name=				"Cymek EMP Detonators ammunition box(es)"
+			level=				"2"
+			value=				"750"
+			mass=				"1200"
+			frequency=			"notrandom"
+			unknownType=		"&vtUnknownAmmoBox;"
+			attributes=			"ammoBox, commonwealth, consumable, military"
+
+			description=		"This box contains miniaturized Xenotite pump-charge EMP detonators."
+			>
+
+		<Image imageID="&rsItems1;" imageX="0" imageY="384" imageWidth="96" imageHeight="96"/>
+
+		<Invoke>
+			(intAmmoBoxOpen (itmCreate &itCymekIonSlug; 120))
+		</Invoke>
+	</ItemType>
+	<ItemType UNID="&itAmmoBoxCymekAntiMatter;"
+			name=				"Cymek Anti Matter Inducers ammunition box(es)"
+			level=				"2"
+			value=				"1500"
+			mass=				"1500"
+			frequency=			"notrandom"
+			unknownType=		"&vtUnknownAmmoBox;"
+			attributes=			"ammoBox, commonwealth, consumable, military"
+
+			description=		"This box contains anti-matter inducers compatible with the Cymek launcher."
+			>
+
+		<Image imageID="&rsItems1;" imageX="0" imageY="384" imageWidth="96" imageHeight="96"/>
+
+		<Invoke>
+			(intAmmoBoxOpen (itmCreate &itCymekAntiMatterSlug; 100))
+		</Invoke>
+	</ItemType>
 <!-- barrel bomb  -->
 
 	<ItemType UNID="&vtBarrelBombFire;"
@@ -1060,8 +1189,8 @@ To Do:
     <ItemType UNID="&itMinersSmugglingCargoHold;"
             name=               "ore smugglers cargo hold"
             level=              "5"
-            value=              "8000"
-            mass=               "650"
+            value=              "9500"
+            mass=               "2500"
             frequency=          "rare"
             numberAppearing=    "1"
             attributes=         "majorItem, MinersHold, illegal, smugglersHold"
@@ -1091,7 +1220,7 @@ To Do:
 			numberAppearing=	"1d2"
 			attributes=			"Consumable; humanTech, Meds, illegal"
 
-			description=		"This container of nanite and gene biomods have been outlawed throughout human space."
+			description=		"This container of nanotech and genetic biomods have been outlawed throughout human space."
 			>
 
 		<Image imageID="&rsItems1;" imageX="192" imageY="480" imageWidth="96" imageHeight="96"/>
@@ -1233,140 +1362,180 @@ To Do:
 		</Language>
 	</DockScreen>
 
-	<!--
-	<ItemType UNID="&itMicroLauncher;"
-			name=				"Neocymek Missile Launcher"
-			level=				"2"
-			value=				"2515"
+	<ItemType UNID="&itCymekLauncher;"
+			name=				"Cymek Slug  Launcher"
+			level=				"6"
+			value=				"2000"
 			mass=				"500"
-			frequency=			"common"
+			frequency=			"notrandom"
 			modifiers=			"MajorItem;"
 
-			description=		"This is the smallest launcher available, made by Neocymek industries. The launcher itself uses low technology, the rounds it fires are a different matter."
+			description=		"This launcher uses a range missiles made out of ore and fabricated with the Cymek nano-fabricator. Designed to give ships with small reactors a way to punch above their weight class."
 			>
 
 		<Image imageID="&rsItems1;" imageX="0" imageY="480" imageWidth="96" imageHeight="96"/>
 		<Weapon
-				fireRate=			"15"
+				fireRate=			"20"
 				powerUse=			"2"
 				launcher=			"true"
                                 deviceSlots=                    "0"
+				omnidirectional=		"true" 
 				>
 
 			<Missiles>
 
-
-				<Missile ammoID="&itMicroMissile;"
+				<Missile ammoID="&itCymekTitaniumSlug;"
 						type=			"missile"
-						lifetime=		"180"
-						damage=			"blast:3d6; momentum3; WMD4"
-						missileSpeed=	"40"
+						lifetime=		"80"
+						damage=			"kinetic:2d6; WMD2"
+						missileSpeed=	"60"
 						hitPoints=		"15"
 						directional=	"true"
-						sound=			"&snMissileLauncher;"
-						vaporTrailLength="16"
-						vaporTrailWidth="110"
-						vaporTrailWidthInc="5"
-						vaporTrailColor="0xd0, 0xd0, 0xd0"
+						sound=				"&snRecoillessCannon;"
 						>
-					<Image imageID="&rsMissiles2;" imageX="0" imageY="0" imageWidth="32" imageHeight="32" imageFrameCount="0" imageTicksPerFrame="0"/>
+					<Image imageID="&rsMissiles3;" imageX="16" imageY="0" imageWidth="16" imageHeight="16" imageFrameCount="0" imageTicksPerFrame="0"/>
 				</Missile>
 
-				<Missile ammoID="&itEMPMissile;"
-
+				<Missile ammoID="&itCymekUraniumSlug;"
 						type=			"missile"
-						lifetime=		"240"
-						damage=			"ion:4d6; EMP4;"
-						missileSpeed=	"40"
+						lifetime=		"80"
+						damage=			"kinetic:3d6; WMD3; radiation1"
+						missileSpeed=	"60"
 						hitPoints=		"15"
-						maneuverability="2"
 						directional=	"true"
-						sound=			"&snMissileLauncher;"
-						vaporTrailLength="16"
-						vaporTrailWidth="110"
-						vaporTrailWidthInc="5"
-						vaporTrailColor="0xd0, 0xd0, 0xd0"
+						sound=				"&snRecoillessCannon;"
 						>
-					<Image imageID="&rsMissiles2;" imageX="0" imageY="0" imageWidth="32" imageHeight="32" imageFrameCount="0" imageTicksPerFrame="0"/>
+					<Image imageID="&rsMissiles3;" imageX="16" imageY="0" imageWidth="16" imageHeight="16" imageFrameCount="0" imageTicksPerFrame="0"/>
+				</Missile>
+
+				<Missile ammoID="&itCymekBlastSlug;"
+						type=			"missile"
+						lifetime=		"80"
+						damage=			"blast:3d6; WMD4;"
+						missileSpeed=	"50"
+						hitPoints=		"15"
+						directional=	"true"
+						sound=				"&snRecoillessCannon;"
+						effect=				"&efBlastShellDefault;"
+					>
+				</Missile>
+
+				<Missile ammoID="&itCymekIonSlug;"
+						type=			"beam"
+						lifetime=		"80"
+						damage=			"ion:2d6; EMP4;"
+						missileSpeed=	"50"
+						hitPoints=		"15"
+						directional=	"true"
+						beamType=			"lightning"
+						primaryColor=	"#a0f0ff"
+						secondaryColor=	"#f0f0ff"
+						intensity=			"1"
+						directional=		"true"
+						sound=				"&snLaserCannon;"
+						>
 				</Missile>
                                 
-                                <Missile ammoID="&itParticleMissile;"
+                                <Missile ammoID="&itCymekAntimatterSlug;"
 
 						type=			"beam"
 						lifetime=		"120"
-						damage=			"Particle:4d6+4;"
+						damage=			"antimatter:2d6+2; WMD3"
 						missileSpeed=	"90"
 						hitPoints=		"15"
 						directional=	"true"
                                                 beamType=			"heavyblaster"
-                                                primaryColor=		"0x33, 0xff, 0x33"
-                                                secondaryColor=		"0x00, 0x99, 0x00"
+						primaryColor=		"#ff6a00"
+						secondaryColor=		"#ff2a00"
                                                 intensity=			"5"
 						sound=			"&snLaserCannon;"
 
 						>
-					
 				</Missile>
-
 			</Missiles>
-
 		</Weapon>
-
 	</ItemType>
 
-	<ItemType UNID="&itMicroMissile;"
-			name=				"Neocymek Destructor"
-			level=				"2"
-			value=				"10"
-			mass=				"4"
-			frequency=			"common"
+	<ItemType UNID="&itCymekTitaniumSlug;"
+			name=				"Cymek Titanium Slug"
+			level=				"1"
+			value=				"1"
+			mass=				"1"
+			frequency=			"notrandom"
 			numberAppearing=	"12d12"
 			modifiers=			"Consumable; Missile"
 			showReference=		"true"
 
-			description=		"This uses a special shaped charge to amplify armor penetration from such a small amount of explosives."
+			description=		"A titanium slug with enough reactor fuel for the internal Cymek launcher fusor to fire it at a considerable fraction of the speed of light."
 
 			sortName=			"NAMI.40"
 			>
-
 		<Image imageID="&rsItems1;" imageX="0" imageY="96" imageWidth="96" imageHeight="96"/>
 	</ItemType>
-
-	<ItemType UNID="&itEMPMissile;"
-			name=				"Neocymek Tesla Missile"
-			level=				"4"
-			value=				"20"
-			mass=				"6"
-			frequency=			"common"
-			numberAppearing=	"12d12"
-			modifiers=			"Consumable; Missile;"
-
-			description=		"This is a lightweight tracking EMP missile used to disable oppenents. It doesn't do any physical damage however."
-
-			sortName=			"NAMI.35"
-			>
-
-		<Image imageID="&rsItems1;" imageX="0" imageY="96" imageWidth="96" imageHeight="96"/>
-	</ItemType>
-
-	<ItemType UNID="&itParticleMissile;"
-			name=				"Neocymek Desolator"
-			level=				"4"
-			value=				"20"
+	<ItemType UNID="&itCymekUraniumSlug;"
+			name=				"Cymek Uranium Slug"
+			level=				"3"
+			value=				"2"
 			mass=				"1"
-			frequency=			"common"
+			frequency=			"notrandom"
+			numberAppearing=	"12d12"
+			modifiers=			"Consumable; Missile; Illegal"
+			showReference=		"true"
+
+			description=		"A uranium slug for use with the Cymek launcher. Do not handle for too long."
+
+			sortName=			"NAMI.40"
+			>
+		<Image imageID="&rsItems1;" imageX="0" imageY="96" imageWidth="96" imageHeight="96"/>
+	</ItemType>
+	<ItemType UNID="&itCymekBlastSlug;"
+			name=				"Cymek Blast Slug"
+			level=				"3"
+			value=				"2"
+			mass=				"1"
+			frequency=			"notrandom"
 			numberAppearing=	"12d12"
 			modifiers=			"Consumable; Missile;"
+			showReference=		"true"
 
-			description=		"A lot of ships reactors have trouble powering particle weapons, this solves the problem by packing the particle and power source in the same package."
+			description=		"A small shaped charge that can be fired from the Cymek launcher. "
 
-			sortName=			"NAMI.35"
+			sortName=			"NAMI.40"
 			>
-
-		<Image imageID="&rsItems1;" imageX="288" imageY="192" imageWidth="96" imageHeight="96"/>
+		<Image imageID="&rsItems1;" imageX="0" imageY="96" imageWidth="96" imageHeight="96"/>
 	</ItemType>
+	<ItemType UNID="&itCymekIonSlug;"
+			name=				"Cymek EMP Slug"
+			level=				"4"
+			value=				"4"
+			mass=				"5"
+			frequency=			"notrandom"
+			numberAppearing=	"12d12"
+			modifiers=			"Consumable; Missile; Military"
+			showReference=		"true"
 
-	-->
+			description=		"A miniaturized Xenotite pump-charge EMP detonator capable of disabling many ships. "
+
+			sortName=			"NAMI.40"
+			>
+		<Image imageID="&rsItems1;" imageX="0" imageY="96" imageWidth="96" imageHeight="96"/>
+	</ItemType>
+	<ItemType UNID="&itCymekAntimatterSlug;"
+			name=				"Cymek Anti Matter Slug"
+			level=				"4"
+			value=				"20"
+			mass=				"5"
+			frequency=			"notrandom"
+			numberAppearing=	"12d12"
+			modifiers=			"Consumable; Missile; Military"
+			showReference=		"true"
+
+			description=		"This slug is an antimatter inducer capable of throwing out a particle beam composed primarily of anti-protons."
+
+			sortName=			"NAMI.40"
+			>
+		<Image imageID="&rsItems1;" imageX="0" imageY="96" imageWidth="96" imageHeight="96"/>
+	</ItemType>
 
 </TranscendenceExtension>
 
