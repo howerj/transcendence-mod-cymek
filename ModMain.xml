@@ -40,6 +40,8 @@
 	<!ENTITY itCymekIonSlug "0xD539001D"> 
 	<!ENTITY itAmmoBoxCymekAntiMatter "0xD539001E">
 	<!ENTITY itCymekAntiMatterSlug "0xD539001F"> 
+	<!ENTITY itAmmoBoxCymekParticle "0xD5390020">
+	<!ENTITY itCymekParticleSlug "0xD5390021"> 
 
 
 ]>
@@ -80,12 +82,14 @@ To Do / Ideas:
 * Lower level linked fired devices
 * Make a release
 * Advanced scanner
-* make more missiles out of raw materials
 * Make post on mod site
 * Solar fuel collector; Fuel harvesting station - place near sun, makes fuel
 * Solar refuels like it used to?
 * Split fuel assemblies
 * Different version of jump drive that can be created in nano-factory
+* Improve micro-deflector
+* Add shield that you can change damage absorption type
+* Talk to CDM
 
 -->
 
@@ -213,8 +217,9 @@ To Do / Ideas:
 			<Item count="1" item="&itAmmoBoxCymekBlast;"/>
 			<Item count="1" item="&itAmmoBoxCymekIon;"/>
 			<Item count="1" item="&itAmmoBoxCymekAntiMatter;"/>
-
+			<Item count="1" item="&itAmmoBoxCymekParticle;"/>
 			-->
+
 		</Items>
 
 		<Devices>
@@ -222,10 +227,10 @@ To Do / Ideas:
 			<Device deviceID="&itCymekNaniteProjector;"/>
 			<Device deviceID="&itNanoFabricator;"/>
 			<Device deviceID="&itCymekMicroDeflector;"/>
+			<Device deviceID="&itCymekLauncher;"/>
 			<!-- Test Items
 			<Device deviceID="&itMinersSmugglingCargoHold;"/>
 			<Device deviceID="&itDM1500MissileRack;"/>
-			<Device deviceID="&itCymekLauncher;"/>
 			<Device deviceID="&itPersonalCDMShard;"/>
 			-->
 		</Devices>
@@ -688,11 +693,12 @@ To Do / Ideas:
 					{ item:&itBarrelBomb;				enhancement:Nil						components:( { item:&itHydrocarbons; count:1 } { item:&itTitaniumOre; count:1 } )	totalCost:0 }
 
 
-					{ item:&itCymekLauncher;				enhancement:Nil						components:( { item:&itDuralloyOre; count:3 } { item:&itCeralloyOre; count:1 } { item:&itHelium3FuelRod; count:5 } )	totalCost:0 }
+					{ item:&itCymekLauncher;				enhancement:Nil						components:( { item:&itPlasteelOre; count:5 } { item:&itHelium3FuelRod; count:15 } )	totalCost:0 }
 					{ item:&itAmmoBoxCymekTitanium;				enhancement:Nil						components:( { item:&itTitaniumOre; count:2 } { item:&itHelium3FuelRod; count:5 } )	totalCost:0 }
 					{ item:&itAmmoBoxCymekUranium;				enhancement:Nil						components:( { item:&itUraniumOre; count:2 } { item:&itHelium3FuelRod; count:5 } )	totalCost:0 }
 					{ item:&itAmmoBoxCymekBlast;				enhancement:Nil						components:( { item:&itHydrocarbons; count:2 } { item:&itHelium3FuelRod; count:10 } )	totalCost:0 }
 					{ item:&itAmmoBoxCymekIon;				enhancement:Nil						components:( { item:&itXenotiteOre; count:2 } )	totalCost:0 }
+					{ item:&itAmmoBoxCymekParticle;				enhancement:Nil						components:( { item:&itXenotiteOre; count:3 } )	totalCost:0 }
 					{ item:&itAmmoBoxCymekAntiMatter;			enhancement:Nil						components:( { item:&itPteracniumOre; count:4 } { item:&itXenotiteOre; count:3 } )	totalCost:0 }
 					)
 			</NanoRecipes>
@@ -1028,7 +1034,7 @@ To Do / Ideas:
 		<Image imageID="&rsItems1;" imageX="0" imageY="384" imageWidth="96" imageHeight="96"/>
 
 		<Invoke>
-			(intAmmoBoxOpen (itmCreate &itCymekTitaniumSlug; 200))
+			(intAmmoBoxOpen (itmCreate &itCymekTitaniumSlug; 400))
 		</Invoke>
 	</ItemType>
 
@@ -1047,13 +1053,13 @@ To Do / Ideas:
 		<Image imageID="&rsItems1;" imageX="0" imageY="384" imageWidth="96" imageHeight="96"/>
 
 		<Invoke>
-			(intAmmoBoxOpen (itmCreate &itCymekUraniumSlug; 200))
+			(intAmmoBoxOpen (itmCreate &itCymekUraniumSlug; 300))
 		</Invoke>
 	</ItemType>
 
 	<ItemType UNID="&itAmmoBoxCymekBlast;"
 			name=				"Cymek Blast Slug ammunition box(es)"
-			level=				"2"
+			level=				"4"
 			value=				"400"
 			mass=				"1000"
 			frequency=			"notrandom"
@@ -1071,25 +1077,44 @@ To Do / Ideas:
 	</ItemType>
 	<ItemType UNID="&itAmmoBoxCymekIon;"
 			name=				"Cymek EMP Detonators ammunition box(es)"
-			level=				"2"
+			level=				"5"
 			value=				"750"
 			mass=				"1200"
 			frequency=			"notrandom"
 			unknownType=		"&vtUnknownAmmoBox;"
 			attributes=			"ammoBox, commonwealth, consumable, military"
 
-			description=		"This box contains miniaturized Xenotite pump-charge EMP detonators."
+			description=		"This box contains miniaturized Xenotite pumped-charge EMP detonators."
 			>
 
 		<Image imageID="&rsItems1;" imageX="0" imageY="384" imageWidth="96" imageHeight="96"/>
 
 		<Invoke>
-			(intAmmoBoxOpen (itmCreate &itCymekIonSlug; 120))
+			(intAmmoBoxOpen (itmCreate &itCymekIonSlug; 200))
 		</Invoke>
 	</ItemType>
+	<ItemType UNID="&itAmmoBoxCymekParticle;"
+			name=				"Cymek particle generator ammunition box(es)"
+			level=				"4"
+			value=				"500"
+			mass=				"1400"
+			frequency=			"notrandom"
+			unknownType=		"&vtUnknownAmmoBox;"
+			attributes=			"ammoBox, commonwealth, consumable"
+
+			description=		"This box contains an explosive device that can produce lethal particles when focused correctly."
+			>
+
+		<Image imageID="&rsItems1;" imageX="0" imageY="384" imageWidth="96" imageHeight="96"/>
+
+		<Invoke>
+			(intAmmoBoxOpen (itmCreate &itCymekParticleSlug; 200))
+		</Invoke>
+	</ItemType>
+
 	<ItemType UNID="&itAmmoBoxCymekAntiMatter;"
 			name=				"Cymek Anti Matter Inducers ammunition box(es)"
-			level=				"2"
+			level=				"6"
 			value=				"1500"
 			mass=				"1500"
 			frequency=			"notrandom"
@@ -1102,7 +1127,7 @@ To Do / Ideas:
 		<Image imageID="&rsItems1;" imageX="0" imageY="384" imageWidth="96" imageHeight="96"/>
 
 		<Invoke>
-			(intAmmoBoxOpen (itmCreate &itCymekAntiMatterSlug; 100))
+			(intAmmoBoxOpen (itmCreate &itCymekAntiMatterSlug; 200))
 		</Invoke>
 	</ItemType>
 <!-- barrel bomb  -->
@@ -1165,7 +1190,7 @@ To Do / Ideas:
 			numberAppearing=	"2d20"
 			modifiers=			"Consumable; Missile; "
 
-			description=		"An awfully primitive weapon, which is just a barrel filled with explosives and a simple control device. These explosives can be used without any dedicated launcher."
+			description=		"A barrel of explosives and a primitive detonator, deployable from the cargo hold directly. "
 			>
 
 		<Image imageID="&rsItems1;" imageX="96" imageY="96" imageWidth="96" imageHeight="96"/>
@@ -1204,7 +1229,6 @@ To Do / Ideas:
 
 	<CargoHoldDevice cargoSpace=		"30" >
 		<Equipment>
-			<!-- We could turn this into a ROM -->
 			<Install equipment="miningComputer"/>
 		</Equipment>
 	</CargoHoldDevice>
@@ -1365,7 +1389,7 @@ To Do / Ideas:
 	<ItemType UNID="&itCymekLauncher;"
 			name=				"Cymek Slug  Launcher"
 			level=				"6"
-			value=				"2000"
+			value=				"1100"
 			mass=				"500"
 			frequency=			"notrandom"
 			modifiers=			"MajorItem;"
@@ -1435,21 +1459,36 @@ To Do / Ideas:
 						sound=				"&snLaserCannon;"
 						>
 				</Missile>
+
+				<Missile ammoID="&itCymekParticleSlug;"
+						type=			"beam"
+						lifetime=		"80"
+						damage=			"particle:2d6; WMD:4;"
+						missileSpeed=	"50"
+						hitPoints=		"15"
+						directional=	"true"
+						primaryColor=	"#a0f0ff"
+						secondaryColor=	"#f0f0ff"
+						intensity=			"1"
+						directional=		"true"
+						sound=				"&snLaserCannon;"
+						effect=				"&efParticleBeamDefault;"
+						>
+				</Missile>
+
                                 
                                 <Missile ammoID="&itCymekAntimatterSlug;"
-
 						type=			"beam"
 						lifetime=		"120"
-						damage=			"antimatter:2d6+2; WMD3"
+						damage=			"antimatter:2d6+2; WMD5"
 						missileSpeed=	"90"
 						hitPoints=		"15"
 						directional=	"true"
-                                                beamType=			"heavyblaster"
-						primaryColor=		"#ff6a00"
+						primaryColor=	"#f9ffb3"
 						secondaryColor=		"#ff2a00"
                                                 intensity=			"5"
 						sound=			"&snLaserCannon;"
-
+						beamType = "laser"
 						>
 				</Missile>
 			</Missiles>
@@ -1520,9 +1559,26 @@ To Do / Ideas:
 			>
 		<Image imageID="&rsItems1;" imageX="0" imageY="96" imageWidth="96" imageHeight="96"/>
 	</ItemType>
+	<ItemType UNID="&itCymekParticleSlug;"
+			name=				"Cymek Particle Slug"
+			level=				"5"
+			value=				"4"
+			mass=				"1"
+			frequency=			"notrandom"
+			numberAppearing=	"12d12"
+			modifiers=			"Consumable; Missile;"
+			showReference=		"true"
+
+			description=		"For ships with low power reactors particle beam weapons are often to energy intensive to use, these slugs produce lethal particles in the right launcher using an internal power source."
+
+			sortName=			"NAMI.40"
+			>
+		<Image imageID="&rsItems1;" imageX="0" imageY="96" imageWidth="96" imageHeight="96"/>
+	</ItemType>
+
 	<ItemType UNID="&itCymekAntimatterSlug;"
 			name=				"Cymek Anti Matter Slug"
-			level=				"4"
+			level=				"6"
 			value=				"20"
 			mass=				"5"
 			frequency=			"notrandom"
