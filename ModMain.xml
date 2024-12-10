@@ -693,6 +693,7 @@ To Do / Ideas:
 					{ item:&itPersonalCDMShard;	enhancement:Nil    		components:( { item:&itOpticalKnowledgeArray; count: 3 } { item:&itNeuralProcessor; count: 2 } )	totalCost:0 }
 					{ item:&itNanoFabricator;	enhancement:Nil    		components:( { item:&itRegeneratingNanos; count: 3 } { item:&itNeuralProcessor; count: 1 } { item:&itOrthosteelOre; count: 1 } )	totalCost:0 }
 					{ item:&itSmallArmorPatch;	enhancement:Nil    		components:( { item:&itTitaniumOre; count: 1 }  { item:&itHelium3FuelRod; count: 1 } )	totalCost:0 }
+					{ item:&itReinforcedTitanium1;	enhancement:Nil    		components:( { item:&itTitaniumOre; count: 5 }  { item:&itHelium3FuelRod; count: 1 } )	totalCost:0 }
 
 					{ item:&itSuperconductingShields;	enhancement:Nil		components:( { item:&itSuperconductingCoil; count:4 } { item:&itDuralloyOre; count:4 } )	totalCost:0 }
 					{ item:&itSuperconductingCoil;	enhancement:Nil		components:(  { item:&itNiobiumOre; count:1 } )	totalCost:0 }
@@ -768,11 +769,13 @@ To Do / Ideas:
 			attributes=			"MajorItem, communion, humanTech, info, soul, notForSale, QuantumCPU"
 
 			description=		"This Quantum CDM shard contains a homomorphically encrypted copy of your mind running in a virtual paradise. It may be willing to help you."
+                        deviceSlots="0"
 		>
 		<MiscellaneousDevice
 				powerUse=		"1"
 				capacitorPowerUse=	"4"
 				powerToActivate=	"20000"
+                                deviceSlots="0"
 				/>
 
 		<Invoke key="S" installedOnly="true">
@@ -817,7 +820,7 @@ To Do / Ideas:
 	</ItemType>
 
 	<ItemType UNID="&itPlayerCargoContainer;"
-			name=				"Deployable Container Habitat"
+			name=				"deployable container habitat"
 			level=				"2"
 			value=				"300"
 			mass=				"2000"
@@ -1085,7 +1088,7 @@ To Do / Ideas:
 		</Invoke>
 	</ItemType>
 	<ItemType UNID="&itAmmoBoxCymekIon;"
-			name=				"Cymek EMP Detonators ammunition box(es)"
+			name=				"Cymek EMP Slugs ammunition box(es)"
 			level=				"5"
 			value=				"750"
 			mass=				"1200"
@@ -1103,7 +1106,7 @@ To Do / Ideas:
 		</Invoke>
 	</ItemType>
 	<ItemType UNID="&itAmmoBoxCymekParticle;"
-			name=				"Cymek particle generator ammunition box(es)"
+			name=				"Cymek Particle Slugs ammunition box(es)"
 			level=				"4"
 			value=				"500"
 			mass=				"1400"
@@ -1122,7 +1125,7 @@ To Do / Ideas:
 	</ItemType>
 
 	<ItemType UNID="&itAmmoBoxCymekAntiMatter;"
-			name=				"Cymek Anti Matter Inducers ammunition box(es)"
+			name=				"Cymek Anti Matter Slug ammunition box(es)"
 			level=				"6"
 			value=				"1500"
 			mass=				"1500"
@@ -1265,7 +1268,7 @@ To Do / Ideas:
 	</ItemType>
 
 	<ItemType UNID="&itBrainInAVat;"
-			name=				"Cymek Brain in a vat"
+			name=				"cymek brain in a vat"
 			level=				"6"
 			value=				"3500"
 			mass=				"150"
@@ -1295,7 +1298,7 @@ To Do / Ideas:
 	</ItemType>
 
 	<ItemType UNID="&itMetalBlitz;"
-			name=				"Flenser Metal Biltz"
+			name=				"flenser metal biltz"
 			level=				"6"
 			value=				"2500"
 			mass=				"220"
