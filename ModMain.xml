@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TranscendenceExtension
 [
-	<!ENTITY UNIDExtensionHornet	"0xD008002f">
-	<!ENTITY rsArmorHUDShip_Hornet	"0xD008002e">
-	<!ENTITY rsHornetArmorSingle		"0xD008002d"> 
-	<!ENTITY rsHornetLarge			"0xD008002c">
-	<!ENTITY scPlayerHornetBase 	"0xD008002b">
-	<!ENTITY scHornetPlayer 		"0xD008002a">
+	<!ENTITY UNIDExtensionHornet	"0xD539002F">
+	<!ENTITY rsArmorHUDShip_Hornet	"0xD539002E">
+	<!ENTITY rsHornetArmorSingle		"0xD539002D"> 
+	<!ENTITY rsHornetLarge			"0xD539002C">
+	<!ENTITY scPlayerHornetBase 	"0xD539002B">
+	<!ENTITY scHornetPlayer 		"0xD539002A">
 	<!ENTITY itCymekMicroDeflector		        "0xD5390000">
 	<!ENTITY itCymekNaniteProjector "0xD5390001">
 	<!ENTITY itNanoInfusedUltraSteel "0xD5390002">
@@ -92,6 +92,9 @@ To Do / Ideas:
 * Talk to CDM
 * Fabricate Titanium Barricade
 * Make the deployable station look like the warlords ones
+* High level device; zero-point energy source for infinite energy
+* Added 00900000_PlayerShip to hornet attributes, but the ship is the wrong class (wrong
+set of powers).
 
 -->
 
@@ -110,7 +113,7 @@ To Do / Ideas:
 
 	<ShipClass UNID="&scPlayerHornetBase;"
 			class=				"(player Hornet base class)"
-			attributes=			"commonwealth, playerClass, startingClass, 00200000_PlayerShip"
+			attributes=			"commonwealth, playerClass, startingClass, 00200000_PlayerShip, 00900000_PlayerShip"
 			characterClass=		"&unidPilgrimClass;"
 			inherit=			"&baHumanTechShip;"
 
@@ -181,20 +184,20 @@ To Do / Ideas:
 
 			leavesWreck=		"0"
 			
-			attributes=			"commonwealth, playerClass, startingClass, 00200000_PlayerShip"
+			attributes=			"commonwealth, playerClass, startingClass, 00200000_PlayerShip, 00900000_PlayerShip"
 			
 			inherit=			"&scPlayerHornetBase;"
 			>
 
 		<Armor>
-			<!--<ArmorSection name="main" start="0" span="360" armorID="&itNanoInfusedUltraSteel;"/>-->
-			<ArmorSection name="main" start="0" span="360" armorID="&itLightSolarArmor;"/>
+			<ArmorSection name="main" start="0" span="360" armorID="&itNanoInfusedUltraSteel;"/>
+			<!--<ArmorSection name="main" start="0" span="360" armorID="&itLightSolarArmor;"/>-->
 		</Armor>
 
 		<Items>
 			<Item count="3d3" item="&itHelium3FuelRod;"/>
 			<Item count="1d3" item="&itBarrelBomb;"/>
-
+			<Item count="5" item="&itAmmoBoxCymekBlast;"/>
 
 			<!-- Test Items
 			<Item count="2d3" item="&itTitaniumOre;"/>
@@ -207,24 +210,24 @@ To Do / Ideas:
 			<Item count="1" item="&itMetalBlitz;"/>
 			<Item count="200" item="&itSlaveCoffin;"/>
 			<Item count="5" item="&itGemOfDespair;"/>
-			<Item count="5" item="&itTranspaceJumpdrive;"/>
 			<Item count="1" item="&itAmmoBoxCymekTitanium;"/>
 			<Item count="1" item="&itAmmoBoxCymekUranium;"/>
 			<Item count="1" item="&itAmmoBoxCymekBlast;"/>
 			<Item count="1" item="&itAmmoBoxCymekIon;"/>
 			<Item count="1" item="&itAmmoBoxCymekAntiMatter;"/>
-				<Item count="1" item="&itAmmoBoxCymekParticle;"/>
+			<Item count="1" item="&itAmmoBoxCymekParticle;"/>
+			-->
 
+			<Item count="121" item="&itSlaveCoffin;"/>
 			<Item count="10" item="&itAmmoBoxCymekAntiMatter;"/>
 			<Item count="2" item="&itBlackMarketID;"/>
-			<Item count="2" item="&itPlayerCargoContainer;"/>
+			<Item count="1" item="&itPlayerCargoContainer;"/>
 			<Item count="1" item="&itTargetingComputerROM;"/>
 			<Item count="1" item="&itTradingComputerROM;"/>
 			<Item count="1" item="&itWeaponSpeedROM;"/>
 			<Item count="1" item="&itMiningComputerROM;"/>
 			<Item count="1" item="&itEnhanceSRSROM;"/>
 
-			-->
 
 
 		</Items>
@@ -234,13 +237,13 @@ To Do / Ideas:
 			<Device deviceID="&itCymekNaniteProjector;"/>
 			<Device deviceID="&itNanoFabricator;"/>
 			<Device deviceID="&itCymekMicroDeflector;"/>
-			<!-- Test Items
 			<Device deviceID="&itCymekLauncher;"/>
 			<Device deviceID="&itPersonalCDMShard;"/>
 			<Device deviceID="&itMinersSmugglingCargoHold;"/>
-			<Device deviceID="&itMinersSmugglingCargoHold;"/>
-			<Device deviceID="&itDM1500MissileRack;"/>
+			<Item count="1" item="&itTranspaceJumpdrive;"/>
+			<!-- Test Items
 			<Device deviceID="&itPersonalCDMShard;"/>
+			<Device deviceID="&itDM1500MissileRack;"/>
 			-->
 		</Devices>
 
