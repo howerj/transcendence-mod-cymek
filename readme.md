@@ -1,7 +1,7 @@
 # Cymek Industries game mod for the game Transcendence.
 
 * Author: Mixed (See `ModMain.xml`) / Richard James Howe
-* License: Do What Thou Wilt.
+* License: 0BSD / Mixed (see license comments)
 * Email: <mailto:howe.r.j.89@gmail.com>
 * Repo: <https://github.com/howerj/transcendence-mod-cymek>.
 
@@ -15,4 +15,7 @@ See for more information:
 A game mod for Transcendence, it introduces a few unique new items as well as a
 modded Hornet Battle Pod.
 
-A list of TODO items is in `ModMain.xml`.
+A list of TODO items is in `cymek.xml`.
+
+**TODO: Describe license**
+

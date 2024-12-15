@@ -102,10 +102,10 @@ be needed as well.
 	credits="howerj/HornetBattlePodsRule <https://github.com/howerj/cymek>, darksider (barrel bomb), FAD's hornet battle pod mod, Shivian Hunter's hornet battle pod mod, Soggydoggy's one piece armor mod, and more!"
 	>
 	
-	<Image UNID="&rsArmorHUDShip_Hornet;" bitmap="Resources/ArmorHUDShip_Hornet.jpg"/>
-	<Image UNID="&rsHornetArmorSingle;" bitmap="Resources/OneArmorHUD.bmp"/>
-	<Image UNID="&rsHornetLarge;" bitmap="Resources/LargeHornet.jpg" bitmask="Resources/LargeHornetMask.bmp"/>
-	<Image UNID="&rsBarrelBomb;"	bitmap="Resources/barrelbomb.jpg"	bitmask="Resources/barrelbombmask.bmp" backColor="0x00000000"/>
+	<Image UNID="&rsArmorHUDShip_Hornet;" bitmap="resources/ArmorHUDShip_Hornet.jpg"/>
+	<Image UNID="&rsHornetArmorSingle;" bitmap="resources/OneArmorHUD.bmp"/>
+	<Image UNID="&rsHornetLarge;" bitmap="resources/LargeHornet.jpg" bitmask="resources/LargeHornetMask.bmp"/>
+	<Image UNID="&rsBarrelBomb;"	bitmap="resources/barrelbomb.jpg"	bitmask="resources/barrelbombmask.bmp" backColor="0x00000000"/>
 
 	<ShipClass UNID="&scPlayerHornetBase;"
 			class=				"(player Hornet base class)"
