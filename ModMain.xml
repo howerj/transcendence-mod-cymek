@@ -23,12 +23,11 @@
 	<!ENTITY itMinersSmugglingCargoHold "0xD539000D">
 	<!ENTITY itBioTechMod "0xD539000E">
 	<!ENTITY itBrainInAVat "0xD539000F">
-	<!--<!ENTITY itCymekOmniMiningLaser "0xD5390010">-->
+	<!ENTITY itCymekOmniMiningLaser "0xD5390010">
 	<!ENTITY itMetalBlitz "0xD5390011">
 	<!ENTITY itPersonalCDMShard "0xD5390012">
 	<!ENTITY itMiningComputerROM "0xD5390013">
 	<!ENTITY dsNameHabitat "0xD5390014">
-
 	<!ENTITY itAmmoBoxCymekTitanium "0xD5390015">
 	<!ENTITY itAmmoBoxCymekUranium "0xD5390016"> 
 	<!ENTITY itCymekTitaniumSlug "0xD5390017">
@@ -42,7 +41,11 @@
 	<!ENTITY itCymekAntiMatterSlug "0xD539001F"> 
 	<!ENTITY itAmmoBoxCymekParticle "0xD5390020">
 	<!ENTITY itCymekParticleSlug "0xD5390021"> 
-
+	<!ENTITY itBetterThanLifeHeadset "0xD5390022"> 
+	<!ENTITY itCymekSentinel "0xD5390023"> 
+	<!ENTITY scCymekSentinel "0xD5390024"> 
+	<!ENTITY itCymekNanoTitaniumArmor "0xD5390025"> 
+	<!ENTITY itCymekLaser "0xD5390026">
 
 ]>
 
@@ -63,20 +66,12 @@ To Do / Ideas:
 
 * Build instructions / Add a release
 * Improve `readme.md`.
-* Make a new Auton; Nano-fabricated, regen/no-armor, cymek
 * Recall auton option
-* Add new hornet battle pod to Eternity Port mod if possible
-* Balance Recipes; specifically armor
-* New Items
-  * Container of small arms
-  * Weapon crates
-  * (illegal) Better than life head set!
-  * Luminous AI system 
+* BUG: Hornet battle pod to Eternity Port has wrong powers list
 * BUG: Cannot install smugglers cargo hold from black market station, related to mining computer? Or to Hornet Battlepod display?
+* Balance Recipes; specifically armor
 * Upgrade recipes via ROM? Also fabricate armor patches from ore, nanos from ore, get a tech/craft tree going
-* Better Armor tile? The resource image needs cleaning up.
 * Add timer / charge to nano-factory
-* BUG: Buy ship does not work, might be related to smugglers cargo hold problem
 * Make your own habitable station and faction, whatever the system, including Elysium,
 	generates credits with redoable missions.
 * Lower level linked fired devices
@@ -87,12 +82,9 @@ To Do / Ideas:
 * Solar refuels like it used to?
 * Split fuel assemblies
 * Different version of jump drive that can be created in nano-factory
-* Improve micro-deflector
 * Add shield that you can change damage absorption type
-* Talk to CDM
-* Fabricate Titanium Barricade
 * Make the deployable station look like the warlords ones
-* High level device; zero-point energy source for infinite energy
+* High level device; zero-point energy source for infinite energy, 2 devie slots
 * Added 00900000_PlayerShip to hornet attributes, but the ship is the wrong class (wrong
 set of powers).
 
@@ -179,7 +171,7 @@ set of powers).
 
 			maxArmor=			"5000"
 			maxCargoSpace=		"60"
-			maxDevices=			"7"
+			maxDevices=			"6"
 			maxWeapons=			"2"
 
 			leavesWreck=		"0"
@@ -190,60 +182,36 @@ set of powers).
 			>
 
 		<Armor>
-			<ArmorSection name="main" start="0" span="360" armorID="&itNanoInfusedUltraSteel;"/>
-			<!--<ArmorSection name="main" start="0" span="360" armorID="&itLightSolarArmor;"/>-->
+			<ArmorSection name="main" start="0" span="360" armorID="&itLightSolarArmor;"/>
 		</Armor>
 
 		<Items>
 			<Item count="3d3" item="&itHelium3FuelRod;"/>
-			<Item count="1d3" item="&itBarrelBomb;"/>
-			<Item count="5" item="&itAmmoBoxCymekBlast;"/>
-
-			<!-- Test Items
-			<Item count="2d3" item="&itTitaniumOre;"/>
-			<Item count="1" item="&itPlayerCargoContainer;"/>
-			<Item count="1" item="&itEmergencySupplies;"/>
-			<Item count="3" item="&itRegeneratingNanos;"/>
-			<Item count="2" item="&itFusionTrigger;"/>
-			<Item count="2" item="&itBioTechMod;"/>
-			<Item count="2" item="&itBrainInAVat;"/>
-			<Item count="1" item="&itMetalBlitz;"/>
-			<Item count="200" item="&itSlaveCoffin;"/>
-			<Item count="5" item="&itGemOfDespair;"/>
-			<Item count="1" item="&itAmmoBoxCymekTitanium;"/>
-			<Item count="1" item="&itAmmoBoxCymekUranium;"/>
+			<Item count="1" item="&itCymekSentinel;"/>
+		       	<Item count="1" item="&itPlayerCargoContainer;"/>
 			<Item count="1" item="&itAmmoBoxCymekBlast;"/>
-			<Item count="1" item="&itAmmoBoxCymekIon;"/>
-			<Item count="1" item="&itAmmoBoxCymekAntiMatter;"/>
-			<Item count="1" item="&itAmmoBoxCymekParticle;"/>
+
+			<!-- Test items 
+				<Item count="1" item="&itBlackMarketID;"/>
+		       		<Item count="1" item="&itTargetingComputerROM;"/>
+				<Item count="1" item="&itTradingComputerROM;"/>
+		       		<Item count="1" item="&itWeaponSpeedROM;"/>
+				<Item count="1" item="&itMiningComputerROM;"/>
+				<Item count="1" item="&itEnhanceSRSROM;"/>
 			-->
-
-			<Item count="121" item="&itSlaveCoffin;"/>
-			<Item count="10" item="&itAmmoBoxCymekAntiMatter;"/>
-			<Item count="2" item="&itBlackMarketID;"/>
-			<Item count="1" item="&itPlayerCargoContainer;"/>
-			<Item count="1" item="&itTargetingComputerROM;"/>
-			<Item count="1" item="&itTradingComputerROM;"/>
-			<Item count="1" item="&itWeaponSpeedROM;"/>
-			<Item count="1" item="&itMiningComputerROM;"/>
-			<Item count="1" item="&itEnhanceSRSROM;"/>
-
-
-
 		</Items>
 
 		<Devices>
 			<DeviceSlot criteria="w" posAngle="0" posRadius="14"/>
-			<Device deviceID="&itCymekNaniteProjector;"/>
+			<Device deviceID="&itCymekOmniMiningLaser;"/>
 			<Device deviceID="&itNanoFabricator;"/>
 			<Device deviceID="&itCymekMicroDeflector;"/>
 			<Device deviceID="&itCymekLauncher;"/>
-			<Device deviceID="&itPersonalCDMShard;"/>
-			<Device deviceID="&itMinersSmugglingCargoHold;"/>
-			<Item count="1" item="&itTranspaceJumpdrive;"/>
 			<!-- Test Items
+			<Device deviceID="&itMinersSmugglingCargoHold;"/>
 			<Device deviceID="&itPersonalCDMShard;"/>
 			<Device deviceID="&itDM1500MissileRack;"/>
+			<Device deviceID="&itTranspaceJumpdrive;"/>
 			-->
 		</Devices>
 
@@ -266,7 +234,7 @@ set of powers).
 	</ShipClass>
 
 	<ItemType UNID="&itCymekMicroDeflector;"
-			name=				"Cymek Micro Deflector"
+			name=				"cymek micro deflector"
 			level=				"2"
 			value=				"300"
 			mass=				"50"
@@ -295,13 +263,12 @@ set of powers).
 
 		</ItemType>
 
-	<!--
 	<ItemType UNID="&itCymekOmniMiningLaser;"
-			name=				"Cymek Omni Mining Laser"
+			name=				"cymek omni mining laser"
 			level=				"6"
 			value=				"2500"
 			mass=				"1000"
-			frequency=			"rare"
+			frequency=			"notrandom"
 			modifiers=			"EnergyWeapon; MajorItem; Specialty;"
 			showReference=		"true"
 
@@ -334,15 +301,53 @@ set of powers).
         	<Invoke>
 			(intAutoInstall gSource gItem)
 		</Invoke>
-		</ItemType>
-	-->
+	</ItemType>
+
+	<ItemType UNID="&itCymekLaser;"
+			name=				"cymek laser"
+			level=				"6"
+			value=				"400"
+			mass=				"250"
+			frequency=			"notrandom"
+			modifiers=			"EnergyWeapon; MajorItem; Specialty;"
+			showReference=		"true"
+			description=		"This high-tech lightweight and low power laser was made by Cymek Industries for drones and scout ships."
+			>
+
+		<Image imageID="&rsItems1;" imageX="96" imageY="0" imageWidth="96" imageHeight="96"/>
+
+		<Weapon
+				type=				"beam"
+				damage=				"laser:1d4"
+				fireRate=			"30"
+				lifetime=			"50"
+				powerUse=			"5"
+			        omnidirectional=		"false" 
+                                deviceSlots=			"0"
+				fireEffect=			"&efGreenLaserFireEffect;"
+				hitEffect=			"&efGreenLaserHitEffect;"
+				sound=				"&snLaserCannon;"
+				>
+			<Effect>
+				<Beam
+						beamType=			"laser"
+						primaryColor=		"0x5f, 0xf1, 0x2a"
+						secondaryColor=		"0x00, 0xff, 0x00"
+						/>
+			</Effect>			
+		</Weapon>
+
+        	<Invoke>
+			(intAutoInstall gSource gItem)
+		</Invoke>
+	</ItemType>
 
 	<ItemType UNID="&itCymekNaniteProjector;"
 			name=				"Cymek Nanite Projector Matrix"
 			level=				"6"
 			value=				"2650"
-			mass=				"120"
-			frequency=			"rare"
+			mass=				"250"
+			frequency=			"notrandom"
 			modifiers=			"EnergyWeapon; MajorItem; Specialty;"
 			showReference=		"true"
 
@@ -376,8 +381,36 @@ set of powers).
 		</Invoke>
 	</ItemType>
 
+	<ItemType UNID="&itCymekNanoTitaniumArmor;"
+			name=				"segment of regenerating nano titanium"
+			level=				"3"
+			value=				"400"
+			mass=				"1000"
+			frequency=			"notrandom"
+			numberAppearing=	"4"
+			modifiers=			"MinorItem; Specialty;"
+
+			description=		"This is a segment of self-repairing nano-fabricated armor titanium armor, it is stronger and lighter than regular titanium armor thanks to nanoscale manufacturing process."
+
+			>
+
+		<Image imageID="&rsItems4;" imageX="192" imageY="0" imageWidth="96" imageHeight="96"/>
+
+		<Armor
+				hitPoints=	"60"
+				hpBonus=	"+0"
+				composition=    "nanoscale"
+				regen="1"
+				radiationImmune=        "false"
+				blindingImmune=			"false"
+				deviceDamageImmune=		"false"
+				disintegrationImmune=	"false"
+				shatterImmune=			"false"
+				/>
+    	</ItemType>
+
 	<ItemType UNID="&itNanoInfusedUltraSteel;"
-			name=				"segment of Cymek Nanite Infused Steel"
+			name=				"segment of Cymek nanite infused ultra steel"
 			level=				"7"
 			value=				"3500"
 			mass=				"1000"
@@ -397,18 +430,14 @@ set of powers).
 				repairTech=	"8"
 				composition=            "nanoscale"
 				regen="1"
-				radiationImmune=        "true"
                                 photoRecharge=          "30"
 
+				radiationImmune=        "true"
 				blindingImmune=			"false"
 				deviceDamageImmune=		"false"
 				disintegrationImmune=	"false"
-				radiationImmune=		"true"
 				shatterImmune=			"false"
-
-
 				/>
-                
     	</ItemType>
         
 	<ItemType UNID="&itEmergencySupplies;"
@@ -678,7 +707,7 @@ set of powers).
 			<NanoRecipes>
 				(
 					{ item:&itCymekMicroDeflector;	enhancement:Nil		components:( { item:&itTitaniumOre; count:4 }  { item:&itHydrocarbons; count:1 } { item:&itHelium3FuelRod; count:3 } )	totalCost:0 }
-					{ item:&itAutoSentinel;	enhancement:Nil		components:( { item:&itTitaniumOre; count:5 } { item:&itHelium3FuelRod; count:5 } )	totalCost:0 }
+					{ item:&itCymekSentinel;	enhancement:Nil		components:( { item:&itTitaniumOre; count:5 } { item:&itHelium3FuelRod; count:5 } )	totalCost:0 }
 					{ item:&itPlayerCargoContainer;	enhancement:Nil		components:( { item:&itTitaniumOre; count:5 } { item:&itHydrocarbons; count:1 } { item:&itHelium3FuelRod; count:3 } )	totalCost:0 }
 					{ item:&itFrozenSupplies;	enhancement:Nil		components:( { item:&itHydrocarbons; count:1 } { item:&itWaterIce; count:2 } { item:&itHelium3FuelRod; count:3 } )	totalCost:0 }
 					{ item:&itMedicalSupplies;	enhancement:Nil		components:( { item:&itHydrocarbons; count:2 } { item:&itWaterIce; count:1 } { item:&itHelium3FuelRod; count:3 } )	totalCost:0 }
@@ -763,6 +792,7 @@ set of powers).
 		</Language>
 	</DockScreen>
 
+	<!-- We could have a device screen so we can talk to the shard, or improve it. -->
 	<ItemType UNID="&itPersonalCDMShard;"
 			name=				"Personal CDM Shard"
 			level=				"7"
@@ -882,7 +912,15 @@ set of powers).
 			<Data id="cargoSpace">100</Data>
 		</InitialData>
 
-		<ImageVariants> <!-- Image and Effects Sealed containers are mostly orange, with a small chance of other colors.  -->
+		<ImageVariants>
+			<Image	imageID="&rsCommonwealthSlumsImage;" imageX="0" imageY="128" imageWidth="64" imageHeight="64"/>
+			<Image	imageID="&rsCommonwealthSlumsImage;" imageX="64" imageY="128" imageWidth="64" imageHeight="64"/>
+			<Image	imageID="&rsCommonwealthSlumsImage;" imageX="128" imageY="128" imageWidth="64" imageHeight="64"/>
+			<Image	imageID="&rsCommonwealthSlumsImage;" imageX="192" imageY="128" imageWidth="64" imageHeight="64"/>
+		</ImageVariants>
+
+		<!--
+		<ImageVariants> 
 			<Image	imageID="&rsCargoContainer;"	imageX="0"   imageY="0"   imageWidth="56" imageHeight="56" viewportRatio="0.00406"/>
 			<Image	imageID="&rsCargoContainer;"	imageX="56"  imageY="0"   imageWidth="56" imageHeight="56" viewportRatio="0.00406"/>
 			<Image	imageID="&rsCargoContainer;"	imageX="112" imageY="0"   imageWidth="56" imageHeight="56" viewportRatio="0.00406"/>
@@ -894,13 +932,23 @@ set of powers).
 
 			<Image	imageID="&rsCargoContainer;"	imageX="112" imageY="56"  imageWidth="56" imageHeight="56" viewportRatio="0.00406"/>
 			<Image	imageID="&rsCargoContainer;"	imageX="336" imageY="112" imageWidth="56" imageHeight="56" viewportRatio="0.00406"/>
-		</ImageVariants>
+		</ImageVariants> -->
 
+		<DockingPorts>
+			<Port x="0"		y="70" />
+			<Port x="61"	y="35" />
+			<Port x="61"	y="-35" />
+			<Port x="0"		y="-70" />
+			<Port x="-61"	y="-35" />
+			<Port x="-61"	y="35" />
+		</DockingPorts>
+
+		<!--
 		<DockingPorts
 				portCount=		"2"
 				portRadius=		"50"
 				maxDist=		"3"
-			/>
+		/>-->
 
 		<Language>
 			<Text id="actionUndock">[U]ndock</Text>
@@ -1228,7 +1276,7 @@ set of powers).
 
     <ItemType UNID="&itMinersSmugglingCargoHold;"
             name=               "ore smugglers cargo hold"
-            level=              "5"
+            level=              "6"
             value=              "9500"
             mass=               "2500"
             frequency=          "rare"
@@ -1276,7 +1324,7 @@ set of powers).
 			value=				"3500"
 			mass=				"150"
 			frequency=			"rare"
-			attributes=			"communion, consumable, humanTech, info, soul, notForSale, illegal"
+			attributes=			"communion, humanTech, info, soul, notForSale, illegal"
 
 			description=		"Cymek industries pioneered the disincorporated individual, a human brain in a self sustaining vat. Whilst not illegal in and of themselves these living and thinking brains are illegal to trade."
 			>
@@ -1297,7 +1345,20 @@ set of powers).
 				You snap out of it. You feel the presence of Domina.
 			</Text>
 		</Language>
+	</ItemType>
 
+	<ItemType UNID="&itBetterThanLifeHeadset;"
+			name=				"better-than-life headset"
+			level=				"6"
+			value=				"2000"
+			mass=				"150"
+			frequency=			"rare"
+			attributes=			"humanTech, notForSale, illegal"
+
+			description=		"A modified version of the Neuros Media Player, these headsets can create an adaptive virtual environment tailored to the individual, highly addictive these sets have led to people wasting away connected to them. The unscrupulous can use these for Red and Blue conditioning of unwilling minds, turning paradise to a nightmare and back again."
+			>
+
+		<Image imageID="&rsItems1;" imageX="288" imageY="0" imageWidth="96" imageHeight="96"/>
 	</ItemType>
 
 	<ItemType UNID="&itMetalBlitz;"
@@ -1607,6 +1668,106 @@ set of powers).
 			>
 		<Image imageID="&rsItems1;" imageX="0" imageY="96" imageWidth="96" imageHeight="96"/>
 	</ItemType>
+
+	<ItemType UNID="&itCymekSentinel;"
+			name=				"CymekSentinel&#xae;| CymekSentinels&#xae;"
+			attributes=			"auton, combatAuton, commonwealth, minorItem"
+			inherit=			"&baAutonItemBase;"
+			  
+			level=				"3"
+			frequency=			"notrandom"
+			unknownType=		"&itUnknownAuton;"
+			  
+			value=				"750"
+			mass=				"500"
+			charges=			"0"
+			massBonusPerCharge=	"1000"
+
+			description=		"These light drones patterned after the AutoSentinel can be produced in quantity by the Cymek Nano-Fabricator and are suitable for light defense operations."
+			>
+
+		<Image imageID="&rsItems3;" imageX="192" imageY="192" imageWidth="96" imageHeight="96"/>
+		
+		<StaticData>
+			<autonShipClass>&scCymekSentinel;</autonShipClass>
+		</StaticData>
+	</ItemType>
+
+	<ShipClass UNID="&scCymekSentinel;"
+			manufacturer=		"Cymek Industries"
+			class=				"CymekSentinel&#xae;"
+			type=				""
+			defaultSovereign=	"&svCommonwealth;"
+
+			attributes=			"auton, combatAuton, genericClass"
+			inherit=			"&baStdAutonBase;"
+			>
+		<Properties>
+			<Definition id="autonItemType">&itCymekSentinel;</Definition>
+		</Properties>
+
+		<!-- Hull -->
+
+		<Hull
+			size=				"14"
+			mass=				"1"
+			cargoSpace=			"0"
+
+			maxReactorPower=	"500"
+			maxCargoSpace=		"0"
+			maxDevices=			"1"
+
+			maxArmor=			"light"
+			stdArmor=			"light"
+			/>
+
+		<Reactor
+			reactorPower=		"100"
+			/>
+
+		<Drive
+			maxSpeed=			"30"
+			thrust=				"30"
+			/>
+
+		<Maneuver
+			maxRotationRate=	"18.0"
+			rotationAccel=		"6.0"
+			/>
+
+		<!-- Configuration -->
+		
+		<Armor
+			armorID=			"&itCymekNanoTitaniumArmor;"
+			count=				"1"
+			/>
+		
+		<Devices>
+			<Device deviceID="&itCymekLaser;"/>
+			<Device deviceID="&itCymekMicroDeflector;"/>
+		</Devices>
+
+		<!-- Image and Effects -->
+
+		<!-- A custom image for this auton would be nice. -->
+		<Image imageID="&rsAutosentinelHD2;" imageWidth="48" imageHeight="48" rotationCount="120" rotationColumns="12" viewportRatio="0.005625"/>
+		<HeroImage imageID="&rsAutosentinelHero;" imageWidth="320" imageHeight="320"/>
+
+		<!-- AI and Behavior -->
+
+		<AISettings
+			fireRateAdj=		"15"
+			fireAccuracy=		"70"
+			perception=			"4"
+			noAttackOnThreat=	"true"
+			noNavPaths=			"true"
+			ignoreShieldsDown=	"true"
+			/>
+		
+		<Language>
+			<String id="DeployAck">"CymekSentinel&#xae; v1984 online"</String>
+		</Language>
+	</ShipClass>
 
 </TranscendenceExtension>
 
