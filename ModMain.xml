@@ -68,7 +68,10 @@ To Do / Ideas:
 * Improve `readme.md`.
 * Recall auton option
 * BUG: Hornet battle pod to Eternity Port has wrong powers list
+  * Added 00900000_PlayerShip to hornet attributes, but the ship is the wrong class (wrong
+	set of powers).
 * BUG: Cannot install smugglers cargo hold from black market station, related to mining computer? Or to Hornet Battlepod display?
+* BUG: The deployable player station is immortal
 * Balance Recipes; specifically armor
 * Upgrade recipes via ROM? Also fabricate armor patches from ore, nanos from ore, get a tech/craft tree going
 * Add timer / charge to nano-factory
@@ -80,13 +83,14 @@ To Do / Ideas:
 * Make post on mod site
 * Solar fuel collector; Fuel harvesting station - place near sun, makes fuel
 * Solar refuels like it used to?
-* Split fuel assemblies
+* Split fuel assemblies (need to generate multiple items)
 * Different version of jump drive that can be created in nano-factory
 * Add shield that you can change damage absorption type
 * Make the deployable station look like the warlords ones
 * High level device; zero-point energy source for infinite energy, 2 devie slots
-* Added 00900000_PlayerShip to hornet attributes, but the ship is the wrong class (wrong
-set of powers).
+* Make a nanite-feedstock made from multiple mined sources (titanium ore, plasteel ore, and
+other goods) as a way of making components as a sort of currency, other items and ore might
+be needed as well.
 
 -->
 
@@ -108,11 +112,10 @@ set of powers).
 			attributes=			"commonwealth, playerClass, startingClass, 00200000_PlayerShip, 00900000_PlayerShip"
 			characterClass=		"&unidPilgrimClass;"
 			inherit=			"&baHumanTechShip;"
-
 			>
 
 		<PlayerSettings
-			desc=				"This modified Hornet Battle pod was commissioned by the Late and Legendary Anarchist pilot Zephron Janus Babblebrox which they were unable to collect. Zephron's next of kin sold the rights to their life story, which have made somewhat unpopular with those sympathetic with the Anarchists."
+			desc=	"This modified Hornet Battle pod was commissioned by the Late and Legendary Anarchist pilot Zephron Janus Babblebrox which they were unable to collect. Zephron's next of kin sold the rights to their life story, which have made somewhat unpopular with those sympathetic with the Anarchists."
 			startingCredits=	"2d100+50"
 
 			largeImage=			"&rsHornetLarge;"
@@ -183,21 +186,24 @@ set of powers).
 
 		<Armor>
 			<ArmorSection name="main" start="0" span="360" armorID="&itLightSolarArmor;"/>
+			<!--<ArmorSection name="main" start="0" span="360" armorID="&itNanoInfusedUltraSteel;"/>-->
 		</Armor>
 
 		<Items>
 			<Item count="3d3" item="&itHelium3FuelRod;"/>
 			<Item count="1" item="&itCymekSentinel;"/>
-		       	<Item count="1" item="&itPlayerCargoContainer;"/>
-			<Item count="1" item="&itAmmoBoxCymekBlast;"/>
 
 			<!-- Test items 
+		       		<Item count="1" item="&itPlayerCargoContainer;"/>
+				<Item count="1" item="&itAmmoBoxCymekBlast;"/>
 				<Item count="1" item="&itBlackMarketID;"/>
 		       		<Item count="1" item="&itTargetingComputerROM;"/>
 				<Item count="1" item="&itTradingComputerROM;"/>
 		       		<Item count="1" item="&itWeaponSpeedROM;"/>
 				<Item count="1" item="&itMiningComputerROM;"/>
 				<Item count="1" item="&itEnhanceSRSROM;"/>
+				<Item count="15" item="&itSilicarbCrystal;"/>
+				<Item count="15" item="&itPlasteelNanos;"/>
 			-->
 		</Items>
 
@@ -206,8 +212,8 @@ set of powers).
 			<Device deviceID="&itCymekOmniMiningLaser;"/>
 			<Device deviceID="&itNanoFabricator;"/>
 			<Device deviceID="&itCymekMicroDeflector;"/>
-			<Device deviceID="&itCymekLauncher;"/>
 			<!-- Test Items
+			<Device deviceID="&itCymekLauncher;"/>
 			<Device deviceID="&itMinersSmugglingCargoHold;"/>
 			<Device deviceID="&itPersonalCDMShard;"/>
 			<Device deviceID="&itDM1500MissileRack;"/>
