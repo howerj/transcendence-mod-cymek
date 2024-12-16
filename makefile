@@ -1,4 +1,3 @@
-
 INTERP=wine
 OUTPUT=cymek.tdb
 OUTDIR=Collection

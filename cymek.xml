@@ -9,10 +9,8 @@
 	<!ENTITY scHornetPlayer 		"0xD539002A">
 	<!ENTITY itCymekMicroDeflector		        "0xD5390000">
 	<!ENTITY itCymekNaniteProjector "0xD5390001">
-	<!ENTITY itNanoInfusedUltraSteel "0xD5390002">
+	<!ENTITY itCymekNanoSteelArmor "0xD5390002">
 	<!ENTITY itEmergencySupplies "0xD5390003">
-	<!ENTITY itNanoFabricator "0xD5390004">
-	<!ENTITY dsNanoFabricator "0xD5390005">
 	<!ENTITY stPlayerCargoContainer "0xD5390006">
 	<!ENTITY itPlayerCargoContainer "0xD5390007">
 	<!ENTITY itAmmoBoxKM100 "0xD5390008">
@@ -46,6 +44,9 @@
 	<!ENTITY scCymekSentinel "0xD5390024"> 
 	<!ENTITY itCymekNanoTitaniumArmor "0xD5390025"> 
 	<!ENTITY itCymekLaser "0xD5390026">
+	<!ENTITY itCymekNanoFeedstock "0xD5390027">
+	<!ENTITY itNanoFabricator "0xD5390028">
+	<!ENTITY dsNanoFabricator "0xD5390029">
 
 ]>
 
@@ -72,7 +73,6 @@ To Do / Ideas:
 	set of powers).
 * BUG: Cannot install smugglers cargo hold from black market station, related to mining computer? Or to Hornet Battlepod display?
 * BUG: The deployable player station is immortal
-* Balance Recipes; specifically armor
 * Upgrade recipes via ROM? Also fabricate armor patches from ore, nanos from ore, get a tech/craft tree going
 * Add timer / charge to nano-factory
 * Make your own habitable station and faction, whatever the system, including Elysium,
@@ -91,6 +91,8 @@ To Do / Ideas:
 * Make a nanite-feedstock made from multiple mined sources (titanium ore, plasteel ore, and
 other goods) as a way of making components as a sort of currency, other items and ore might
 be needed as well.
+* A disposable version of the nano-factory could be made, nano-formers.
+* Convert slave coffins to brains in a vat?
 
 -->
 
@@ -106,6 +108,294 @@ be needed as well.
 	<Image UNID="&rsHornetArmorSingle;" bitmap="resources/OneArmorHUD.bmp"/>
 	<Image UNID="&rsHornetLarge;" bitmap="resources/LargeHornet.jpg" bitmask="resources/LargeHornetMask.bmp"/>
 	<Image UNID="&rsBarrelBomb;"	bitmap="resources/barrelbomb.jpg"	bitmask="resources/barrelbombmask.bmp" backColor="0x00000000"/>
+
+	<ItemType UNID="&itCymekNanoFeedstock;"
+			name=				"nano feedstock"
+			level=				"2"
+			value=				"100"
+			mass=				"1000"
+			frequency=			"uncommon"
+			attributes=			"consumable, res, humanTech"
+
+			description=		"A container of slurry suitable as a generic medium and energy source for the manufacture of nano-fabricated goods. Crafting some objects may require other ore or objects."
+			>
+
+		<Image imageID="&rsItems1;" imageX="288" imageY="0" imageWidth="96" imageHeight="96"/>
+	</ItemType>
+
+	<Globals>
+		(block Nil
+			(setq cymekCalcFabrication (lambda (theRecipe theSource theFoundry)
+				(block (
+					(theItem (cymekCreateItem theRecipe 1))
+					(currencyUsed (objGetProperty (or theFoundry gSource) 'currency))
+
+					;	Describe the components needed
+					(theComponents
+						(map (@ theRecipe 'components) theDesc
+							(itmCreate (@ theDesc 'item) (@ theDesc 'count))
+							)
+						)
+
+					;	Compute the total price of the components
+						
+					(componentPrice
+						(map theComponents 'reduceSum theComponent
+							;	For devices we assume a damaged device
+							(if (itmMatches theComponent "d")
+								(* (itmGetCount theComponent) (itmGetPrice (itmSet@ theComponent 'damaged True) currencyUsed))
+								(* (itmGetCount theComponent) (itmGetPrice theComponent currencyUsed))
+								)
+							)
+						)
+						
+
+					(markUp (@ theRecipe 'markUp))
+					(workPrice
+						(switch
+							;	If markUp is an integer, assume it is the cost of the work
+							;	as a percent of the component cost. E.g., 10 = 10% of component
+							;	cost.
+							(and markUp (= (typeof markUp) 'int32))
+								(int (round (* componentPrice (/ markUp 100))))
+
+							;	Otherwise, we expect a double such that 0.1 = 10% of component
+							;	cost.
+							markUp
+								(int (round (* componentPrice markUp)))
+
+							;	Otherwise default tinker calculation where  total cost of the work
+							;	compensates for any difference between the input and output prices.
+							(max 50 (intRoundUp (- (itmGetPrice theItem) componentPrice) 25))
+							)
+						)
+					(workCost
+						(or
+							;	Recipe totalCost will override any other calculations
+							(@ theRecipe 'totalCost)
+
+							;	Otherwise add extraCost to the calculated price
+							(+ workPrice (@ theRecipe 'extraCost))
+							)
+						)
+
+					;	For each required component, add up the number of items the player
+					;	actually has. Note that we accept damaged items.
+						
+					(availableComponents
+						(map theComponents theComponent
+							(block (
+								(componentsAvail (rpgCalcComponentsAvailable (or theSource gPlayerShip) theComponent))
+								)
+								{
+									item: theComponent
+									available: (@ componentsAvail 'availCount)
+									}
+								)
+							)
+						)
+					
+					;	Figure out how much cargo space we need for each item
+					(spaceNeeded
+						(-
+							(* (itmGetMass theItem) (itmGetCount theItem))
+							(map theComponents 'reduceSum theComponent
+								(* (itmGetMass (@ theComponent 'item)) (@ theComponent 'count))
+								)
+							)
+						)
+
+					; BUG: This is not working for some reason, but only when using itCymekNanoFeedstock, for some reason...
+					(maxCountSpace
+						(if (gr spaceNeeded 0)
+							(int (/ (objGetCargoSpaceLeft (or theSource gPlayerShip)) spaceNeeded))
+							1000
+							)
+						)
+
+					;	Figure out the maximum number of items we could create
+						
+					(maxCountPrice
+						(if (gr workCost 0)
+							(int (/ (objGetBalance (or theSource gPlayerShip) currencyUsed) workCost))
+							1000
+							)
+						)
+
+					;	Now compute the max count based on component availability
+
+					(maxCount
+						; BUG: Note that maxCountSpace and maxCountPrice are commented out...price is not needed, space is.
+						(min ; maxCountSpace maxCountPrice
+							(if availableComponents
+								(map availableComponents 'reduceMin theEntry
+									(int (/ (@ theEntry 'available) (itmGetCount (@ theEntry 'item))))
+									)
+								1000
+								)
+							)
+						)
+					)
+
+					;	Return a structure describing various aspects of the fabrication
+					
+					{
+						item: theItem
+						recipe: theRecipe
+						
+						;	This is a list of items (with counts) required to fabricate.
+						
+						componentsNeeded: theComponents
+						componentsNeededDesc: (strItemList theComponents 0x0108)
+						
+						;	These fields determine various prices
+						
+						componentCost: componentPrice
+						currencyUsed: currencyUsed
+						workCost: workCost
+						
+						;	This is a list of structures describing what components the
+						;	player has available. Each struct has two fields:
+						;
+						;	item: One of the items required (with counts)
+						;	available: The number of this item the player has (including
+						;		damaged.
+						
+						componentsAvail: availableComponents
+						
+						;	This is a structure suitable for an ItemListDisplay control
+
+						itemListDisplay:
+							(map availableComponents 'excludeNil theEntry
+								{
+									item: (@ theEntry 'item)
+									enabled: (geq (@ theEntry 'available) (itmGetCount (@ theEntry 'item)))
+									}
+								)
+
+						;	Maximum number of items we can fabricate
+						
+						maxFabCount: maxCount
+						maxCount: maxCount
+						
+						;	Missing components
+						
+						componentsMissing: 
+							(map availableComponents 'excludeNil theEntry 
+								(if (eq (@ theEntry 'available) 0)
+									(@ theEntry 'item)
+									)
+								)
+						
+						componentsLacking: 
+							(map availableComponents 'excludeNil theEntry 
+								(if (ls (@ theEntry 'available) (itmGetCount (@ theEntry 'item)))
+									(itmSetCount (@ theEntry 'item) 
+										(subtract (itmGetCount (@ theEntry 'item)) (@ theEntry 'available))
+										) 
+									)
+								)
+
+						; BUG: maxCountSpace not working correctly
+						noCargoSpace:Nil
+						; noCargoSpace: (= maxCountSpace 0)
+						}
+					)
+				))
+			
+			(setq cymekCreateItem (lambda (theRecipe theCount)
+				(if (@ theRecipe 'enhancement)
+					(itmSetCount 
+						(itmSetEnhanced 
+							(itmCreate (@ theRecipe 'item) 1)
+							{
+								enhancement: (@ theRecipe 'enhancement)
+								type: &vtTinkerEnhancement;
+								}
+							)
+						(or (@ theRecipe 'itemCount) theCount)
+						)
+					(itmCreate (@ theRecipe 'item) (or (@ theRecipe 'itemCount) theCount))
+					)
+				))
+				
+			(setq cymekFabricate (lambda (theRecipe theCost theCount options)
+				(block (
+					(compareFlags '(ignoreCharges ignoreData ignoreDisrupted))
+					(reminderType (or (@ options 'reminderMission) &msTinkerReminder;))
+					(itemToCreate (cymekCreateItem theRecipe theCount))
+					itemsConsumed
+					)
+				
+				
+					;	Consume items. NOTE: We expect our callers to have already checked
+					;	to make sure there are enough items.
+
+					(enum (@ theRecipe 'components) theEntry
+						(block (
+							(available 
+								(rpgCalcComponentsAvailable gPlayerShip 
+									(itmCreate (@ theEntry 'item) (* theCount (@ theEntry 'count)))
+									)
+								)
+							)
+							
+							;	Consume items
+							;
+							;	NOTE: rpgCalcComponentsAvailable has done all the work to figure
+							;	out exactly how many items to consume.
+
+							(enum (@ available 'damagedItems) itemToConsume
+								(block ()
+									(objRemoveItem gPlayerShip itemToConsume)
+									(setq itemsConsumed (append itemsConsumed (list itemToConsume)))
+									)
+								)
+
+							(enum (@ available 'items) itemToConsume
+								(block ()
+									(objRemoveItem gPlayerShip itemToConsume)
+									(setq itemsConsumed (append itemsConsumed (list itemToConsume)))
+									)
+								)
+							)
+						)
+						
+					;	Charge player
+					
+					(plyCharge gPlayer (multiply theCost theCount))
+					
+					;	Create the resulting item
+					
+					(itmSetKnown itemToCreate True)
+					(objAddItem gPlayerShip itemToCreate)
+					
+					;	Loop over player missions and see if we've accomplished any of them
+					
+					(enum (msnFind gSource (cat "aS +unid:" reminderType ";")) theMission
+						(if (itmIsEqual itemToCreate (cymekCreateItem (msnGetData theMission 'recipe) 1))
+							(msnSuccess theMission)
+							)
+						)
+					
+					;	Return result
+					
+					{	itemsCreated: itemToCreate
+						itemsConsumed: itemsConsumed
+						totalCost: (multiply theCost theCount)
+						}
+					)
+				))
+				
+			(setq cymekFindRecipe (lambda (recipeList itemType)
+				(@ (filter recipeList theRecipe
+						(eq (@ theRecipe 'item) itemType)
+						)
+					0
+					)
+				))
+			)
+	</Globals>
 
 	<ShipClass UNID="&scPlayerHornetBase;"
 			class=				"(player Hornet base class)"
@@ -186,19 +476,22 @@ be needed as well.
 
 		<Armor>
 			<ArmorSection name="main" start="0" span="360" armorID="&itLightSolarArmor;"/>
-			<!--<ArmorSection name="main" start="0" span="360" armorID="&itNanoInfusedUltraSteel;"/>-->
+			<!--<ArmorSection name="main" start="0" span="360" armorID="&itCymekNanoSteelArmor;"/>-->
 		</Armor>
 
 		<Items>
-			<Item count="3d3" item="&itHelium3FuelRod;"/>
 			<Item count="1" item="&itCymekSentinel;"/>
+		       	<Item count="1" item="&itTargetingComputerROM;"/>
+			<Item count="1" item="&itTradingComputerROM;"/>
+			<Item count="4d3+1" item="&itUraniumOre;"/>
+			<Item count="15" item="&itTitaniumOre;"/>
+			<Item count="15" item="&itHelium3FuelRod;"/>
 
 			<!-- Test items 
 		       		<Item count="1" item="&itPlayerCargoContainer;"/>
 				<Item count="1" item="&itAmmoBoxCymekBlast;"/>
 				<Item count="1" item="&itBlackMarketID;"/>
 		       		<Item count="1" item="&itTargetingComputerROM;"/>
-				<Item count="1" item="&itTradingComputerROM;"/>
 		       		<Item count="1" item="&itWeaponSpeedROM;"/>
 				<Item count="1" item="&itMiningComputerROM;"/>
 				<Item count="1" item="&itEnhanceSRSROM;"/>
@@ -212,9 +505,9 @@ be needed as well.
 			<Device deviceID="&itCymekOmniMiningLaser;"/>
 			<Device deviceID="&itNanoFabricator;"/>
 			<Device deviceID="&itCymekMicroDeflector;"/>
+			<Device deviceID="&itMinersSmugglingCargoHold;"/>
 			<!-- Test Items
 			<Device deviceID="&itCymekLauncher;"/>
-			<Device deviceID="&itMinersSmugglingCargoHold;"/>
 			<Device deviceID="&itPersonalCDMShard;"/>
 			<Device deviceID="&itDM1500MissileRack;"/>
 			<Device deviceID="&itTranspaceJumpdrive;"/>
@@ -232,17 +525,15 @@ be needed as well.
 			rotationAccel=		"6.0"
 			/>
 
-
 		<Effects>
 			<Effect type="thrustMain"		posAngle="180"	posRadius="8"	posZ="0"	rotation="180"/>
 		</Effects>
-
 	</ShipClass>
 
 	<ItemType UNID="&itCymekMicroDeflector;"
 			name=				"cymek micro deflector"
 			level=				"2"
-			value=				"300"
+			value=				"500"
 			mass=				"50"
 			frequency=			"uncommon"
 			modifiers=			"MajorItem"
@@ -255,7 +546,7 @@ be needed as well.
 		<Image imageID="&rsItems1;" imageX="192" imageY="0" imageWidth="96" imageHeight="96"/>
 
 		<Shields
-				hitPoints=		"12"
+				hitPoints=		"20"
 				hpBonus=		"0"
 				regen=		        "12"
 				depletionDelay=	        "288"
@@ -263,11 +554,11 @@ be needed as well.
                                 deviceSlots="0"
 				/>
                 
-        <Invoke>
+        	<Invoke>
 			(intAutoInstall gSource gItem)
 		</Invoke>
 
-		</ItemType>
+	</ItemType>
 
 	<ItemType UNID="&itCymekOmniMiningLaser;"
 			name=				"cymek omni mining laser"
@@ -324,7 +615,7 @@ be needed as well.
 
 		<Weapon
 				type=				"beam"
-				damage=				"laser:1d4"
+				damage=				"laser:1d4+1"
 				fireRate=			"30"
 				lifetime=			"50"
 				powerUse=			"5"
@@ -388,7 +679,7 @@ be needed as well.
 	</ItemType>
 
 	<ItemType UNID="&itCymekNanoTitaniumArmor;"
-			name=				"segment of regenerating nano titanium"
+			name=				"segment of nano-titanium"
 			level=				"3"
 			value=				"400"
 			mass=				"1000"
@@ -415,7 +706,7 @@ be needed as well.
 				/>
     	</ItemType>
 
-	<ItemType UNID="&itNanoInfusedUltraSteel;"
+	<ItemType UNID="&itCymekNanoSteelArmor;"
 			name=				"segment of Cymek nanite infused ultra steel"
 			level=				"7"
 			value=				"3500"
@@ -463,7 +754,6 @@ be needed as well.
 		<Image imageID="&rsItems1;" imageX="192" imageY="480" imageWidth="96" imageHeight="96"/>
 	</ItemType>
 
-
 	<ItemType UNID="&itNanoFabricator;"
 			name=				"Cymek Nano Fabricator"
 			attributes=			"humanTech, majorItem"
@@ -482,6 +772,14 @@ be needed as well.
 		<Image imageID="&rsItems1;" imageX="0" imageY="192" imageWidth="96" imageHeight="96"/>
 
 		<MiscellaneousDevice powerUse=			"1" />
+		<!--<MiscellaneousDevice
+				powerUse=		"1"
+				capacitorPowerUse=	"4"
+				powerToActivate=	"2000"
+                                deviceSlots="0"
+		/>-->
+
+
 
 		<Invoke key="F" installedOnly="false">
 			(block Nil
@@ -513,7 +811,7 @@ be needed as well.
 
 					;	Global Nano Fab recipes
 					(map (typGetData &dsNanoFabricator; 'NanoRecipes) 'excludeNil theRecipe
-						(itmSetData (tinkerCreateItem theRecipe 1) 'recipe theRecipe)
+						(itmSetData (cymekCreateItem theRecipe 1) 'recipe theRecipe)
 						)
 					)
 				)
@@ -526,7 +824,7 @@ be needed as well.
 						(theItem (scrGetItem gScreen))
 						(theRecipe (itmGetData theItem 'recipe))
 						(fabInfo (if theRecipe
-							(tinkerCalcFabrication theRecipe)
+							(cymekCalcFabrication theRecipe)
 							(rpgCalcCreateFromComponents theItem gPlayerShip gSource)
 							))
 						;(workCost (@ fabInfo 'workCost))
@@ -708,47 +1006,83 @@ be needed as well.
 			</FabricateResult>
 		</Panes>
 
-		<!-- We could add fuel rods as a `cost` -->
+		<!-- 
+			`itCymekNanoFeedstock` is used as a generic "cost", we need to balance these
+			costs with the item we are producing. The items we produce are also cheaper
+			than their utility would suggest so we do not have to use hundreds of tons of
+			ore or items, instead relying on the fact that it takes time and effort to mine
+			ore, or to find certain ores. The items are cheaper so it is more difficult to
+			profit off of them. You should also bear in mind the weight of an item.
+
+			The cost of ore and fuel rods is,
+
+			itHelium3FuelRod    -   25, itHeliumAssembly - 150, itXenotiteFuelRod - 375
+			itPteracniumFuelRod -   1125, itHadronVacuumFuelCell - 5250
+
+			itCopperOre         -  52,    uncommon
+			itTitaniumOre       -  35,    common
+			itVanadiumOre       -  90,    rare
+			itHeliumRegolith    -  200,   rare
+			itPlasteelOre       -  80,    common
+			itUraniumOre        -  120,   uncommon
+			itCobaltThoriumOre  -  280,   uncommon
+			itNiobiumOre        -  185,   common
+			itPalladiumOre      -  460,   rare
+			itCeralloyOre       -  400,   common
+			itGoldOre           -  600,   uncommon
+			itXenotiteOre       -  1000,  rare
+			itCeriumOre         -  850,   common
+			itDuralloyOre       -  2100,  rare
+			itPlatinumOre       -  1250,  uncommon
+			itPteracniumOre     -  850,   common
+			itHexaniumOre       -  2700,  uncommon
+			itMolybdenumOre     -  4500,  rare
+			itOrthoSteelOre     -  1800,  common
+			...
+
+
+			It would be great if we could produce multiple items, this would mean we could
+			dispense with the ammo boxes and create ammo directly.
+		-->
 		<GlobalData>
 			<NanoRecipes>
 				(
-					{ item:&itCymekMicroDeflector;	enhancement:Nil		components:( { item:&itTitaniumOre; count:4 }  { item:&itHydrocarbons; count:1 } { item:&itHelium3FuelRod; count:3 } )	totalCost:0 }
-					{ item:&itCymekSentinel;	enhancement:Nil		components:( { item:&itTitaniumOre; count:5 } { item:&itHelium3FuelRod; count:5 } )	totalCost:0 }
-					{ item:&itPlayerCargoContainer;	enhancement:Nil		components:( { item:&itTitaniumOre; count:5 } { item:&itHydrocarbons; count:1 } { item:&itHelium3FuelRod; count:3 } )	totalCost:0 }
-					{ item:&itFrozenSupplies;	enhancement:Nil		components:( { item:&itHydrocarbons; count:1 } { item:&itWaterIce; count:2 } { item:&itHelium3FuelRod; count:3 } )	totalCost:0 }
-					{ item:&itMedicalSupplies;	enhancement:Nil		components:( { item:&itHydrocarbons; count:2 } { item:&itWaterIce; count:1 } { item:&itHelium3FuelRod; count:3 } )	totalCost:0 }
-					{ item:&itEmergencySupplies;	enhancement:Nil		components:( { item:&itHydrocarbons; count:2 } { item:&itWaterIce; count:2 } { item:&itHelium3FuelRod; count:3 } )	totalCost:0 }
-					{ item:&itHeliumAssembly;	enhancement:Nil		components:( { item:&itHelium3FuelRod; count:6 } )	totalCost:0 }
-					{ item:&itUraniumRods;	enhancement:Nil		components:( { item:&itUraniumOre; count:1 } )	totalCost:0 }
-					{ item:&itUraniumRods;				enhancement:Nil						components:( { item:&itRadioactiveWaste; count:3 })	totalCost:0 }
-					{ item:&itCymekNaniteProjector;	enhancement:Nil components:( { item:&itNiobiumOre; count:2 } { item:&itTitaniumOre; count: 3 } )	totalCost:0 }
-					{ item:&itDisposableLauncher;	enhancement:Nil    		components:( { item:&itKM100Missile; count:32 } { item:&itTitaniumOre; count: 1 } )	totalCost:0 }
-					{ item:&itDM1500MissileRack;	enhancement:Nil    		components:( { item:&itKM500Missile; count:32 } { item:&itTitaniumOre; count: 1 } )	totalCost:0 }
-					{ item:&itNanoInfusedUltraSteel;	enhancement:Nil    		components:( { item:&itCeralloyOre; count:1 } { item:&itDuralloyOre; count: 4 } )	totalCost:0 }
-					{ item:&itRegeneratingNanos;	enhancement:Nil    		components:( { item:&itRepairingNanos; count: 2 } )	totalCost:0 }
-					{ item:&itRepairingNanos;	enhancement:Nil    		components:( { item:&itTitaniumOre; count: 4 } { item:&itHelium3FuelRod; count: 6 } )	totalCost:0 }
-					{ item:&itUltraLightTitaniumCasing;	enhancement:Nil    		components:( { item:&itTitaniumOre; count: 1 } )	totalCost:0 }
-					{ item:&itPersonalCDMShard;	enhancement:Nil    		components:( { item:&itOpticalKnowledgeArray; count: 3 } { item:&itNeuralProcessor; count: 2 } )	totalCost:0 }
-					{ item:&itNanoFabricator;	enhancement:Nil    		components:( { item:&itRegeneratingNanos; count: 3 } { item:&itNeuralProcessor; count: 1 } { item:&itOrthosteelOre; count: 1 } )	totalCost:0 }
-					{ item:&itSmallArmorPatch;	enhancement:Nil    		components:( { item:&itTitaniumOre; count: 1 }  { item:&itHelium3FuelRod; count: 1 } )	totalCost:0 }
-					{ item:&itReinforcedTitanium1;	enhancement:Nil    		components:( { item:&itTitaniumOre; count: 5 }  { item:&itHelium3FuelRod; count: 1 } )	totalCost:0 }
+				{ item:&itCymekNanoFeedstock;      enhancement:Nil    components:( { item:&itTitaniumOre; count:3 }  { item:&itHelium3FuelRod; count:1 } )  totalCost:0 }
+				{ item:&itCymekNanoFeedstock;      enhancement:Nil    components:( { item:&itCopperOre; count:2 }  { item:&itHelium3FuelRod; count:1 } )  totalCost:0 }
+				{ item:&itCymekNanoFeedstock;      enhancement:Nil    components:( { item:&itVanadiumOre; count:1 }  { item:&itHelium3FuelRod; count:1 } )  totalCost:0 }
+				{ item:&itCymekNanoFeedstock;      enhancement:Nil    components:( { item:&itPlasteelOre; count:1 }  { item:&itHelium3FuelRod; count:1 } )  totalCost:0 }
+				{ item:&itCymekNanoFeedstock;      enhancement:Nil    components:( { item:&itUraniumOre; count:1 }  )  totalCost:0 }
+				{ item:&itCymekNanoFeedstock;      enhancement:Nil    components:( { item:&itHydrocarbons; count:3 }  )  totalCost:0 }
 
-					{ item:&itSuperconductingShields;	enhancement:Nil		components:( { item:&itSuperconductingCoil; count:4 } { item:&itDuralloyOre; count:4 } )	totalCost:0 }
-					{ item:&itSuperconductingCoil;	enhancement:Nil		components:(  { item:&itNiobiumOre; count:1 } )	totalCost:0 }
-					
-					{ item:&itAmmoBoxKM100;				enhancement:Nil						components:( { item:&itHydrocarbons; count:1 })	totalCost:0 }
-					{ item:&itAmmoBoxSapiens;				enhancement:Nil						components:( { item:&itHydrocarbons; count:1 } { item:&itRadioactiveWaste; count:1 } )	totalCost:0 }
-					{ item:&itBarrelBomb;				enhancement:Nil						components:( { item:&itHydrocarbons; count:1 } { item:&itTitaniumOre; count:1 } )	totalCost:0 }
+				{ item:&itCymekMicroDeflector;     enhancement:Nil    components:( { item:&itCymekNanoFeedstock; count:5 } )  totalCost:0 }
+				{ item:&itCymekSentinel;           enhancement:Nil    components:( { item:&itCymekNanoFeedstock; count:3 } )  totalCost:0 }
+				{ item:&itPlayerCargoContainer;    enhancement:Nil    components:( { item:&itCymekNanoFeedstock; count:5 } )  totalCost:0 }
+				{ item:&itEmergencySupplies;       enhancement:Nil    components:( { item:&itCymekNanoFeedstock; count:3 } )  totalCost:0 }
+				{ item:&itHeliumAssembly;          enhancement:Nil    components:( { item:&itHelium3FuelRod; count:6 } )  totalCost:0 }
+				{ item:&itUraniumRods;             enhancement:Nil    components:( { item:&itUraniumOre; count:1 } )  totalCost:0 }
+				{ item:&itUraniumRods;             enhancement:Nil    components:( { item:&itRadioactiveWaste; count:3 } )  totalCost:0 }
+				{ item:&itCymekNaniteProjector;    enhancement:Nil    components:( { item:&itNiobiumOre; count:2 } { item:&itCymekNanoFeedstock; count: 8 } )  totalCost:0 }
+				{ item:&itCymekNanoSteelArmor;     enhancement:Nil    components:( { item:&itCeralloyOre; count:1 } { item:&itDuralloyOre; count: 4 } )  totalCost:0 }
+				{ item:&itRegeneratingNanos;       enhancement:Nil    components:( { item:&itRepairingNanos; count: 2 } )  totalCost:0 }
+				{ item:&itRepairingNanos;          enhancement:Nil    components:( { item:&itCymekNanoFeedstock; count: 4 } )  totalCost:0 }
+				{ item:&itPersonalCDMShard;        enhancement:Nil    components:( { item:&itCymekNanoFeedstock; count:1 } { item:&itOpticalKnowledgeArray; count: 2 } { item:&itNeuralProcessor; count: 2 } )  totalCost:0 }
+				{ item:&itNanoFabricator;          enhancement:Nil    components:( { item:&itRegeneratingNanos; count: 3 } { item:&itNeuralProcessor; count: 1 } { item:&itOrthosteelOre; count: 2 } )  totalCost:0 }
+				{ item:&itReinforcedTitanium1;     enhancement:Nil    components:( { item:&itTitaniumOre; count: 5 }  { item:&itHelium3FuelRod; count: 1 } )  totalCost:0 }
 
+				{ item:&itSuperconductingShields;  enhancement:Nil    components:( { item:&itSuperconductingCoil; count:4 } { item:&itCymekNanoFeedstock; count:4 } )  totalCost:0 }
+				{ item:&itSuperconductingCoil;     enhancement:Nil    components:( { item:&itCymekNanoFeedstock; count:1 } { item:&itNiobiumOre; count:1 } )  totalCost:0 }
 
-					{ item:&itCymekLauncher;				enhancement:Nil						components:( { item:&itPlasteelOre; count:5 } { item:&itHelium3FuelRod; count:15 } )	totalCost:0 }
-					{ item:&itAmmoBoxCymekTitanium;				enhancement:Nil						components:( { item:&itTitaniumOre; count:2 } { item:&itHelium3FuelRod; count:5 } )	totalCost:0 }
-					{ item:&itAmmoBoxCymekUranium;				enhancement:Nil						components:( { item:&itUraniumOre; count:2 } { item:&itHelium3FuelRod; count:5 } )	totalCost:0 }
-					{ item:&itAmmoBoxCymekBlast;				enhancement:Nil						components:( { item:&itHydrocarbons; count:2 } { item:&itHelium3FuelRod; count:10 } )	totalCost:0 }
-					{ item:&itAmmoBoxCymekIon;				enhancement:Nil						components:( { item:&itXenotiteOre; count:2 } )	totalCost:0 }
-					{ item:&itAmmoBoxCymekParticle;				enhancement:Nil						components:( { item:&itXenotiteOre; count:3 } )	totalCost:0 }
-					{ item:&itAmmoBoxCymekAntiMatter;			enhancement:Nil						components:( { item:&itPteracniumOre; count:4 } { item:&itXenotiteOre; count:3 } )	totalCost:0 }
-					)
+				{ item:&itAmmoBoxSapiens;          enhancement:Nil    components:( { item:&itCymekNanoFeedstock; count:1 } { item:&itRadioactiveWaste; count:1 } )  totalCost:0 }
+				{ item:&itBarrelBomb;              enhancement:Nil    components:( { item:&itHydrocarbons; count:1 } { item:&itTitaniumOre; count:1 } )  totalCost:0 }
+
+				{ item:&itCymekLauncher;           enhancement:Nil    components:( { item:&itCymekNanoFeedstock; count:11 } )  totalCost:0 }
+				{ item:&itAmmoBoxCymekTitanium;    enhancement:Nil    components:( { item:&itTitaniumOre; count:2 } { item:&itCymekNanoFeedstock; count:1 } )  totalCost:0 }
+				{ item:&itAmmoBoxCymekUranium;     enhancement:Nil    components:( { item:&itUraniumOre; count:2 } { item:&itCymekNanoFeedstock; count:1 } )  totalCost:0 }
+				{ item:&itAmmoBoxCymekBlast;       enhancement:Nil    components:( { item:&itHydrocarbons; count:2 } { item:&itCymekNanoFeedstock; count:1 } )  totalCost:0 }
+				{ item:&itAmmoBoxCymekIon;         enhancement:Nil    components:( { item:&itXenotiteOre; count:2 } )  totalCost:0 }
+				{ item:&itAmmoBoxCymekParticle;    enhancement:Nil    components:( { item:&itXenotiteOre; count:3 } )  totalCost:0 }
+				{ item:&itAmmoBoxCymekAntiMatter;  enhancement:Nil    components:( { item:&itPteracniumOre; count:4 } { item:&itXenotiteOre; count:3 } )  totalCost:0 }
+				)
 			</NanoRecipes>
 		</GlobalData>
 		
@@ -925,21 +1259,6 @@ be needed as well.
 			<Image	imageID="&rsCommonwealthSlumsImage;" imageX="192" imageY="128" imageWidth="64" imageHeight="64"/>
 		</ImageVariants>
 
-		<!--
-		<ImageVariants> 
-			<Image	imageID="&rsCargoContainer;"	imageX="0"   imageY="0"   imageWidth="56" imageHeight="56" viewportRatio="0.00406"/>
-			<Image	imageID="&rsCargoContainer;"	imageX="56"  imageY="0"   imageWidth="56" imageHeight="56" viewportRatio="0.00406"/>
-			<Image	imageID="&rsCargoContainer;"	imageX="112" imageY="0"   imageWidth="56" imageHeight="56" viewportRatio="0.00406"/>
-			<Image	imageID="&rsCargoContainer;"	imageX="168" imageY="0"   imageWidth="56" imageHeight="56" viewportRatio="0.00406"/>
-			<Image	imageID="&rsCargoContainer;"	imageX="224" imageY="0"   imageWidth="56" imageHeight="56" viewportRatio="0.00406"/>
-			<Image	imageID="&rsCargoContainer;"	imageX="280" imageY="0"   imageWidth="56" imageHeight="56" viewportRatio="0.00406"/>
-			<Image	imageID="&rsCargoContainer;"	imageX="336" imageY="0"   imageWidth="56" imageHeight="56" viewportRatio="0.00406"/>
-			<Image	imageID="&rsCargoContainer;"	imageX="392" imageY="0"   imageWidth="56" imageHeight="56" viewportRatio="0.00406"/>
-
-			<Image	imageID="&rsCargoContainer;"	imageX="112" imageY="56"  imageWidth="56" imageHeight="56" viewportRatio="0.00406"/>
-			<Image	imageID="&rsCargoContainer;"	imageX="336" imageY="112" imageWidth="56" imageHeight="56" viewportRatio="0.00406"/>
-		</ImageVariants> -->
-
 		<DockingPorts>
 			<Port x="0"		y="70" />
 			<Port x="61"	y="35" />
@@ -948,13 +1267,6 @@ be needed as well.
 			<Port x="-61"	y="-35" />
 			<Port x="-61"	y="35" />
 		</DockingPorts>
-
-		<!--
-		<DockingPorts
-				portCount=		"2"
-				portRadius=		"50"
-				maxDist=		"3"
-		/>-->
 
 		<Language>
 			<Text id="actionUndock">[U]ndock</Text>
@@ -1162,6 +1474,7 @@ be needed as well.
 			(intAmmoBoxOpen (itmCreate &itCymekIonSlug; 200))
 		</Invoke>
 	</ItemType>
+
 	<ItemType UNID="&itAmmoBoxCymekParticle;"
 			name=				"Cymek Particle Slugs ammunition box(es)"
 			level=				"4"
@@ -1367,13 +1680,14 @@ be needed as well.
 		<Image imageID="&rsItems1;" imageX="288" imageY="0" imageWidth="96" imageHeight="96"/>
 	</ItemType>
 
+
 	<ItemType UNID="&itMetalBlitz;"
 			name=				"flenser metal biltz"
 			level=				"6"
 			value=				"2500"
 			mass=				"220"
 			frequency=			"common"
-                        numberAppearing=               	"4d4"
+                        numberAppearing=               	"1d4"
 			modifiers=			"MajorItem; Illegal"
 
 			charges=			"60"
@@ -1557,7 +1871,6 @@ be needed as well.
 						effect=				"&efParticleBeamDefault;"
 						>
 				</Missile>
-
                                 
                                 <Missile ammoID="&itCymekAntimatterSlug;"
 						type=			"beam"
@@ -1593,6 +1906,7 @@ be needed as well.
 			>
 		<Image imageID="&rsItems1;" imageX="0" imageY="96" imageWidth="96" imageHeight="96"/>
 	</ItemType>
+
 	<ItemType UNID="&itCymekUraniumSlug;"
 			name=				"Cymek Uranium Slug"
 			level=				"3"
@@ -1609,6 +1923,7 @@ be needed as well.
 			>
 		<Image imageID="&rsItems1;" imageX="0" imageY="96" imageWidth="96" imageHeight="96"/>
 	</ItemType>
+
 	<ItemType UNID="&itCymekBlastSlug;"
 			name=				"Cymek Blast Slug"
 			level=				"3"
@@ -1625,6 +1940,7 @@ be needed as well.
 			>
 		<Image imageID="&rsItems1;" imageX="0" imageY="96" imageWidth="96" imageHeight="96"/>
 	</ItemType>
+
 	<ItemType UNID="&itCymekIonSlug;"
 			name=				"Cymek EMP Slug"
 			level=				"4"
@@ -1641,6 +1957,7 @@ be needed as well.
 			>
 		<Image imageID="&rsItems1;" imageX="0" imageY="96" imageWidth="96" imageHeight="96"/>
 	</ItemType>
+
 	<ItemType UNID="&itCymekParticleSlug;"
 			name=				"Cymek Particle Slug"
 			level=				"5"
@@ -1676,7 +1993,7 @@ be needed as well.
 	</ItemType>
 
 	<ItemType UNID="&itCymekSentinel;"
-			name=				"CymekSentinel&#xae;| CymekSentinels&#xae;"
+			name=				"CymekSentinel | CymekSentinels"
 			attributes=			"auton, combatAuton, commonwealth, minorItem"
 			inherit=			"&baAutonItemBase;"
 			  
@@ -1701,7 +2018,7 @@ be needed as well.
 
 	<ShipClass UNID="&scCymekSentinel;"
 			manufacturer=		"Cymek Industries"
-			class=				"CymekSentinel&#xae;"
+			class=				"CymekSentinel"
 			type=				""
 			defaultSovereign=	"&svCommonwealth;"
 
@@ -1771,7 +2088,7 @@ be needed as well.
 			/>
 		
 		<Language>
-			<String id="DeployAck">"CymekSentinel&#xae; v1984 online"</String>
+			<String id="DeployAck">"CymekSentinel v1984 online"</String>
 		</Language>
 	</ShipClass>
 
