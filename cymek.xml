@@ -47,7 +47,7 @@
 	<!ENTITY itCymekNanoFeedstock "0xD5390027">
 	<!ENTITY itNanoFabricator "0xD5390028">
 	<!ENTITY dsNanoFabricator "0xD5390029">
-
+	<!ENTITY scHornetPlayerCDM "0xD5390040">
 ]>
 
 <!--
@@ -66,44 +66,33 @@ References/Mods
 To Do / Ideas:
 
 * Build instructions / Add a release
-* Improve `readme.md`.
 * Recall auton option
-* BUG: Hornet battle pod to Eternity Port has wrong powers list
-  * Added 00900000_PlayerShip to hornet attributes, but the ship is the wrong class (wrong
-	set of powers).
-* BUG: Cannot install smugglers cargo hold from black market station, related to mining computer? Or to Hornet Battlepod display?
-* BUG: The deployable player station is immortal
 * Upgrade recipes via ROM? Also fabricate armor patches from ore, nanos from ore, get a tech/craft tree going
 * Add timer / charge to nano-factory
 * Make your own habitable station and faction, whatever the system, including Elysium,
 	generates credits with redoable missions.
 * Lower level linked fired devices
-* Make a release
-* Advanced scanner
-* Make post on mod site
-* Solar fuel collector; Fuel harvesting station - place near sun, makes fuel
-* Solar refuels like it used to?
+* Advanced scanner; longer range / find containers, ships
+* Solar fuel collector; Fuel harvesting station - place near sun, makes fuel, perhaps make
+a solar collector device that operated like the old versions (which filled up your tank)
 * Split fuel assemblies (need to generate multiple items)
 * Different version of jump drive that can be created in nano-factory
 * Add shield that you can change damage absorption type
-* Make the deployable station look like the warlords ones
 * High level device; zero-point energy source for infinite energy, 2 devie slots
-* Make a nanite-feedstock made from multiple mined sources (titanium ore, plasteel ore, and
-other goods) as a way of making components as a sort of currency, other items and ore might
-be needed as well.
 * A disposable version of the nano-factory could be made, nano-formers.
 * Convert slave coffins to brains in a vat?
+* Add disposable launcher recipe back in?
 
 -->
 
 
 <TranscendenceExtension 
 	UNID="&UNIDExtensionHornet;" 
-	apiVersion="22" 
+	apiVersion="53" 
 	name="Cymek Industries" 
 	credits="howerj/HornetBattlePodsRule <https://github.com/howerj/cymek>, darksider (barrel bomb), FAD's hornet battle pod mod, Shivian Hunter's hornet battle pod mod, Soggydoggy's one piece armor mod, and more!"
 	>
-	
+	<Library UNID="&unidHumanSpaceLibrary;"/>
 	<Image UNID="&rsArmorHUDShip_Hornet;" bitmap="resources/ArmorHUDShip_Hornet.jpg"/>
 	<Image UNID="&rsHornetArmorSingle;" bitmap="resources/OneArmorHUD.bmp"/>
 	<Image UNID="&rsHornetLarge;" bitmap="resources/LargeHornet.jpg" bitmask="resources/LargeHornetMask.bmp"/>
@@ -205,7 +194,7 @@ be needed as well.
 							)
 						)
 
-					; BUG: This is not working for some reason, but only when using itCymekNanoFeedstock, for some reason...
+					; BUG: This is not working for some reason, but only when using itCymekNanoFeedstock as an ingredient, for some reason...
 					(maxCountSpace
 						(if (gr spaceNeeded 0)
 							(int (/ (objGetCargoSpaceLeft (or theSource gPlayerShip)) spaceNeeded))
@@ -398,10 +387,24 @@ be needed as well.
 	</Globals>
 
 	<ShipClass UNID="&scPlayerHornetBase;"
-			class=				"(player Hornet base class)"
-			attributes=			"commonwealth, playerClass, startingClass, 00200000_PlayerShip, 00900000_PlayerShip"
-			characterClass=		"&unidPilgrimClass;"
-			inherit=			"&baHumanTechShip;"
+			class=		"(player Hornet base class)"
+			attributes=	"commonwealth, playerClass, startingClass"
+			inherit=	"&baHumanTechShip;"
+
+			mass=				"5"
+			reactorPower=		"50"
+			fuelCapacity=		"25000"
+			cargoSpace=			"30"
+			thrust=				"150"
+			maxSpeed=			"45"
+
+			maxArmor=			"5000"
+			maxCargoSpace=		"60"
+			maxDevices=			"6"
+			maxWeapons=			"2"
+
+			leavesWreck=		"0"
+	
 			>
 
 		<PlayerSettings
@@ -447,56 +450,29 @@ be needed as well.
 		<Image imageID="&rsHornetHD;" imageWidth="32" imageHeight="32" rotationCount="120" rotationColumns="12" viewportRatio="0.0029375"/>
 		<HeroImage imageID="&rsHornetHero;" imageWidth="320" imageHeight="320"/>
 
-	</ShipClass>
-
-	<ShipClass UNID="&scHornetPlayer;"
-			manufacturer=		"Cymek Industries"
-			class=				"Cymek Hornet"
-			type=				"battlepod"
-			score=				"1"
-
-			mass=				"5"
-			reactorPower=		"50"
-			fuelCapacity=		"25000"
-			cargoSpace=			"30"
-			thrust=				"150"
-			maxSpeed=			"45"
-
-			maxArmor=			"5000"
-			maxCargoSpace=		"60"
-			maxDevices=			"6"
-			maxWeapons=			"2"
-
-			leavesWreck=		"0"
-			
-			attributes=			"commonwealth, playerClass, startingClass, 00200000_PlayerShip, 00900000_PlayerShip"
-			
-			inherit=			"&scPlayerHornetBase;"
-			>
-
 		<Armor>
 			<ArmorSection name="main" start="0" span="360" armorID="&itLightSolarArmor;"/>
 			<!--<ArmorSection name="main" start="0" span="360" armorID="&itCymekNanoSteelArmor;"/>-->
 		</Armor>
 
 		<Items>
-			<Item count="1" item="&itCymekSentinel;"/>
 		       	<Item count="1" item="&itTargetingComputerROM;"/>
 			<Item count="1" item="&itTradingComputerROM;"/>
+		       	<Item count="1" item="&itPlayerCargoContainer;"/>
 			<Item count="4d3+1" item="&itUraniumOre;"/>
-			<Item count="15" item="&itTitaniumOre;"/>
-			<Item count="15" item="&itHelium3FuelRod;"/>
 
-			<!-- Test items 
-		       		<Item count="1" item="&itPlayerCargoContainer;"/>
+			<!--
+				<Item count="15" item="&itSilicarbCrystal;"/>
+				<Item count="15" item="&itPlasteelNanos;"/>
+				<Item count="15" item="&itLaserAmplifier;"/>
+				<Item count="15" item="&itGemOfDespair;"/>
+				<Item count="15" item="&itTitaniumOre;"/>
+				<Item count="15" item="&itHelium3FuelRod;"/>
 				<Item count="1" item="&itAmmoBoxCymekBlast;"/>
 				<Item count="1" item="&itBlackMarketID;"/>
-		       		<Item count="1" item="&itTargetingComputerROM;"/>
 		       		<Item count="1" item="&itWeaponSpeedROM;"/>
 				<Item count="1" item="&itMiningComputerROM;"/>
 				<Item count="1" item="&itEnhanceSRSROM;"/>
-				<Item count="15" item="&itSilicarbCrystal;"/>
-				<Item count="15" item="&itPlasteelNanos;"/>
 			-->
 		</Items>
 
@@ -505,12 +481,12 @@ be needed as well.
 			<Device deviceID="&itCymekOmniMiningLaser;"/>
 			<Device deviceID="&itNanoFabricator;"/>
 			<Device deviceID="&itCymekMicroDeflector;"/>
-			<Device deviceID="&itMinersSmugglingCargoHold;"/>
 			<!-- Test Items
-			<Device deviceID="&itCymekLauncher;"/>
 			<Device deviceID="&itPersonalCDMShard;"/>
 			<Device deviceID="&itDM1500MissileRack;"/>
 			<Device deviceID="&itTranspaceJumpdrive;"/>
+			<Device deviceID="&itMinersSmugglingCargoHold;"/>
+			<Device deviceID="&itCymekLauncher;"/>
 			-->
 		</Devices>
 
@@ -528,6 +504,32 @@ be needed as well.
 		<Effects>
 			<Effect type="thrustMain"		posAngle="180"	posRadius="8"	posZ="0"	rotation="180"/>
 		</Effects>
+	</ShipClass>
+
+	<ShipClass UNID="&scHornetPlayer;"
+			manufacturer=		"Cymek Industries"
+			class=				"Cymek Hornet"
+			type=				"battlepod"
+			score=				"1"
+
+			characterClass=	"&unidPilgrimClass;"
+			attributes=			"commonwealth, playerClass, startingClass, 00200000_PlayerShip"
+			
+			inherit=			"&scPlayerHornetBase;"
+			>
+	</ShipClass>
+
+	<ShipClass UNID="&scHornetPlayerCDM;"
+			manufacturer=		"Cymek Industries"
+			class=				"Cymek Hornet"
+			type=				"battlepod"
+			score=				"1"
+
+			characterClass=	"&unidCDMMercenaryClass;"
+			attributes=			"commonwealth, playerClass, startingClass, 00900000_PlayerShip"
+			
+			inherit=			"&scPlayerHornetBase;"
+			>
 	</ShipClass>
 
 	<ItemType UNID="&itCymekMicroDeflector;"
@@ -564,7 +566,7 @@ be needed as well.
 			name=				"cymek omni mining laser"
 			level=				"6"
 			value=				"2500"
-			mass=				"1000"
+			mass=				"250"
 			frequency=			"notrandom"
 			modifiers=			"EnergyWeapon; MajorItem; Specialty;"
 			showReference=		"true"
@@ -577,7 +579,7 @@ be needed as well.
 		<Weapon
 				type=				"beam"
 				damage=				"laser:1d4+1; mining:5;"
-				fireRate=			"30"
+				fireRate=			"15"
 				lifetime=			"50"
 				powerUse=			"20"
 			        omnidirectional=		"true" 
@@ -604,7 +606,7 @@ be needed as well.
 			name=				"cymek laser"
 			level=				"6"
 			value=				"400"
-			mass=				"250"
+			mass=				"200"
 			frequency=			"notrandom"
 			modifiers=			"EnergyWeapon; MajorItem; Specialty;"
 			showReference=		"true"
@@ -616,7 +618,7 @@ be needed as well.
 		<Weapon
 				type=				"beam"
 				damage=				"laser:1d4+1"
-				fireRate=			"30"
+				fireRate=			"20"
 				lifetime=			"50"
 				powerUse=			"5"
 			        omnidirectional=		"false" 
@@ -771,7 +773,11 @@ be needed as well.
 
 		<Image imageID="&rsItems1;" imageX="0" imageY="192" imageWidth="96" imageHeight="96"/>
 
-		<MiscellaneousDevice powerUse=			"1" />
+		<!-- Device slots zero, because it is just a barrel of goop that is powered from its inputs -->
+		<MiscellaneousDevice 
+			powerUse=			"1"
+                        deviceSlots="0"
+		/>
 		<!--<MiscellaneousDevice
 				powerUse=		"1"
 				capacitorPowerUse=	"4"
@@ -1043,6 +1049,7 @@ be needed as well.
 
 			It would be great if we could produce multiple items, this would mean we could
 			dispense with the ammo boxes and create ammo directly.
+
 		-->
 		<GlobalData>
 			<NanoRecipes>
@@ -1137,11 +1144,11 @@ be needed as well.
 			name=				"Personal CDM Shard"
 			level=				"7"
 			value=				"2000"
-			mass=				"1000"
+			mass=				"50"
 			frequency=			"notrandom"
 			attributes=			"MajorItem, communion, humanTech, info, soul, notForSale, QuantumCPU"
 
-			description=		"This Quantum CDM shard contains a homomorphically encrypted copy of your mind running in a virtual paradise. It may be willing to help you."
+			description=		"This Quantum CDM shard contains a homomorphically encrypted copy of your mind running in a virtual paradise with its own power supply. It may be willing to help you."
                         deviceSlots="0"
 		>
 		<MiscellaneousDevice
@@ -1220,6 +1227,16 @@ be needed as well.
 
 	<!-- TODO: Fix cargo space, add option to collapse habitat container back if it is empty. -->
 	<!-- It would be nice if we could take the container with if it is empty -->
+	<!--
+		Adding the following makes the station no longer immortal, however it no longer
+		functions as well...
+
+			armorID=			"&itPlasteelPlate;"
+			hitPoints=			"100"
+			multiHull=			"false"
+			regen=				"8"
+
+	-->
 	<StationType UNID="&stPlayerCargoContainer;"
 			name=				"player habitat"
 			sovereign=			"&svPlayer;"
@@ -1227,7 +1244,14 @@ be needed as well.
 		
 			attributes=			"envAir, generic, friendly, majorStation, noSalvage"
 
-			abandonedScreen=	"Main"
+			dockScreen=	"Main"
+			abandonedScreen=	"Dead"
+
+			armorID=			"&itPlasteelPlate;"
+			hitPoints=			"100"
+			multiHull=			"false"
+			regen=				"8"
+			structuralHitPoints="1"
 
 			scale=				"ship"
 			size=				"20"
@@ -1303,12 +1327,13 @@ be needed as well.
 
 				This one is yours, you need to tidy up and you forgot to turn the Holo TV off
 				when you last left.
-			</Text>
 
+			</Text>
 			<Text id="rpg.jettisonQuantity">How many items do you wish to store?</Text>
 			<Text id="rpg.lootQuantity">How many items do you wish to retrieve?</Text>
 			<Text id="rpg.noSpaceToJettison">There is not enough space here to store %itemName%.</Text>
 			<Text id="rpg.onlySomeSpaceToJettison">There is only enough space here to store %itemName%.</Text>
+			<Text id="deadStation">The corpse of your former abode saddens you. All of your belongings are no more.</Text>
 		</Language>
 		
 		<!-- Docking -->
@@ -1355,8 +1380,18 @@ be needed as well.
 						</Actions>
 					</Default>
 				</Panes>
-
 			</Main>
+			<Dead>
+				<Panes>
+					<Default descID="deadStation">
+						<Actions>
+							<Action id="actionUndock" cancel="1" default="1">
+								<Exit/>
+							</Action>
+						</Actions>
+					</Default>
+				</Panes>
+			</Dead>
 		</DockScreens>
 	</StationType>
 
