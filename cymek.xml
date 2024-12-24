@@ -48,6 +48,9 @@
 	<!ENTITY itNanoFabricator "0xD5390028">
 	<!ENTITY dsNanoFabricator "0xD5390029">
 	<!ENTITY scHornetPlayerCDM "0xD5390040">
+	<!ENTITY itCymekExternalLaser "0xD5390041">
+	<!ENTITY itEnergyGenerator "0xD5390042">
+	<!ENTITY itAkan30CannonExternal "0xD5390043">
 ]>
 
 <!--
@@ -71,7 +74,6 @@ To Do / Ideas:
 * Add timer / charge to nano-factory
 * Make your own habitable station and faction, whatever the system, including Elysium,
 	generates credits with redoable missions.
-* Lower level linked fired devices
 * Advanced scanner; longer range / find containers, ships
 * Solar fuel collector; Fuel harvesting station - place near sun, makes fuel, perhaps make
 a solar collector device that operated like the old versions (which filled up your tank)
@@ -82,6 +84,10 @@ a solar collector device that operated like the old versions (which filled up yo
 * A disposable version of the nano-factory could be made, nano-formers.
 * Convert slave coffins to brains in a vat?
 * Add disposable launcher recipe back in?
+* Add power consuming launcher, or launcher recharged from fuel rods?
+* TODO: Make a cymek corporation, and perhaps an enhancer
+* Balance: The hornet is probably too fast, but I get bored otherwise, perhaps a faster
+	autopilot would help?
 
 -->
 
@@ -113,6 +119,12 @@ a solar collector device that operated like the old versions (which filled up yo
 	</ItemType>
 
 	<Globals>
+		<!-- This was copied and renamed from the Tinker fab code, modifications needed to be made because
+		of an odd bug where not enough space was erroneously displayed when attempting to fabricate items
+		with `itCymekNanoFeedstock`, otherwise the normal tinker code could be used. The reason for this bug
+		I still do not know, the checks have been removed (but they do not seem to work for a normal tinker,
+		you can easily fabricate more Lucifer Ammo Boxes from fusion triggers than your cargo hold will allow).
+		-->
 		(block Nil
 			(setq cymekCalcFabrication (lambda (theRecipe theSource theFoundry)
 				(block (
@@ -391,27 +403,27 @@ a solar collector device that operated like the old versions (which filled up yo
 			attributes=	"commonwealth, playerClass, startingClass"
 			inherit=	"&baHumanTechShip;"
 
-			mass=				"5"
-			reactorPower=		"50"
-			fuelCapacity=		"25000"
-			cargoSpace=			"30"
-			thrust=				"150"
-			maxSpeed=			"45"
+			mass=		"5"
+			reactorPower=	"50"
+			fuelCapacity=	"25000"
+			cargoSpace=	"30"
+			thrust=		"150"
+			maxSpeed=	"45"
 
-			maxArmor=			"5000"
-			maxCargoSpace=		"60"
-			maxDevices=			"6"
-			maxWeapons=			"2"
+			maxArmor=	"5000"
+			maxCargoSpace=	"60"
+			maxDevices=	"6"
+			maxWeapons=	"2"
 
-			leavesWreck=		"0"
+			leavesWreck=	"0"
 	
 			>
 
 		<PlayerSettings
 			desc=	"This modified Hornet Battle pod was commissioned by the Late and Legendary Anarchist pilot Zephron Janus Babblebrox which they were unable to collect. Zephron's next of kin sold the rights to their life story, which have made somewhat unpopular with those sympathetic with the Anarchists."
-			startingCredits=	"2d100+50"
+			startingCredits="2d100+50"
 
-			largeImage=			"&rsHornetLarge;"
+			largeImage=		"&rsHornetLarge;"
 			initialClass=		"true"
 			>
 
@@ -427,20 +439,10 @@ a solar collector device that operated like the old versions (which filled up yo
 			<ShieldDisplay shieldLevelEffect="&efShieldHUDDefault;"> </ShieldDisplay>
 
 			<ReactorDisplay>
-				<Image imageID="&rsZubrinReactor;" 
-						imageX="0" imageY="0" imageWidth="256" imageHeight="60"/>
-
-				<PowerLevelImage imageID="&rsZubrinReactor;"
-						imageX="0" imageY="60" imageWidth="202" imageHeight="14"
-						destX="54" destY="9"/>
-
-				<FuelLevelImage imageID="&rsZubrinReactor;"
-						imageX="0" imageY="74" imageWidth="194" imageHeight="14"
-						destX="54" destY="37"/>
-
-				<FuelLowLevelImage imageID="&rsZubrinReactor;"
-						imageX="0" imageY="88" imageWidth="194" imageHeight="14"/>
-
+				<Image imageID="&rsZubrinReactor;" imageX="0" imageY="0" imageWidth="256" imageHeight="60"/>
+				<PowerLevelImage imageID="&rsZubrinReactor;" imageX="0" imageY="60" imageWidth="202" imageHeight="14" destX="54" destY="9"/>
+				<FuelLevelImage imageID="&rsZubrinReactor;" imageX="0" imageY="74" imageWidth="194" imageHeight="14" destX="54" destY="37"/>
+				<FuelLowLevelImage imageID="&rsZubrinReactor;" imageX="0" imageY="88" imageWidth="194" imageHeight="14"/>
 				<ReactorText x="62" y="22" width="154" height="14"/>
 				<PowerLevelText x="62" y="0" width="154" height="9"/>
 				<FuelLevelText x="62" y="51" width="154" height="9"/>
@@ -461,7 +463,7 @@ a solar collector device that operated like the old versions (which filled up yo
 		       	<Item count="1" item="&itPlayerCargoContainer;"/>
 			<Item count="4d3+1" item="&itUraniumOre;"/>
 
-			<!--
+			<!-- Test Items
 				<Item count="15" item="&itSilicarbCrystal;"/>
 				<Item count="15" item="&itPlasteelNanos;"/>
 				<Item count="15" item="&itLaserAmplifier;"/>
@@ -482,6 +484,7 @@ a solar collector device that operated like the old versions (which filled up yo
 			<Device deviceID="&itNanoFabricator;"/>
 			<Device deviceID="&itCymekMicroDeflector;"/>
 			<!-- Test Items
+			<Device deviceID="&itEnergyGenerator;"/>
 			<Device deviceID="&itPersonalCDMShard;"/>
 			<Device deviceID="&itDM1500MissileRack;"/>
 			<Device deviceID="&itTranspaceJumpdrive;"/>
@@ -583,6 +586,48 @@ a solar collector device that operated like the old versions (which filled up yo
 				lifetime=			"50"
 				powerUse=			"20"
 			        omnidirectional=		"true" 
+                                deviceSlots=			"0"
+				fireEffect=			"&efGreenLaserFireEffect;"
+				hitEffect=			"&efGreenLaserHitEffect;"
+				sound=				"&snLaserCannon;"
+				>
+			<Effect>
+				<Beam
+						beamType=			"laser"
+						primaryColor=		"0x5f, 0xf1, 0x2a"
+						secondaryColor=		"0x00, 0xff, 0x00"
+						/>
+			</Effect>			
+		</Weapon>
+
+        	<Invoke>
+			(intAutoInstall gSource gItem)
+		</Invoke>
+	</ItemType>
+
+	<ItemType UNID="&itCymekExternalLaser;"
+			name=		"cymek external laser"
+			level=		"6"
+			value=		"400"
+			mass=		"200"
+			frequency=	"notrandom"
+			modifiers=	"EnergyWeapon; MajorItem; Specialty; auxMountDevice;"
+			auxMountDevice= "true"
+			inherit=	"&baStdAuxMountDeviceBase;"
+			showReference=	"true"
+			description=	"This external variant high-tech lightweight and low power laser was made by Cymek Industries for drones and scout ships."
+			>
+
+		<Image imageID="&rsItems1;" imageX="96" imageY="0" imageWidth="96" imageHeight="96"/>
+
+		<Weapon
+				type=				"beam"
+				damage=				"laser:1d4+1"
+				linkedFire=			"always"
+				fireRate=			"20"
+				lifetime=			"50"
+				powerUse=			"5"
+			        omnidirectional=		"false" 
                                 deviceSlots=			"0"
 				fireEffect=			"&efGreenLaserFireEffect;"
 				hitEffect=			"&efGreenLaserHitEffect;"
@@ -1020,7 +1065,7 @@ a solar collector device that operated like the old versions (which filled up yo
 			ore, or to find certain ores. The items are cheaper so it is more difficult to
 			profit off of them. You should also bear in mind the weight of an item.
 
-			The cost of ore and fuel rods is,
+			The credit cost of ore and fuel rods is,
 
 			itHelium3FuelRod    -   25, itHeliumAssembly - 150, itXenotiteFuelRod - 375
 			itPteracniumFuelRod -   1125, itHadronVacuumFuelCell - 5250
@@ -1061,8 +1106,10 @@ a solar collector device that operated like the old versions (which filled up yo
 				{ item:&itCymekNanoFeedstock;      enhancement:Nil    components:( { item:&itUraniumOre; count:1 }  )  totalCost:0 }
 				{ item:&itCymekNanoFeedstock;      enhancement:Nil    components:( { item:&itHydrocarbons; count:3 }  )  totalCost:0 }
 
-				{ item:&itCymekMicroDeflector;     enhancement:Nil    components:( { item:&itCymekNanoFeedstock; count:5 } )  totalCost:0 }
-				{ item:&itCymekSentinel;           enhancement:Nil    components:( { item:&itCymekNanoFeedstock; count:3 } )  totalCost:0 }
+				{ item:&itCymekMicroDeflector;     enhancement:Nil    components:( { item:&itCymekNanoFeedstock; count:8 } )  totalCost:0 }
+				{ item:&itCymekSentinel;           enhancement:Nil    components:( { item:&itCymekNanoFeedstock; count:15 } )  totalCost:0 }
+				{ item:&itCymekLaser;              enhancement:Nil    components:( { item:&itCymekNanoFeedstock; count:8 } )  totalCost:0 }
+				{ item:&itCymekExternalLaser;      enhancement:Nil    components:( { item:&itCymekNanoFeedstock; count:10 } )  totalCost:0 }
 				{ item:&itPlayerCargoContainer;    enhancement:Nil    components:( { item:&itCymekNanoFeedstock; count:5 } )  totalCost:0 }
 				{ item:&itEmergencySupplies;       enhancement:Nil    components:( { item:&itCymekNanoFeedstock; count:3 } )  totalCost:0 }
 				{ item:&itHeliumAssembly;          enhancement:Nil    components:( { item:&itHelium3FuelRod; count:6 } )  totalCost:0 }
@@ -1073,7 +1120,7 @@ a solar collector device that operated like the old versions (which filled up yo
 				{ item:&itRegeneratingNanos;       enhancement:Nil    components:( { item:&itRepairingNanos; count: 2 } )  totalCost:0 }
 				{ item:&itRepairingNanos;          enhancement:Nil    components:( { item:&itCymekNanoFeedstock; count: 4 } )  totalCost:0 }
 				{ item:&itPersonalCDMShard;        enhancement:Nil    components:( { item:&itCymekNanoFeedstock; count:1 } { item:&itOpticalKnowledgeArray; count: 2 } { item:&itNeuralProcessor; count: 2 } )  totalCost:0 }
-				{ item:&itNanoFabricator;          enhancement:Nil    components:( { item:&itRegeneratingNanos; count: 3 } { item:&itNeuralProcessor; count: 1 } { item:&itOrthosteelOre; count: 2 } )  totalCost:0 }
+				{ item:&itNanoFabricator;          enhancement:Nil    components:( { item:&itRegeneratingNanos; count: 3 } { item:&itNeuralProcessor; count: 1 } { item:&itCymekNanoFeedstock; count: 20 } )  totalCost:0 }
 				{ item:&itReinforcedTitanium1;     enhancement:Nil    components:( { item:&itTitaniumOre; count: 5 }  { item:&itHelium3FuelRod; count: 1 } )  totalCost:0 }
 
 				{ item:&itSuperconductingShields;  enhancement:Nil    components:( { item:&itSuperconductingCoil; count:4 } { item:&itCymekNanoFeedstock; count:4 } )  totalCost:0 }
@@ -1096,16 +1143,9 @@ a solar collector device that operated like the old versions (which filled up yo
 		<Language>
 			<Text id="actionFabricate">[F]abricate</Text>
 			<!--<Text id="actionReminder">[R]emember for Later</Text>-->
-
-			<Text id="descFabricateNoItems">
-				Unfortunately, you do not have any required components.
-			</Text>
-			<Text id="descFabricateItem">
-				To fabricate %itemName% the following components are needed:
-			</Text>
-			<Text id="descFabricateItemNoComponents">
-				To fabricate %itemName% we charge %cost%.
-			</Text>
+			<Text id="descFabricateNoItems"> Unfortunately, you do not have any required components.  </Text>
+			<Text id="descFabricateItem"> To fabricate %itemName% the following components are needed: </Text>
+			<Text id="descFabricateItemNoComponents"> To fabricate %itemName% we charge %cost%.  </Text>
 			<Text id="descFabricateReminderAdded">
 				A reminder has been added to your mission computer. Once you obtain
 				the necessary items you may return here to fabricate %itemName%.
@@ -1121,21 +1161,11 @@ a solar collector device that operated like the old versions (which filled up yo
 				Consumed: %itemsConsumed%.\n
 			</Text>
 
-			<Text id="errorComponentLacking">
-				Unfortunately, you need one more %itemName%.
-			</Text>
-			<Text id="errorComponentsLacking">
-				Unfortunately, you need %itemCount% more %itemNames%.
-			</Text>
-			<Text id="errorComponentMissing">
-				Unfortunately, you do not have any %itemNamesShort%.
-			</Text>
-			<Text id="errorMoneyLacking">
-				Unfortunately, you do not have enough credits.
-			</Text>
-			<Text id="errorCargoSpace">
-				Unfortunately, you do not have enough cargo space.
-			</Text>
+			<Text id="errorComponentLacking"> Unfortunately, you need one more %itemName%.  </Text>
+			<Text id="errorComponentsLacking"> Unfortunately, you need %itemCount% more %itemNames%.  </Text>
+			<Text id="errorComponentMissing"> Unfortunately, you do not have any %itemNamesShort%.  </Text>
+			<Text id="errorMoneyLacking"> Unfortunately, you do not have enough credits.  </Text>
+			<Text id="errorCargoSpace"> Unfortunately, you do not have enough cargo space.  </Text>
 		</Language>
 	</DockScreen>
 
@@ -1244,7 +1274,7 @@ a solar collector device that operated like the old versions (which filled up yo
 		
 			attributes=			"envAir, generic, friendly, majorStation, noSalvage"
 
-			dockScreen=	"Main"
+			dockScreen=		"Main"
 			abandonedScreen=	"Dead"
 
 			armorID=			"&itPlasteelPlate;"
@@ -1284,10 +1314,10 @@ a solar collector device that operated like the old versions (which filled up yo
 		</ImageVariants>
 
 		<DockingPorts>
-			<Port x="0"		y="70" />
+			<Port x="0"	y="70" />
 			<Port x="61"	y="35" />
 			<Port x="61"	y="-35" />
-			<Port x="0"		y="-70" />
+			<Port x="0"	y="-70" />
 			<Port x="-61"	y="-35" />
 			<Port x="-61"	y="35" />
 		</DockingPorts>
@@ -2073,14 +2103,14 @@ a solar collector device that operated like the old versions (which filled up yo
 
 			maxReactorPower=	"500"
 			maxCargoSpace=		"0"
-			maxDevices=			"1"
+			maxDevices=			"2"
 
 			maxArmor=			"light"
-			stdArmor=			"light"
+			stdArmor=			"medium"
 			/>
 
 		<Reactor
-			reactorPower=		"100"
+			reactorPower=		"300"
 			/>
 
 		<Drive
@@ -2126,6 +2156,62 @@ a solar collector device that operated like the old versions (which filled up yo
 			<String id="DeployAck">"CymekSentinel v1984 online"</String>
 		</Language>
 	</ShipClass>
+
+	<!-- It would be nice if this refuelled instead of just generated -->
+	<ItemType UNID="&itEnergyGenerator;"
+			name=				"zero point energy generator"
+			level=				"9"
+			value=				"20000"
+			mass=				"1500"
+			frequency=			"rare"
+			attributes=			"Alien; MajorItem;"
+
+			description=		"This inconceivable alien device generates energy by unknown means, requiring no fuel. Unfortunately its power output is quite low."
+			>
+		<Image imageID="&rsItems1;" imageX="0" imageY="192" imageWidth="96" imageHeight="96"/>
+		<MiscellaneousDevice powerUse="-50"/>
+	</ItemType>
+
+	<!-- Need a way of getting rid of all this Akan ammo, perhaps it could be converted to fuel or
+	something? Either way, two of these will chew through ammo stocks. -->
+	<ItemType UNID="&itAkan30CannonExternal;"
+			name=				"Akan 30 external cannon"
+			attributes=			"commonwealth, majorItem, specialty, auxMountDevice, rasiermesser"
+			  
+			level=				"5"
+			frequency=			"common"
+			auxMountDevice= "true"
+			inherit=	"&baStdAuxMountDeviceBase;"
+
+			value=				"15000"
+			mass=				"3000"
+			  
+			description=		"The external Akan 30 is a powerful cannon designed by the Rasiermesser Corporation."
+			>
+
+		<Image imageID="&rsItemsRasiermesser3;" imageX="96" imageY="96" imageWidth="96" imageHeight="96"/>
+
+		<Weapon
+				fireRate=			"10"
+				powerUse=			"20"
+				linkedFire=			"always"
+				>
+
+			<Missiles>
+				<Missile ammoID="&itAkan30CannonShell;"
+						type=			"missile"
+
+						damage=			"blast:3d12; momentum:2; WMD:5"
+						missileSpeed=	"50"
+						lifetime=		"120"
+
+						effect=			"&efAkanCannonShell;"
+						sound=			"&snRecoillessCannon;"
+						>
+				</Missile>
+			</Missiles>
+		</Weapon>
+	</ItemType>
 
 </TranscendenceExtension>
 
