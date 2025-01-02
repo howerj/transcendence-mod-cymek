@@ -51,6 +51,9 @@
 	<!ENTITY itCymekExternalLaser "0xD5390041">
 	<!ENTITY itEnergyGenerator "0xD5390042">
 	<!ENTITY itAkan30CannonExternal "0xD5390043">
+	<!ENTITY itOmniThermoCannonIntegratedShellFac "0xD5390044">
+	<!ENTITY itExternalWasteCannon "0xD5390045">
+	<!ENTITY itExternalPlasmaTorch "0xD5390046">
 ]>
 
 <!--
@@ -88,6 +91,7 @@ a solar collector device that operated like the old versions (which filled up yo
 * TODO: Make a cymek corporation, and perhaps an enhancer
 * Balance: The hornet is probably too fast, but I get bored otherwise, perhaps a faster
 	autopilot would help?
+* Add omni-thermo with integrated thermo-nanofac, external actinide waste cannons, external plasma mining tools
 
 -->
 
@@ -420,7 +424,7 @@ a solar collector device that operated like the old versions (which filled up yo
 			>
 
 		<PlayerSettings
-			desc=	"This modified Hornet Battle pod was commissioned by the Late and Legendary Anarchist pilot Zephron Janus Babblebrox which they were unable to collect. Zephron's next of kin sold the rights to their life story, which have made somewhat unpopular with those sympathetic with the Anarchists."
+			desc=	"This modified Hornet Battle pod was commissioned by the late and legendary anarchist pilot Zephron Janus Babblebrox which they were unable to collect. Zephron's next of kin sold the rights to their 3DV holo-vid life story, which have made somewhat unpopular with those sympathetic with the Anarchists."
 			startingCredits="2d100+50"
 
 			largeImage=		"&rsHornetLarge;"
@@ -464,17 +468,18 @@ a solar collector device that operated like the old versions (which filled up yo
 			<Item count="4d3+1" item="&itUraniumOre;"/>
 
 			<!-- Test Items
-				<Item count="15" item="&itSilicarbCrystal;"/>
-				<Item count="15" item="&itPlasteelNanos;"/>
-				<Item count="15" item="&itLaserAmplifier;"/>
 				<Item count="15" item="&itGemOfDespair;"/>
 				<Item count="15" item="&itTitaniumOre;"/>
 				<Item count="15" item="&itHelium3FuelRod;"/>
 				<Item count="1" item="&itAmmoBoxCymekBlast;"/>
-				<Item count="1" item="&itBlackMarketID;"/>
 		       		<Item count="1" item="&itWeaponSpeedROM;"/>
 				<Item count="1" item="&itMiningComputerROM;"/>
 				<Item count="1" item="&itEnhanceSRSROM;"/>
+				<Item count="15" item="&itSilicarbCrystal;"/>
+				<Item count="15" item="&itPlasteelNanos;"/>
+				<Item count="45" item="&itLaserAmplifier;"/>
+				<Item count="1" item="&itBlackMarketID;"/>
+
 			-->
 		</Items>
 
@@ -484,8 +489,11 @@ a solar collector device that operated like the old versions (which filled up yo
 			<Device deviceID="&itNanoFabricator;"/>
 			<Device deviceID="&itCymekMicroDeflector;"/>
 			<!-- Test Items
-			<Device deviceID="&itEnergyGenerator;"/>
+			<Device deviceID="&itExternalWasteCannon;"/>
+			<Device deviceID="&itExternalPlasmaTorch;"/>
+			<Device deviceID="&itOmniThermoCannonIntegratedShellFac;"/>
 			<Device deviceID="&itPersonalCDMShard;"/>
+			<Device deviceID="&itEnergyGenerator;"/>
 			<Device deviceID="&itDM1500MissileRack;"/>
 			<Device deviceID="&itTranspaceJumpdrive;"/>
 			<Device deviceID="&itMinersSmugglingCargoHold;"/>
@@ -1356,7 +1364,7 @@ a solar collector device that operated like the old versions (which filled up yo
 				food processor which comes with the tag line 'Tasty and Hygienic!'.
 
 				This one is yours, you need to tidy up and you forgot to turn the Holo TV off
-				when you last left.
+				when you last left. 
 
 			</Text>
 			<Text id="rpg.jettisonQuantity">How many items do you wish to store?</Text>
@@ -2169,11 +2177,12 @@ a solar collector device that operated like the old versions (which filled up yo
 			description=		"This inconceivable alien device generates energy by unknown means, requiring no fuel. Unfortunately its power output is quite low."
 			>
 		<Image imageID="&rsItems1;" imageX="0" imageY="192" imageWidth="96" imageHeight="96"/>
-		<MiscellaneousDevice powerUse="-50"/>
+		<MiscellaneousDevice powerUse="-150"/>
 	</ItemType>
 
 	<!-- Need a way of getting rid of all this Akan ammo, perhaps it could be converted to fuel or
-	something? Either way, two of these will chew through ammo stocks. -->
+	something? Either way, two of these will chew through ammo stocks. Perhaps we could have a large
+	version of the nano-fac for processing items? -->
 	<ItemType UNID="&itAkan30CannonExternal;"
 			name=				"Akan 30 external cannon"
 			attributes=			"commonwealth, majorItem, specialty, auxMountDevice, rasiermesser"
@@ -2195,6 +2204,7 @@ a solar collector device that operated like the old versions (which filled up yo
 				fireRate=			"10"
 				powerUse=			"20"
 				linkedFire=			"always"
+                                deviceSlots="0"
 				>
 
 			<Missiles>
@@ -2210,6 +2220,153 @@ a solar collector device that operated like the old versions (which filled up yo
 						>
 				</Missile>
 			</Missiles>
+		</Weapon>
+	</ItemType>
+
+	<ItemType UNID="&itOmniThermoCannonIntegratedShellFac;"
+		name=				"omnidirectional thermo cannon with shell-fac"
+			attributes=			"bushido, commonwealth, majorItem, military, specialty"
+			  
+			level=				"9"
+			frequency=			"rare"
+
+			value=				"250000"
+			mass=				"5000"
+			  
+			description=		"This is a modified thermo cannon mounted on an automated turret. It includes an integrated thermo-shell nano factory."
+			>
+
+		<Image imageID="&rsItemsBushido2;" imageX="288" imageY="192" imageWidth="96" imageHeight="96"/>
+
+		<Weapon
+				omnidirectional=	"true"
+				fireRate=			"16"
+				powerUse=			"250"
+				type=			"missile"
+
+				damage=			"thermo:6d12; momentum2; WMD5"
+				missileSpeed=	"60"
+				hitPoints=		"30"
+				lifetime=		"100"
+
+				effect=			"&efThermoCannonShell;"
+				sound=			"&snRecoillessCannon;"
+				>
+		</Weapon>
+	</ItemType>
+
+	<ItemType UNID="&itExternalWasteCannon;"
+			name=				"external actinide waste cannon"
+			attributes=			"illegal, majorItem, sapiens, notStandard, auxMountDevice;"
+			  
+			level=				"5"
+			frequency=			"rare"
+			auxMountDevice= "true"
+			inherit=	"&baStdAuxMountDeviceBase;"
+
+			value=				"6200"
+			mass=				"6000"
+ 
+			description=		"The external actinide waste cannon is a dirty weapon that shoots out a cloud of radioactive debris."
+			>
+
+		<Image imageID="&rsItems4;" imageX="288" imageY="96" imageWidth="96" imageHeight="96"/>
+
+		<Weapon
+				fireRate=			"30"
+				linkedFire=			"always"
+
+				type=				"missile"
+				repeating=			"3"
+
+				lifetime=			"60"
+				damage=				"blast:1d8; radiation1; WMD1"
+				powerUse=			"60"
+
+				missileSpeed=		"20"
+				
+				hitEffect=			"&efRadioactiveHitEffect;"
+				sound=				"&snLaserCannon;"
+                                deviceSlots="0"
+				>
+
+			<Configuration aimTolerance="5">
+				<Shot angle="3d5-9"/>
+			</Configuration>
+			
+			<Effect>
+				<Orb	style=			"fireblast"
+						animate=		"explode"
+						lifetime=		"60"
+
+						blendMode=		"screen"
+						primaryColor=	"#00ff2b"
+						secondaryColor=	"#008015"
+						>
+					<Events>
+						<GetParameters>
+							(block (
+								(damageHP (@ gData 'damageHP))
+								(weaponUNID (@ gData 'weaponUNID))
+								)
+							
+								{
+									radius: (if (= damageHP 0) 10 (mathScale damageHP 5 64 20 45 50))
+									;lifetime: (if (= damageHP 0) 4 (mathScale damageHP 5 64 12 48 50))
+								
+									intensity: (seededRandom weaponUNID 50 70)
+									distortion: (mathScale damageHP 5 64 50 0 100)
+									detail: (seededRandom weaponUNID 20 25)
+									}
+								)
+						</GetParameters>
+					</Events>
+				</Orb>
+			</Effect>
+		</Weapon>
+	</ItemType>
+
+
+	<ItemType UNID="&itExternalPlasmaTorch;"
+			name=				"external plasma torch(es)"
+			attributes=			"commonwealth, essentialMiningEquipment, majorItem, miningEquipment, NAMI, specialty, auxMountDevice"
+			  
+			level=				"6"
+			frequency=			"rare"
+
+			value=				"19000"
+			mass=				"4000"
+			auxMountDevice= "true"
+			inherit=	"&baStdAuxMountDeviceBase;"
+ 
+			description=		"Plasma torches are used for large-scale asteroid mining. They are effective on icy and metallic asteroids. This one has been modified for external mounting."
+			>
+
+		<Image imageID="&rsItems6;" imageX="192" imageY="96" imageWidth="96" imageHeight="96"/>
+
+		<Weapon
+				type=				"particles"
+				damage=				"plasma:30; mining:5; WMD:2"
+				linkedFire=			"always"
+				
+				fireRate=			"30"
+
+				powerUse=			"300"
+				sound=				"&snRecoillessCannon;"
+                                deviceSlots="0"
+				>
+			
+			<ParticleSystem
+					style=				"spray"
+					emitLifetime=		"1"
+					emitRate=			"60-75"
+					emitSpeed=			"40"
+					spreadAngle=		"1"
+					
+					particleLifetime=	"30"
+					particleEffect=		"&efPlasmaParticleDefault;"
+					>
+			</ParticleSystem>
 		</Weapon>
 	</ItemType>
 
