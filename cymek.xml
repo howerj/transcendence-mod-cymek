@@ -71,19 +71,23 @@ References/Mods
 
 To Do / Ideas:
 
+* The Flayer: Mid Tier unique weapon, EMP cannon + Better Waste Cannon
+* A nano-recycler, able to reduce components into raw materials, a medium tech
+product that acts on low level items only.
+* Make a disposable external missile pod, perhaps that should replace the cymek launcher?
 * Build instructions / Add a release
-* Recall auton option
+* Recall auton option, it is annoying to have to have the NAMI auton bay to do this
+* Make a drone with limited cargo space that can fire missiles.
 * Upgrade recipes via ROM? Also fabricate armor patches from ore, nanos from ore, get a tech/craft tree going
 * Add timer / charge to nano-factory
 * Make your own habitable station and faction, whatever the system, including Elysium,
-	generates credits with redoable missions.
+generates credits with redoable missions. Use slave pods to populate.
 * Advanced scanner; longer range / find containers, ships
 * Solar fuel collector; Fuel harvesting station - place near sun, makes fuel, perhaps make
 a solar collector device that operated like the old versions (which filled up your tank)
 * Split fuel assemblies (need to generate multiple items)
 * Different version of jump drive that can be created in nano-factory
 * Add shield that you can change damage absorption type
-* High level device; zero-point energy source for infinite energy, 2 devie slots
 * A disposable version of the nano-factory could be made, nano-formers.
 * Convert slave coffins to brains in a vat?
 * Add disposable launcher recipe back in?
@@ -92,6 +96,7 @@ a solar collector device that operated like the old versions (which filled up yo
 * Balance: The hornet is probably too fast, but I get bored otherwise, perhaps a faster
 	autopilot would help?
 * Add omni-thermo with integrated thermo-nanofac, external actinide waste cannons, external plasma mining tools
+* Map Marker, Target Drone
 
 -->
 
@@ -458,13 +463,14 @@ a solar collector device that operated like the old versions (which filled up yo
 
 		<Armor>
 			<ArmorSection name="main" start="0" span="360" armorID="&itLightSolarArmor;"/>
+			<!--<ArmorSection name="main" start="0" span="360" armorID="&itDiamondLatticArmor;"/>-->
 			<!--<ArmorSection name="main" start="0" span="360" armorID="&itCymekNanoSteelArmor;"/>-->
 		</Armor>
 
 		<Items>
 		       	<Item count="1" item="&itTargetingComputerROM;"/>
 			<Item count="1" item="&itTradingComputerROM;"/>
-		       	<Item count="1" item="&itPlayerCargoContainer;"/>
+			<Item count="1" item="&itSystemMapROM;"/>
 			<Item count="4d3+1" item="&itUraniumOre;"/>
 
 			<!-- Test Items
@@ -479,7 +485,7 @@ a solar collector device that operated like the old versions (which filled up yo
 				<Item count="15" item="&itPlasteelNanos;"/>
 				<Item count="45" item="&itLaserAmplifier;"/>
 				<Item count="1" item="&itBlackMarketID;"/>
-
+				<Item count="1" item="&itOmniThermoCannonIntegratedShellFac;"/>
 			-->
 		</Items>
 
@@ -573,6 +579,7 @@ a solar collector device that operated like the old versions (which filled up yo
 
 	</ItemType>
 
+	<!-- We should be able to make this... -->
 	<ItemType UNID="&itCymekOmniMiningLaser;"
 			name=				"cymek omni mining laser"
 			level=				"6"
@@ -1177,7 +1184,9 @@ a solar collector device that operated like the old versions (which filled up yo
 		</Language>
 	</DockScreen>
 
-	<!-- We could have a device screen so we can talk to the shard, or improve it. -->
+	<!-- We could have a device screen so we can talk to the shard, or improve it. Perhaps it could
+	be merged with the nano fabricator? If you feed it info you could get powers, but more limited
+	ones than the ones you get with the Eternity Port mod. -->
 	<ItemType UNID="&itPersonalCDMShard;"
 			name=				"Personal CDM Shard"
 			level=				"7"
@@ -2331,7 +2340,7 @@ a solar collector device that operated like the old versions (which filled up yo
 			name=				"external plasma torch(es)"
 			attributes=			"commonwealth, essentialMiningEquipment, majorItem, miningEquipment, NAMI, specialty, auxMountDevice"
 			  
-			level=				"6"
+			level=				"7"
 			frequency=			"rare"
 
 			value=				"19000"
